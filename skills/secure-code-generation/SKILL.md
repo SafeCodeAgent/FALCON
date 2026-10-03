@@ -7,7 +7,7 @@ description: >-
   a configurable number of attack-verify-repair turns and returns code that is
   both functional and secure. Use when the user asks to write, implement, or
   change code and wants it to be secure.
-argument-hint: "<what to build> [--turns 2] [--probes 5-10] [--attacker main|agent] [--verifier main|agent]"
+argument-hint: "<what to build> [--turns 2] [--probes 5-10] [--attacker opus|sonnet|haiku] [--verifier opus|sonnet|haiku]"
 disable-model-invocation: false
 ---
 
@@ -18,6 +18,32 @@ initial implementation, run up to `num_turns` cycles of attack → verify →
 repair, grounding each repair in a concrete counterexample rather than a hunch.
 
 Repo root is `${CLAUDE_PROJECT_DIR}`. The user's arguments are: `$ARGUMENTS`.
+
+## Configuration
+
+These values come from the plugin's settings — the user sets them in **`/config`**
+(or the plugin's configure dialog), so they do **not** have to be typed in the
+prompt. The values in effect for this run are:
+
+- Attacker: `${user_config.attacker}`
+- Verifier: `${user_config.verifier}`
+- Probes per target: `${user_config.probes_min}`–`${user_config.probes_max}`
+- Repair turns: `${user_config.num_turns}`
+- Max targets: `${user_config.max_targets}`
+
+Use these as the defaults. If the user also passed arguments (`--turns N`,
+`--probes MIN-MAX`, `--attacker <model>`, `--verifier <model>`), those override
+the settings above for this one run.
+
+Apply them like this:
+- `num_turns` is the number of attack → verify → repair cycles (below).
+- Build `CONFIG_JSON` with `probes_min`, `probes_max`, `max_targets`, plus the
+  `execution` block from the session marker (step 1).
+- **Attacker:** if it is `main coding agent`, play the attacker inline. Otherwise
+  it is a model name — delegate to the `attacker-verifier:attacker` subagent via
+  the Agent tool with `model` set to that value (it runs up to 20 turns).
+- **Verifier:** if it is `main coding agent`, judge traces inline. Otherwise
+  delegate to the `attacker-verifier:verifier` subagent with `model` set to it.
 
 ## 1. Sandbox (first run in the session)
 
@@ -35,12 +61,11 @@ Progress: `turn 0/<N> · main coding agent · implemented <summary>`.
 
 ## 3. Attack → verify → repair loop
 
-Let `N = num_turns` (default 2; `--turns` overrides). Follow
+Let `N = num_turns` from the Configuration section (`--turns` overrides). Follow
 `${CLAUDE_PLUGIN_ROOT}/docs/attack-verify-loop.md` for each turn, with
 `--scope changed` so the attacker targets what you just wrote (fall back to
-`--scope path` on the touched files if there is no git history). Build
-`CONFIG_JSON` from the session execution block plus any `--probes`,
-`--attacker`, `--verifier` the user passed.
+`--scope path` on the touched files if there is no git history), using the
+attacker, verifier, probe, and target settings from the Configuration section.
 
 For each turn `t` from 1 to `N`:
 

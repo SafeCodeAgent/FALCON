@@ -6,7 +6,7 @@ description: >-
   the resulting execution traces. Reports which parts of the repository are
   unsafe and writes a Markdown report named with the repo and a timestamp. Use
   when the user wants to check, audit, or find security issues in existing code.
-argument-hint: "[path] [--probes 5-10] [--attacker main|agent] [--verifier main|agent] [--scope whole|changed|path]"
+argument-hint: "[path] [--probes 5-10] [--attacker opus|sonnet|haiku] [--verifier opus|sonnet|haiku] [--scope whole|changed|path]"
 disable-model-invocation: false
 ---
 
@@ -17,6 +17,30 @@ reading it. You run one attack → verify pass over the chosen scope and report
 the parts of the repository that are unsafe.
 
 Repo root is `${CLAUDE_PROJECT_DIR}`. The user's arguments are: `$ARGUMENTS`.
+
+## Configuration
+
+These values come from the plugin's settings — the user sets them in **`/config`**
+(or the plugin's configure dialog), so they do **not** have to be typed in the
+prompt. The values in effect for this run are:
+
+- Attacker: `${user_config.attacker}`
+- Verifier: `${user_config.verifier}`
+- Probes per target: `${user_config.probes_min}`–`${user_config.probes_max}`
+- Max targets: `${user_config.max_targets}`
+
+Use these as the defaults. If the user also passed arguments (`--probes MIN-MAX`,
+`--attacker <model>`, `--verifier <model>`, `--max-targets N`), those override
+the settings above for this one run.
+
+Apply them like this:
+- Build `CONFIG_JSON` with `probes_min`, `probes_max`, `max_targets`, plus the
+  `execution` block from the session marker (step 1).
+- **Attacker:** if it is `main coding agent`, play the attacker inline. Otherwise
+  it is a model name — delegate to the `attacker-verifier:attacker` subagent via
+  the Agent tool with `model` set to that value (it runs up to 20 turns).
+- **Verifier:** if it is `main coding agent`, judge traces inline. Otherwise
+  delegate to the `attacker-verifier:verifier` subagent with `model` set to it.
 
 ## 1. Sandbox (first run in the session)
 
@@ -41,9 +65,9 @@ report records what was not attacked. This version attacks Python.
 ## 3. Run one attack → verify pass
 
 Follow `${CLAUDE_PLUGIN_ROOT}/docs/attack-verify-loop.md` with `N = 1` turn
-(no repair). Build `CONFIG_JSON` from the session execution block plus any
-`--probes`, `--attacker`, `--verifier`, `--max-targets` the user passed. Keep
-the user informed with the progress line from that document at each step.
+(no repair), using the attacker, verifier, probe, and target settings from the
+Configuration section above. Keep the user informed with the progress line from
+that document at each step.
 
 ## 4. Write the report and summarise
 

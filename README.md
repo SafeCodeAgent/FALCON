@@ -95,40 +95,63 @@ The choice is remembered for the rest of the session.
 
 ---
 
-## Configuration
+Everything has a working default. There are three ways to configure, and they
+override each other in this order (later wins): built-in defaults → settings UI
+→ per-run arguments.
 
-Everything has a working default. Override per run with arguments, or set
-project-wide defaults in a file.
+### Settings UI (easiest — no typing in the prompt)
 
-| Setting | Argument | Default | Meaning |
-|---|---|---|---|
-| Probe budget | `--probes 5-10` | `5-10` | min–max probes generated per target |
-| Attacker | `--attacker main\|agent` | `main` | who writes probes (the main coding agent, or the dedicated attacker agent) |
-| Verifier | `--verifier main\|agent` | `main` | who judges undecided traces (the main coding agent, or the dedicated verifier agent) |
-| Turns | `--turns 2` | `2` | attack → verify → repair cycles (`/secure-code-generation`) |
-| Max targets | `--max-targets 20` | `20` | cap on how many functions a run attacks |
-| Scope | `--scope whole\|changed\|path` | depends | what to attack |
+Run **`/config`** and open the **attacker-verifier** rows, or open `/plugin` →
+attacker-verifier → **Configure**. You get editable fields:
+
+| Setting | Control | Default |
+|---|---|---|
+| Attacker | dropdown: `main coding agent` / `opus` / `sonnet` / `haiku` / `fable` | `main coding agent` |
+| Verifier (trace judge) | dropdown: `main coding agent` / `opus` / `sonnet` / `haiku` / `fable` | `main coding agent` |
+| Probes per target (min) | number | 5 |
+| Probes per target (max) | number | 10 |
+| Repair turns (`/secure-code-generation`) | number | 2 |
+| Max targets per run | number | 20 |
+
+Pick a model for the attacker or verifier to run that role on the dedicated
+agent at that model; `main coding agent` keeps it inline on your current model.
+These are saved and reused for every run until you change them.
+
+### Per-run arguments (override the settings for one call)
+
+```
+/check-code-security src/ --probes 8-12 --attacker opus --verifier sonnet
+/secure-code-generation implement the import --turns 3
+```
+
+| Argument | Meaning |
+|---|---|
+| `--probes MIN-MAX` | probe budget per target |
+| `--attacker <main coding agent\|opus\|sonnet\|haiku\|fable>` | who writes probes |
+| `--verifier <main coding agent\|opus\|sonnet\|haiku\|fable>` | who judges undecided traces |
+| `--turns N` | attack → verify → repair cycles (`/secure-code-generation`) |
+| `--max-targets N` | cap on how many functions a run attacks |
+| `--scope whole\|changed\|path` | what to attack |
 
 **Attacker and verifier as agents.** By default the main coding agent plays both
-roles inline. Set `--attacker agent` / `--verifier agent` to delegate to the
-dedicated subagents (`attacker-verifier:attacker`, `attacker-verifier:verifier`).
-The attacker is a genuine agent: it may read the code and the repository and
-iterate for up to 20 turns before committing its probes.
+roles inline. Choosing a model delegates to the dedicated subagents
+(`attacker-verifier:attacker`, `attacker-verifier:verifier`) on that model. The
+attacker is a genuine agent: it may read the code and the repository and iterate
+for up to 20 turns before committing its probes.
 
-**Project defaults.** Create `.attacker-verifier/config.json` at your repo root:
+### Project file (optional, committed with the repo)
+
+Create `.attacker-verifier/config.json` at your repo root for engine-level
+defaults such as the sandbox and probe limits:
 
 ```json
 {
   "probes_min": 5,
   "probes_max": 10,
-  "num_turns": 2,
   "max_targets": 20,
   "execution": { "mode": "host" }
 }
 ```
-
-Arguments passed at call time override this file, which overrides the built-in
-defaults.
 
 ---
 

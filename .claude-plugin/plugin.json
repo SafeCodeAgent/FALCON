@@ -19,5 +19,53 @@
     "dynamic-analysis",
     "sandbox",
     "code-review"
-  ]
+  ],
+  "userConfig": {
+    "attacker": {
+      "type": "string",
+      "title": "Attacker",
+      "description": "Who generates the adversarial probes. 'main coding agent' runs it inline; choosing a model runs the dedicated attacker agent (up to 20 turns) on that model.",
+      "options": ["main coding agent", "opus", "sonnet", "haiku", "fable"],
+      "default": "main coding agent"
+    },
+    "verifier": {
+      "type": "string",
+      "title": "Verifier (trace judge)",
+      "description": "Who judges execution traces the crash oracle leaves undecided. 'main coding agent' runs it inline; choosing a model runs the dedicated verifier agent on that model.",
+      "options": ["main coding agent", "opus", "sonnet", "haiku", "fable"],
+      "default": "main coding agent"
+    },
+    "probes_min": {
+      "type": "number",
+      "title": "Probes per target (min)",
+      "description": "Minimum number of proof-of-concept probes the attacker generates per target.",
+      "default": 5,
+      "min": 1,
+      "max": 100
+    },
+    "probes_max": {
+      "type": "number",
+      "title": "Probes per target (max)",
+      "description": "Maximum number of proof-of-concept probes the attacker generates per target.",
+      "default": 10,
+      "min": 1,
+      "max": 100
+    },
+    "num_turns": {
+      "type": "number",
+      "title": "Repair turns (secure-code-generation)",
+      "description": "How many attack -> verify -> repair cycles /secure-code-generation runs before returning the best version.",
+      "default": 2,
+      "min": 1,
+      "max": 10
+    },
+    "max_targets": {
+      "type": "number",
+      "title": "Max targets per run",
+      "description": "Cap on how many functions, methods, or classes a single run attacks.",
+      "default": 20,
+      "min": 1,
+      "max": 200
+    }
+  }
 }
