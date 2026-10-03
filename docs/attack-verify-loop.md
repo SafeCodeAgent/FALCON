@@ -24,17 +24,19 @@ Recognised settings:
 | Setting | Meaning | Default |
 |---|---|---|
 | `probes_min`, `probes_max` | probe budget per target (`--probes 5-10`) | 5, 10 |
-| `attacker` | `main coding agent` (inline) or a model family (`--attacker opus`) | `main coding agent` |
+| `attacker` | `main` (inline) or a model id, from `.attacker-verifier/config.json`; `--attacker <name>` overrides | `main` |
 | `attacker_effort` | reasoning effort for a delegated attacker (`--attacker-effort high`) | `inherit` |
-| `verifier` | `main coding agent` (inline) or a model family (`--verifier sonnet`) | `main coding agent` |
+| `verifier` | `main` (inline) or a model id, from `.attacker-verifier/config.json`; `--verifier <name>` overrides | `main` |
 | `verifier_effort` | reasoning effort for a delegated verifier (`--verifier-effort high`) | `inherit` |
 | `num_turns` | repair cycles, generation only (`--turns 2`) | 2 |
 | `max_targets` | cap on targets attacked (`--max-targets 20`) | 20 |
 | `execution` | sandbox block from the session marker | `{"mode":"host"}` |
 
-Model families (`opus`/`sonnet`/`haiku`) resolve to the latest model of that
-family through Claude Code's subagent model override. When delegating, set the
-subagent's effort to the configured value unless it is `inherit`.
+Models come from Claude Code's live catalog. Read a saved choice from
+`.attacker-verifier/config.json` (`attacker`/`verifier` = `main` or a model id),
+and resolve a `--attacker`/`--verifier` argument with `engine resolve-model
+"<name>"`. When delegating, set the subagent's effort to the configured value
+unless it is `inherit`.
 
 Keep a per-run scratch directory for intermediate files:
 `RUN_DIR="${CLAUDE_PLUGIN_DATA}/runs/${CLAUDE_SESSION_ID}-<timestamp>"`.
@@ -62,15 +64,13 @@ read the code and the repository and iterate, up to 20 turns, before writing its
 probes. Read the attacker prompt at
 `${CLAUDE_PLUGIN_ROOT}/engine/prompts/attacker.md` and follow it exactly.
 
-- If `attacker` is `main coding agent` (default): **you** play the attacker,
-  inline. For each target, work through the attacker prompt and produce between
-  `probes_min` and `probes_max` deterministic probes. Explore the target as
-  needed before committing probes — treat your budget as up to 20 steps of
-  attacker work.
-- If `attacker` is a model name (e.g. `opus`): delegate to the
-  `attacker-verifier:attacker` subagent via the Agent tool with `model` set to
-  that value (it runs up to 20 turns), passing the target, the task, and the
-  path to write to.
+- If `attacker` is `main` (default): **you** play the attacker, inline. For each
+  target, work through the attacker prompt and produce between `probes_min` and
+  `probes_max` deterministic probes. Explore the target as needed before
+  committing probes — treat your budget as up to 20 steps of attacker work.
+- If `attacker` is a model id: delegate to the `attacker-verifier:attacker`
+  subagent via the Agent tool with `model` set to that id (it runs up to 20
+  turns), passing the target, the task, and the path to write to.
 
 Collect all probes into one file `"$RUN_DIR/probes.json"`:
 
@@ -110,9 +110,9 @@ Otherwise judge each trace with the stage-3 prompt at
 `${CLAUDE_PLUGIN_ROOT}/engine/prompts/verifier_stage3.md`, reading **only** the
 trace — not the source, the patch, or any test.
 
-- If `verifier` is `main coding agent` (default): you judge each trace inline.
-- If `verifier` is a model name: delegate to the `attacker-verifier:verifier`
-  subagent via the Agent tool with `model` set to that value.
+- If `verifier` is `main` (default): you judge each trace inline.
+- If `verifier` is a model id: delegate to the `attacker-verifier:verifier`
+  subagent via the Agent tool with `model` set to that id.
 
 Write the verdicts to `"$RUN_DIR/verdicts.json"`:
 

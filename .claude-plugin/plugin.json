@@ -21,31 +21,17 @@
     "code-review"
   ],
   "userConfig": {
-    "attacker": {
-      "type": "string",
-      "title": "Attacker model",
-      "description": "Who generates the adversarial probes. 'main coding agent' runs it inline on your current session model. 'opus', 'sonnet', and 'haiku' run the dedicated attacker agent (up to 20 turns) on that model family, always resolving to the latest model of that family.",
-      "options": ["main coding agent", "opus", "sonnet", "haiku"],
-      "default": "main coding agent"
-    },
     "attacker_effort": {
       "type": "string",
       "title": "Attacker reasoning effort",
-      "description": "Reasoning effort for the attacker when it runs on a chosen model. 'inherit' keeps the current session's effort.",
+      "description": "Reasoning effort for the attacker when it runs on a chosen model (set the model with /attacker-verifier:configure). 'inherit' keeps the current session's effort.",
       "options": ["inherit", "low", "medium", "high", "xhigh", "max"],
       "default": "inherit"
-    },
-    "verifier": {
-      "type": "string",
-      "title": "Verifier model (trace judge)",
-      "description": "Who judges execution traces the crash oracle leaves undecided. 'main coding agent' runs it inline on your current session model. 'opus', 'sonnet', and 'haiku' run the dedicated verifier agent on that model family, always resolving to the latest model of that family.",
-      "options": ["main coding agent", "opus", "sonnet", "haiku"],
-      "default": "main coding agent"
     },
     "verifier_effort": {
       "type": "string",
       "title": "Verifier reasoning effort",
-      "description": "Reasoning effort for the verifier when it runs on a chosen model. 'inherit' keeps the current session's effort.",
+      "description": "Reasoning effort for the verifier when it runs on a chosen model (set the model with /attacker-verifier:configure). 'inherit' keeps the current session's effort.",
       "options": ["inherit", "low", "medium", "high", "xhigh", "max"],
       "default": "inherit"
     },

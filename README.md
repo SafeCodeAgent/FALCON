@@ -9,7 +9,8 @@ adversarial inputs; a **faithfulness check** discards probes that would fake the
 result; the admitted probes run in a **sandbox**; and a **verifier** reads the
 resulting execution traces and decides, backed by concrete evidence.
 
-It ships two slash commands:
+It ships two slash commands (plus `/attacker-verifier:configure` to pick the
+attacker and verifier models from Claude Code's live model list):
 
 - **`/secure-code-generation`** — write or edit code, then harden it over a few
   attack → verify → repair turns, fixing each vulnerability against a real
@@ -95,47 +96,54 @@ The choice is remembered for the rest of the session.
 
 ---
 
-Everything has a working default. There are three ways to configure, and they
-override each other in this order (later wins): built-in defaults → settings UI
-→ per-run arguments.
+Everything has a working default. Configuration lives in two places, plus
+per-run arguments that override them for a single call.
 
-### Settings UI (easiest — no typing in the prompt)
+### Models — from Claude Code's live list
 
-Open **`/plugin`** → **attacker-verifier** → **Configure** (or the
-attacker-verifier rows in **`/config`**). You get editable fields:
+Pick which model the attacker and verifier run on with:
+
+```
+/attacker-verifier:configure
+```
+
+It shows the models Claude Code **currently** offers (read live from Claude
+Code's own model catalog, **Fable excluded**) and saves your choice to
+`.attacker-verifier/config.json`. The list is **not hardcoded** in the plugin:
+when Claude Code adds or changes models, these choices update automatically — no
+plugin edit needed.
+
+- `main` (the default) runs the role **inline on your current session model** —
+  no delegation. To follow the newest model you use, leave it on `main` and set
+  your session model with Claude Code's own **`/model`** picker.
+- A specific model runs that role on the dedicated subagent at that model.
+
+The engine reads the same live list directly if you want to see it:
+
+```
+python3 engine/cli.py list-models        # current models, fable excluded
+```
+
+### Effort, probes, and limits — in `/config`
+
+Open **`/config`** (or `/plugin` → attacker-verifier → Configure) for the static
+settings:
 
 | Setting | Control | Options | Default |
 |---|---|---|---|
-| **Attacker model** | dropdown | `main coding agent`, `opus`, `sonnet`, `haiku` | `main coding agent` |
 | **Attacker reasoning effort** | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` |
-| **Verifier model** (trace judge) | dropdown | `main coding agent`, `opus`, `sonnet`, `haiku` | `main coding agent` |
 | **Verifier reasoning effort** | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` |
 | **Probes per target (min)** | number | 1–100 | 5 |
 | **Probes per target (max)** | number | 1–100 | 10 |
 | **Repair turns** (`/secure-code-generation`) | number | 1–10 | 2 |
 | **Max targets per run** | number | 1–200 | 20 |
 
-Settings are saved and reused for every run until you change them.
+`inherit` effort uses your current session effort; a chosen level applies when a
+role runs on a model (not `main`).
 
-**About the model options (why families, not `opus 5.5`).** The attacker and
-verifier roles are run through Claude Code's subagent model override, which takes
-a **model family** — `opus`, `sonnet`, or `haiku` — and always resolves it to the
-**latest** model of that family. So picking `opus` tracks the current Opus
-automatically: there is no pinned version to maintain and nothing goes stale.
-This is why the list is families rather than specific version strings (a pinned
-`opus 5.5` would not be accepted by the delegation mechanism and would have to be
-updated by hand). `main coding agent` keeps the role inline on whatever model and
-effort your session is already using.
-
-**Reasoning effort.** `inherit` uses your current session effort. Choosing a
-level (`low` … `max`) sets the effort for that role when it runs on a chosen
-model. If a role is set to `main coding agent`, it always uses the session
-effort, so the effort dropdown applies once you pick a model for that role.
-
-> Note: the number fields show their current saved value. On a brand-new install
-> some Claude Code builds render the number boxes empty until first saved — the
-> effective defaults are still those in the table above (5, 10, 2, 20). Click
-> **Save configuration** once to write them in explicitly.
+> Note: on a brand-new install some Claude Code builds render the number boxes
+> empty until first saved — the effective defaults are still those above
+> (5, 10, 2, 20). Click **Save configuration** once to write them in explicitly.
 
 ### Per-run arguments (override the settings for one call)
 
@@ -147,31 +155,33 @@ effort, so the effort dropdown applies once you pick a model for that role.
 | Argument | Meaning |
 |---|---|
 | `--probes MIN-MAX` | probe budget per target |
-| `--attacker <main coding agent\|opus\|sonnet\|haiku>` | who writes probes |
-| `--verifier <main coding agent\|opus\|sonnet\|haiku>` | who judges undecided traces |
+| `--attacker <name>` | model for the attacker: any name from `list-models`, `opus`/`sonnet`/`haiku`, or `main coding agent` |
+| `--verifier <name>` | model for the verifier (same values as `--attacker`) |
 | `--attacker-effort <inherit\|low\|medium\|high\|xhigh\|max>` | attacker reasoning effort |
 | `--verifier-effort <inherit\|low\|medium\|high\|xhigh\|max>` | verifier reasoning effort |
 | `--turns N` | attack → verify → repair cycles (`/secure-code-generation`) |
 | `--max-targets N` | cap on how many functions a run attacks |
 | `--scope whole\|changed\|path` | what to attack |
 
-**Attacker and verifier as agents.** By default the main coding agent plays both
-roles inline. Choosing a model family delegates to the dedicated subagents
-(`attacker-verifier:attacker`, `attacker-verifier:verifier`) on the latest model
-of that family, at the chosen reasoning effort. The attacker is a genuine agent:
-it may read the code and the repository and iterate for up to 20 turns before
-committing its probes.
+**Attacker and verifier as agents.** By default both roles run inline on the
+main coding agent. Choosing a model delegates to the dedicated subagents
+(`attacker-verifier:attacker`, `attacker-verifier:verifier`) on that model, at
+the chosen reasoning effort. The attacker is a genuine agent: it may read the
+code and the repository and iterate for up to 20 turns before committing its
+probes.
 
 For the complete, explicit reference of every setting, see
 [docs/configuration.md](docs/configuration.md).
 
 ### Project file (optional, committed with the repo)
 
-Create `.attacker-verifier/config.json` at your repo root for engine-level
-defaults such as the sandbox and probe limits:
+`/attacker-verifier:configure` writes the model choices here; you can also set
+engine-level defaults (sandbox, probe limits) in the same file:
 
 ```json
 {
+  "attacker": "main",
+  "verifier": "claude-sonnet-5-5",
   "probes_min": 5,
   "probes_max": 10,
   "max_targets": 20,
