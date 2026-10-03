@@ -24,11 +24,17 @@ Recognised settings:
 | Setting | Meaning | Default |
 |---|---|---|
 | `probes_min`, `probes_max` | probe budget per target (`--probes 5-10`) | 5, 10 |
-| `attacker` | `main coding agent` (inline) or a model name (`--attacker opus`) | `main coding agent` |
-| `verifier` | `main coding agent` (inline) or a model name (`--verifier sonnet`) | `main coding agent` |
+| `attacker` | `main coding agent` (inline) or a model family (`--attacker opus`) | `main coding agent` |
+| `attacker_effort` | reasoning effort for a delegated attacker (`--attacker-effort high`) | `inherit` |
+| `verifier` | `main coding agent` (inline) or a model family (`--verifier sonnet`) | `main coding agent` |
+| `verifier_effort` | reasoning effort for a delegated verifier (`--verifier-effort high`) | `inherit` |
 | `num_turns` | repair cycles, generation only (`--turns 2`) | 2 |
 | `max_targets` | cap on targets attacked (`--max-targets 20`) | 20 |
 | `execution` | sandbox block from the session marker | `{"mode":"host"}` |
+
+Model families (`opus`/`sonnet`/`haiku`) resolve to the latest model of that
+family through Claude Code's subagent model override. When delegating, set the
+subagent's effort to the configured value unless it is `inherit`.
 
 Keep a per-run scratch directory for intermediate files:
 `RUN_DIR="${CLAUDE_PLUGIN_DATA}/runs/${CLAUDE_SESSION_ID}-<timestamp>"`.

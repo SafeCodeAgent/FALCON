@@ -23,22 +23,36 @@
   "userConfig": {
     "attacker": {
       "type": "string",
-      "title": "Attacker",
-      "description": "Who generates the adversarial probes. 'main coding agent' runs it inline; choosing a model runs the dedicated attacker agent (up to 20 turns) on that model.",
-      "options": ["main coding agent", "opus", "sonnet", "haiku", "fable"],
+      "title": "Attacker model",
+      "description": "Who generates the adversarial probes. 'main coding agent' runs it inline on your current session model. 'opus', 'sonnet', and 'haiku' run the dedicated attacker agent (up to 20 turns) on that model family, always resolving to the latest model of that family.",
+      "options": ["main coding agent", "opus", "sonnet", "haiku"],
       "default": "main coding agent"
+    },
+    "attacker_effort": {
+      "type": "string",
+      "title": "Attacker reasoning effort",
+      "description": "Reasoning effort for the attacker when it runs on a chosen model. 'inherit' keeps the current session's effort.",
+      "options": ["inherit", "low", "medium", "high", "xhigh", "max"],
+      "default": "inherit"
     },
     "verifier": {
       "type": "string",
-      "title": "Verifier (trace judge)",
-      "description": "Who judges execution traces the crash oracle leaves undecided. 'main coding agent' runs it inline; choosing a model runs the dedicated verifier agent on that model.",
-      "options": ["main coding agent", "opus", "sonnet", "haiku", "fable"],
+      "title": "Verifier model (trace judge)",
+      "description": "Who judges execution traces the crash oracle leaves undecided. 'main coding agent' runs it inline on your current session model. 'opus', 'sonnet', and 'haiku' run the dedicated verifier agent on that model family, always resolving to the latest model of that family.",
+      "options": ["main coding agent", "opus", "sonnet", "haiku"],
       "default": "main coding agent"
+    },
+    "verifier_effort": {
+      "type": "string",
+      "title": "Verifier reasoning effort",
+      "description": "Reasoning effort for the verifier when it runs on a chosen model. 'inherit' keeps the current session's effort.",
+      "options": ["inherit", "low", "medium", "high", "xhigh", "max"],
+      "default": "inherit"
     },
     "probes_min": {
       "type": "number",
       "title": "Probes per target (min)",
-      "description": "Minimum number of proof-of-concept probes the attacker generates per target.",
+      "description": "Minimum number of proof-of-concept probes the attacker generates per target. Default 5.",
       "default": 5,
       "min": 1,
       "max": 100
@@ -46,7 +60,7 @@
     "probes_max": {
       "type": "number",
       "title": "Probes per target (max)",
-      "description": "Maximum number of proof-of-concept probes the attacker generates per target.",
+      "description": "Maximum number of proof-of-concept probes the attacker generates per target. Default 10.",
       "default": 10,
       "min": 1,
       "max": 100
@@ -54,7 +68,7 @@
     "num_turns": {
       "type": "number",
       "title": "Repair turns (secure-code-generation)",
-      "description": "How many attack -> verify -> repair cycles /secure-code-generation runs before returning the best version.",
+      "description": "How many attack -> verify -> repair cycles /secure-code-generation runs before returning the best version. Default 2.",
       "default": 2,
       "min": 1,
       "max": 10
@@ -62,7 +76,7 @@
     "max_targets": {
       "type": "number",
       "title": "Max targets per run",
-      "description": "Cap on how many functions, methods, or classes a single run attacks.",
+      "description": "Cap on how many functions, methods, or classes a single run attacks. Default 20.",
       "default": 20,
       "min": 1,
       "max": 200

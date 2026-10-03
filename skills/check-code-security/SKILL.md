@@ -24,8 +24,8 @@ These values come from the plugin's settings — the user sets them in **`/confi
 (or the plugin's configure dialog), so they do **not** have to be typed in the
 prompt. The values in effect for this run are:
 
-- Attacker: `${user_config.attacker}`
-- Verifier: `${user_config.verifier}`
+- Attacker model: `${user_config.attacker}` (effort: `${user_config.attacker_effort}`)
+- Verifier model: `${user_config.verifier}` (effort: `${user_config.verifier_effort}`)
 - Probes per target: `${user_config.probes_min}`–`${user_config.probes_max}`
 - Max targets: `${user_config.max_targets}`
 
@@ -36,11 +36,14 @@ the settings above for this one run.
 Apply them like this:
 - Build `CONFIG_JSON` with `probes_min`, `probes_max`, `max_targets`, plus the
   `execution` block from the session marker (step 1).
-- **Attacker:** if it is `main coding agent`, play the attacker inline. Otherwise
-  it is a model name — delegate to the `attacker-verifier:attacker` subagent via
-  the Agent tool with `model` set to that value (it runs up to 20 turns).
+- **Attacker:** if it is `main coding agent`, play the attacker inline on the
+  current session model. Otherwise it is a model family (`opus`/`sonnet`/`haiku`)
+  — delegate to the `attacker-verifier:attacker` subagent via the Agent tool with
+  `model` set to that value (it runs up to 20 turns). If the attacker effort is
+  not `inherit`, run that subagent at the chosen effort.
 - **Verifier:** if it is `main coding agent`, judge traces inline. Otherwise
-  delegate to the `attacker-verifier:verifier` subagent with `model` set to it.
+  delegate to the `attacker-verifier:verifier` subagent with `model` set to the
+  chosen family, at the chosen verifier effort when it is not `inherit`.
 
 ## 1. Sandbox (first run in the session)
 
