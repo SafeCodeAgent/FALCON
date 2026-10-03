@@ -1,0 +1,21 @@
+# The paper is kept locally but not published with the plugin.
+paper/
+
+# Engine run artifacts written into a repo under test.
+.attacker-verifier/
+.attacker-verifier-harness.py
+
+# Generated security reports (named <repo>_<timestamp>.md).
+*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9].md
+
+# Python
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.pytest_cache/
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+*.swp

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "attacker-verifier",
+  "displayName": "Attacker-Verifier",
+  "version": "0.1.0",
+  "description": "Counterexample-grounded security checking for agent-generated code: an attacker proposes proof-of-concept probes, a faithfulness check filters them, and a verifier judges their sandboxed execution traces.",
+  "author": {
+    "name": "tue09",
+    "url": "https://github.com/tue09"
+  },
+  "homepage": "https://github.com/tue09/attacker-verifier",
+  "repository": "https://github.com/tue09/attacker-verifier",
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "secure-code-generation",
+    "vulnerability-detection",
+    "static-analysis",
+    "dynamic-analysis",
+    "sandbox",
+    "code-review"
+  ]
+}
