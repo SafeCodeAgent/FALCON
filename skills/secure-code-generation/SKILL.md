@@ -26,6 +26,7 @@ The in-effect values are:
 
 - Attacker effort: `${user_config.attacker_effort}`
 - Verifier effort: `${user_config.verifier_effort}`
+- Attacker max turns: `${user_config.attacker_max_turns}`
 - Probes per target: `${user_config.probes_min}`–`${user_config.probes_max}`
 - Repair turns: `${user_config.num_turns}`
 - Max targets: `${user_config.max_targets}`

@@ -59,6 +59,7 @@ model *different* from your session model.
 |---|---|---|---|---|
 | `attacker_effort` | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` | a delegated attacker |
 | `verifier_effort` | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` | a delegated verifier |
+| `attacker_max_turns` | number | 1–100 | 20 | the attacker, per target |
 | `probes_min` | number | 1–100 | 5 | both commands |
 | `probes_max` | number | 1–100 | 10 | both commands |
 | `num_turns` | number | 1–10 | 2 | `/secure-code-generation` only |
@@ -73,8 +74,18 @@ Typed after the command, overriding the saved settings for one run:
 
 `--attacker <name>`, `--verifier <name>` (any name from `list-models`, or
 `opus`/`sonnet`/`haiku`, or `main coding agent`), `--attacker-effort`,
-`--verifier-effort`, `--probes MIN-MAX`, `--turns N`, `--max-targets N`,
-`--scope whole|changed|path`.
+`--verifier-effort`, `--attacker-max-turns N`, `--probes MIN-MAX`, `--turns N`,
+`--max-targets N`, `--scope whole|changed|path`.
+
+## Attacker turn budget
+
+`attacker_max_turns` (default 20) is how long the attacker works on one target:
+it reads the code and crafts probes for up to this many turns, then returns its
+probes — even if fewer than `probes_min`. If it reaches the limit without
+returning, it is asked once more to output what it has; if it still produces no
+probes, that target is skipped and reported with no evidence. This is distinct
+from `max_targets` (how many targets a run attacks) and `num_turns` (how many
+repair cycles `/secure-code-generation` runs).
 
 ## The sandbox (`execution`)
 

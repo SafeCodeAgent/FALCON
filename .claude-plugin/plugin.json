@@ -35,6 +35,14 @@
       "options": ["inherit", "low", "medium", "high", "xhigh", "max"],
       "default": "inherit"
     },
+    "attacker_max_turns": {
+      "type": "number",
+      "title": "Attacker max turns",
+      "description": "Turn budget for the attacker per target: it explores the code and crafts probes for up to this many turns, then returns its probes. If it has not returned by the limit it is compelled to, and if it produces no probes the target is skipped. Default 20.",
+      "default": 20,
+      "min": 1,
+      "max": 100
+    },
     "probes_min": {
       "type": "number",
       "title": "Probes per target (min)",

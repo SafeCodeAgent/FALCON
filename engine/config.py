@@ -33,6 +33,10 @@ DEFAULTS: Dict[str, Any] = {
     # Secure-code-generation only: how many attack -> verify -> repair cycles to
     # run before returning the best patch so far.
     "num_turns": 2,
+    # Turn budget for the attacker per target: it explores and crafts probes for
+    # up to this many turns, then returns its probes (compelled to return if it
+    # has not; the target is skipped if it produces none).
+    "attacker_max_turns": 20,
     # Upper bound on how many targets a single run attacks, so a large repo does
     # not expand without limit. Targets are ranked by security relevance first.
     "max_targets": 20,

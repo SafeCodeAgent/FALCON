@@ -24,6 +24,7 @@ Recognised settings:
 | Setting | Meaning | Default |
 |---|---|---|
 | `probes_min`, `probes_max` | probe budget per target (`--probes 5-10`) | 5, 10 |
+| `attacker_max_turns` | attacker turn budget per target (`--attacker-max-turns 20`) | 20 |
 | `attacker` | `main` (inline) or a model id, from `.attacker-verifier/config.json`; `--attacker <name>` overrides | `main` |
 | `attacker_effort` | reasoning effort for a delegated attacker (`--attacker-effort high`) | `inherit` |
 | `verifier` | `main` (inline) or a model id, from `.attacker-verifier/config.json`; `--verifier <name>` overrides | `main` |
@@ -60,17 +61,30 @@ Progress: `turn t/N · main coding agent · selected K target(s)`.
 ### 2. Attack — the attacker agent
 
 The attacker proposes probes. It is an **agent**, not a single reply: it may
-read the code and the repository and iterate, up to 20 turns, before writing its
-probes. Read the attacker prompt at
-`${CLAUDE_PLUGIN_ROOT}/engine/prompts/attacker.md` and follow it exactly.
+read the code and the repository and iterate, up to its turn budget
+(`attacker_max_turns`, default 20), before writing its probes. Read the attacker
+prompt at `${CLAUDE_PLUGIN_ROOT}/engine/prompts/attacker.md` and follow it
+exactly.
 
 - If `attacker` is `main` (default): **you** play the attacker, inline. For each
   target, work through the attacker prompt and produce between `probes_min` and
-  `probes_max` deterministic probes. Explore the target as needed before
-  committing probes — treat your budget as up to 20 steps of attacker work.
+  `probes_max` deterministic probes. Treat `attacker_max_turns` as your budget of
+  attacker steps: explore within it, then commit probes.
 - If `attacker` is a model id: delegate to the `attacker-verifier:attacker`
-  subagent via the Agent tool with `model` set to that id (it runs up to 20
-  turns), passing the target, the task, and the path to write to.
+  subagent via the Agent tool with `model` set to that id, telling it the turn
+  budget and the path to write its probes to.
+
+**Turn budget and return/stop rule.** The attacker must return its probes within
+`attacker_max_turns`:
+
+- When the budget is reached, it returns the probes it has (even if fewer than
+  `probes_min`).
+- If the attacker finishes or hits the budget without having written a probes
+  file, make **one** final request: "output the probes JSON you have now to
+  `<path>`, even if incomplete; if you have none, return `{"probes": []}`." This
+  compels a return.
+- If it still produces no probes for a target, **stop** on that target: it
+  contributes no probes and is reported with no evidence. Do not loop further.
 
 Collect all probes into one file `"$RUN_DIR/probes.json"`:
 

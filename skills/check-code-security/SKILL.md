@@ -25,6 +25,7 @@ values are:
 
 - Attacker effort: `${user_config.attacker_effort}`
 - Verifier effort: `${user_config.verifier_effort}`
+- Attacker max turns: `${user_config.attacker_max_turns}`
 - Probes per target: `${user_config.probes_min}`–`${user_config.probes_max}`
 - Max targets: `${user_config.max_targets}`
 

@@ -133,6 +133,7 @@ settings:
 |---|---|---|---|
 | **Attacker reasoning effort** | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` |
 | **Verifier reasoning effort** | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` |
+| **Attacker max turns** | number | 1–100 | 20 |
 | **Probes per target (min)** | number | 1–100 | 5 |
 | **Probes per target (max)** | number | 1–100 | 10 |
 | **Repair turns** (`/secure-code-generation`) | number | 1–10 | 2 |
@@ -140,6 +141,12 @@ settings:
 
 `inherit` effort uses your current session effort; a chosen level applies when a
 role runs on a model (not `main`).
+
+**Attacker max turns** is the attacker's turn budget per target: it explores and
+crafts probes for up to this many turns, then returns its probes (compelled to
+return if it hasn't; the target is skipped if it produces none). This is
+separate from **Max targets per run** (how many functions one run attacks) and
+**Repair turns** (how many fix cycles `/secure-code-generation` runs).
 
 > Note: on a brand-new install some Claude Code builds render the number boxes
 > empty until first saved — the effective defaults are still those above
@@ -159,6 +166,7 @@ role runs on a model (not `main`).
 | `--verifier <name>` | model for the verifier (same values as `--attacker`) |
 | `--attacker-effort <inherit\|low\|medium\|high\|xhigh\|max>` | attacker reasoning effort |
 | `--verifier-effort <inherit\|low\|medium\|high\|xhigh\|max>` | verifier reasoning effort |
+| `--attacker-max-turns N` | attacker turn budget per target |
 | `--turns N` | attack → verify → repair cycles (`/secure-code-generation`) |
 | `--max-targets N` | cap on how many functions a run attacks |
 | `--scope whole\|changed\|path` | what to attack |
