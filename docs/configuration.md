@@ -3,61 +3,24 @@
 Every setting, where to set it, what it accepts, and how it is applied. All
 settings have working defaults, so the plugin runs with no configuration at all.
 
-## Two places to configure
+## Where to set it
 
-- **Models** (which model the attacker and verifier run on) are chosen with the
-  **`/attacker-verifier:configure`** command, which reads Claude Code's **live**
-  model list. Saved to `.attacker-verifier/config.json` in your repo.
-- **Everything else** (reasoning effort, probe counts, repair turns, max
-  targets) is set in **`/config`** (or `/plugin` → attacker-verifier →
-  Configure). Saved to `pluginConfigs` in your `settings.json`.
+- **Settings UI** — `/config`, or `/plugin` → attacker-verifier → **Configure**.
+  Every setting below is an editable row there (dropdown or number). Saved to
+  `pluginConfigs` in your `settings.json`.
+- **Per-run arguments** typed after the command override the settings for one
+  run.
+- An optional **project file** `.attacker-verifier/config.json` at the repo root
+  can also carry engine-level values (probe limits, `max_targets`, and the
+  `execution` sandbox block).
 
-Per-run arguments typed after a command override both for that single run.
-
-## Models (live list)
-
-The attacker and verifier can run on any model Claude Code currently offers. The
-list is **not hardcoded in this plugin** — it is read at run time from Claude
-Code's own model catalog, so when Claude Code adds or changes models the choices
-update automatically. The **Fable family is excluded**.
-
-Set the models with:
-
-```
-/attacker-verifier:configure
-```
-
-It shows the live models as a picker and saves your choice to
-`.attacker-verifier/config.json`:
-
-```json
-{ "attacker": "main", "verifier": "claude-sonnet-5-5" }
-```
-
-- `main` means **run the role inline on your current session model** (no
-  delegation). This is the default when nothing is set.
-- A model id (e.g. `claude-opus-5-5`) runs the role on the dedicated subagent at
-  that model.
-
-The engine exposes the same live data directly:
-
-```
-python3 engine/cli.py list-models          # current models, fable excluded
-python3 engine/cli.py resolve-model opus    # -> the latest Opus's model id
-```
-
-### The always-current path
-
-If you want a role to simply follow the newest model you use, leave it on `main`
-and pick your model with Claude Code's own **`/model`** picker (that list is
-live). Set a specific model here only when you want the attacker or verifier on a
-model *different* from your session model.
-
-## Effort, probes, and limits (`/config`)
+## The settings
 
 | Key | Control | Accepts | Default | Applies to |
 |---|---|---|---|---|
+| `attacker` | dropdown | `main coding agent`, `opus`, `sonnet`, `haiku` | `main coding agent` | both commands |
 | `attacker_effort` | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` | a delegated attacker |
+| `verifier` | dropdown | `main coding agent`, `opus`, `sonnet`, `haiku` | `main coding agent` | both commands |
 | `verifier_effort` | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` | a delegated verifier |
 | `attacker_max_turns` | number | 1–100 | 20 | the attacker, per target |
 | `probes_min` | number | 1–100 | 5 | both commands |
@@ -65,17 +28,29 @@ model *different* from your session model.
 | `num_turns` | number | 1–10 | 2 | `/secure-code-generation` only |
 | `max_targets` | number | 1–200 | 20 | both commands |
 
-`inherit` effort uses your current session effort. A chosen level applies when
-the role runs on a model (not `main`).
-
-## Per-run arguments
-
-Typed after the command, overriding the saved settings for one run:
-
-`--attacker <name>`, `--verifier <name>` (any name from `list-models`, or
-`opus`/`sonnet`/`haiku`, or `main coding agent`), `--attacker-effort`,
+Per-run argument equivalents: `--attacker`, `--attacker-effort`, `--verifier`,
 `--verifier-effort`, `--attacker-max-turns N`, `--probes MIN-MAX`, `--turns N`,
 `--max-targets N`, `--scope whole|changed|path`.
+
+## How the model setting works
+
+`main coding agent` (the default) runs the role **inline** on your current
+session model — no delegation. To follow whatever model you are using, leave it
+on `main coding agent` and set your session model with Claude Code's own
+`/model` picker.
+
+`opus`, `sonnet`, and `haiku` are **model families**. The chosen family is passed
+to Claude Code's subagent model override, which resolves it to the **latest**
+model of that family at run time. So the choice tracks the current model
+automatically — nothing is version-pinned and nothing needs manual updating when
+Claude Code ships a new model. The Fable family is intentionally not offered.
+
+## How reasoning effort works
+
+- `inherit` uses your current session effort.
+- Any other level (`low` … `max`) sets the effort for that role **when it runs on
+  a chosen family** (not `main coding agent`).
+- When a role is `main coding agent`, it always uses the session effort.
 
 ## Attacker turn budget
 

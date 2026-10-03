@@ -20,13 +20,14 @@ from typing import Any, Dict, Optional
 
 # The defaults below are the "just run it" settings described in the README.
 DEFAULTS: Dict[str, Any] = {
-    # Who proposes probes. "main" means the coding agent currently running the
-    # skill does it inline; any other value names a subagent or model the skill
-    # should delegate to.
-    "attacker": "main",
-    # Who judges traces the deterministic stage leaves undecided. Same meaning
-    # as ``attacker``; "main" keeps it inline with the coding agent.
-    "verifier": "main",
+    # Who proposes probes. "main coding agent" runs it inline on the current
+    # session model; a family alias (opus/sonnet/haiku) delegates to the attacker
+    # subagent on the latest model of that family. (Read by the skill, not the
+    # engine; here so a project config and ``config`` can carry it.)
+    "attacker": "main coding agent",
+    # Who judges traces the deterministic stage leaves undecided. Same vocabulary
+    # as ``attacker``; "main coding agent" keeps it inline.
+    "verifier": "main coding agent",
     # Number of probes requested per target, as a closed range.
     "probes_min": 5,
     "probes_max": 10,

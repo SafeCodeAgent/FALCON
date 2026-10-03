@@ -20,34 +20,31 @@ Repo root is `${CLAUDE_PROJECT_DIR}`. The user's arguments are: `$ARGUMENTS`.
 
 ## Configuration
 
-Effort and probe counts come from the plugin settings (`/config`). The in-effect
-values are:
+All settings come from the plugin settings (`/config`, or `/plugin` →
+attacker-verifier → Configure). The in-effect values are:
 
-- Attacker effort: `${user_config.attacker_effort}`
-- Verifier effort: `${user_config.verifier_effort}`
+- Attacker model: `${user_config.attacker}` (effort: `${user_config.attacker_effort}`)
+- Verifier model: `${user_config.verifier}` (effort: `${user_config.verifier_effort}`)
 - Attacker max turns: `${user_config.attacker_max_turns}`
 - Probes per target: `${user_config.probes_min}`–`${user_config.probes_max}`
 - Max targets: `${user_config.max_targets}`
 
-The attacker and verifier **models** are read from the repo config file
-`${CLAUDE_PROJECT_DIR}/.attacker-verifier/config.json` (set with
-`/attacker-verifier:configure`). Read its `attacker` and `verifier` keys; if the
-file or a key is absent, the model is `main` (run inline on the session model).
-A per-run argument overrides the saved choice: resolve `--attacker <name>` or
-`--verifier <name>` with
-`python3 "${CLAUDE_PLUGIN_ROOT}/engine/cli.py" resolve-model "<name>"`.
+A per-run argument overrides a setting for this run (`--probes MIN-MAX`,
+`--attacker <main coding agent|opus|sonnet|haiku>`, `--verifier ...`,
+`--max-targets N`).
 
 Apply them:
 - Build `CONFIG_JSON` with `probes_min`, `probes_max`, `max_targets`, plus the
   `execution` block from the session marker (step 1).
-- **Attacker:** if the model is `main`, play the attacker inline on the current
-  session model. Otherwise it is a model id — delegate to the
-  `attacker-verifier:attacker` subagent via the Agent tool with `model` set to
-  that id (it runs up to 20 turns); if the attacker effort is not `inherit`, run
-  it at that effort.
-- **Verifier:** if the model is `main`, judge traces inline. Otherwise delegate
-  to the `attacker-verifier:verifier` subagent with `model` set to that id, at
-  the verifier effort when it is not `inherit`.
+- **Attacker:** if it is `main coding agent`, play the attacker inline on the
+  current session model. Otherwise it is a family (`opus`/`sonnet`/`haiku`) —
+  delegate to the `attacker-verifier:attacker` subagent via the Agent tool with
+  `model` set to that family, which resolves to the latest model of it (up to the
+  attacker turn budget); if the attacker effort is not `inherit`, run it at that
+  effort.
+- **Verifier:** if it is `main coding agent`, judge traces inline. Otherwise
+  delegate to the `attacker-verifier:verifier` subagent with `model` set to the
+  chosen family, at the verifier effort when it is not `inherit`.
 
 ## 1. Sandbox (first run in the session)
 
