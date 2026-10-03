@@ -24,8 +24,8 @@
     "attacker": {
       "type": "string",
       "title": "Attacker model",
-      "description": "Who generates the adversarial probes. 'main coding agent' runs it inline on your current session model. 'opus', 'sonnet', and 'haiku' run the dedicated attacker agent on that family, always resolving to the latest model of that family (Fable is not offered).",
-      "options": ["main coding agent", "opus", "sonnet", "haiku"],
+      "description": "Who generates the adversarial probes. 'main coding agent' runs it inline on your current session model; a specific model runs the dedicated attacker agent on it. This list is fixed in the plugin (a settings dropdown cannot read Claude Code's live list); each choice is resolved to the current model id at run time. Fable is not offered.",
+      "options": ["main coding agent", "Opus 5.5", "Opus 5", "Opus 4.8", "Opus 4.7", "Opus 4.6", "Sonnet 5.5", "Sonnet 5", "Sonnet 4.6", "Haiku 4.5"],
       "default": "main coding agent"
     },
     "attacker_effort": {
@@ -38,8 +38,8 @@
     "verifier": {
       "type": "string",
       "title": "Verifier model (trace judge)",
-      "description": "Who judges execution traces the crash oracle leaves undecided. 'main coding agent' runs it inline on your current session model. 'opus', 'sonnet', and 'haiku' run the dedicated verifier agent on that family, always resolving to the latest model of that family (Fable is not offered).",
-      "options": ["main coding agent", "opus", "sonnet", "haiku"],
+      "description": "Who judges execution traces the crash oracle leaves undecided. 'main coding agent' runs it inline on your current session model; a specific model runs the dedicated verifier agent on it. This list is fixed in the plugin (a settings dropdown cannot read Claude Code's live list); each choice is resolved to the current model id at run time. Fable is not offered.",
+      "options": ["main coding agent", "Opus 5.5", "Opus 5", "Opus 4.8", "Opus 4.7", "Opus 4.6", "Sonnet 5.5", "Sonnet 5", "Sonnet 4.6", "Haiku 4.5"],
       "default": "main coding agent"
     },
     "verifier_effort": {

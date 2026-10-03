@@ -31,7 +31,7 @@ from typing import Any, Dict, List, Optional
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from engine import __version__, config as config_mod  # noqa: E402
-from engine import faithfulness, report, runner, targets as targets_mod, verifier  # noqa: E402
+from engine import faithfulness, models as models_mod, report, runner, targets as targets_mod, verifier  # noqa: E402
 
 STDOUT_EXCERPT = 1500
 
@@ -388,6 +388,22 @@ def cmd_config(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_resolve_model(args: argparse.Namespace) -> int:
+    resolved = models_mod.resolve(args.model)
+    if resolved is None:
+        sys.stderr.write("attacker-verifier: unknown or unsupported model: %r\n" % args.model)
+        return 1
+    print(resolved)
+    return 0
+
+
+def cmd_list_models(args: argparse.Namespace) -> int:
+    found = models_mod.list_models()
+    for model in found:
+        print(model["name"])
+    return 0
+
+
 def cmd_version(_args: argparse.Namespace) -> int:
     print(__version__)
     return 0
@@ -440,6 +456,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--repo", **common_repo)
     p.add_argument("--config-json", **common_cfg)
     p.set_defaults(func=cmd_config)
+
+    p = sub.add_parser("resolve-model", help="map a model label to an Agent-tool model id")
+    p.add_argument("model", help="e.g. 'Opus 5.5', 'opus', 'main coding agent'")
+    p.set_defaults(func=cmd_resolve_model)
+
+    p = sub.add_parser("list-models", help="print Claude Code's live model names (fable excluded)")
+    p.set_defaults(func=cmd_list_models)
 
     p = sub.add_parser("version", help="print the engine version")
     p.set_defaults(func=cmd_version)

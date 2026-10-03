@@ -30,21 +30,28 @@ attacker-verifier → Configure). The in-effect values are:
 - Max targets: `${user_config.max_targets}`
 
 A per-run argument overrides a setting for this run (`--probes MIN-MAX`,
-`--attacker <main coding agent|opus|sonnet|haiku>`, `--verifier ...`,
-`--max-targets N`).
+`--attacker <model>`, `--verifier <model>`, `--max-targets N`).
+
+Resolve each model choice to what the Agent tool takes:
+
+```
+python3 "${CLAUDE_PLUGIN_ROOT}/engine/cli.py" resolve-model "<the setting value>"
+```
+
+It prints `main` for `main coding agent`, or a concrete model id for a model
+label (looked up in Claude Code's live catalog, so the id is current).
 
 Apply them:
 - Build `CONFIG_JSON` with `probes_min`, `probes_max`, `max_targets`, plus the
   `execution` block from the session marker (step 1).
-- **Attacker:** if it is `main coding agent`, play the attacker inline on the
-  current session model. Otherwise it is a family (`opus`/`sonnet`/`haiku`) —
-  delegate to the `attacker-verifier:attacker` subagent via the Agent tool with
-  `model` set to that family, which resolves to the latest model of it (up to the
+- **Attacker:** if the resolved value is `main`, play the attacker inline on the
+  current session model. Otherwise delegate to the `attacker-verifier:attacker`
+  subagent via the Agent tool with `model` set to that resolved id (up to the
   attacker turn budget); if the attacker effort is not `inherit`, run it at that
   effort.
-- **Verifier:** if it is `main coding agent`, judge traces inline. Otherwise
-  delegate to the `attacker-verifier:verifier` subagent with `model` set to the
-  chosen family, at the verifier effort when it is not `inherit`.
+- **Verifier:** if the resolved value is `main`, judge traces inline. Otherwise
+  delegate to the `attacker-verifier:verifier` subagent with `model` set to that
+  resolved id, at the verifier effort when it is not `inherit`.
 
 ## 1. Sandbox (first run in the session)
 

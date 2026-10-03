@@ -18,9 +18,9 @@ settings have working defaults, so the plugin runs with no configuration at all.
 
 | Key | Control | Accepts | Default | Applies to |
 |---|---|---|---|---|
-| `attacker` | dropdown | `main coding agent`, `opus`, `sonnet`, `haiku` | `main coding agent` | both commands |
+| `attacker` | dropdown | `main coding agent` + model names (`Opus 5.5`, `Opus 5`, …) | `main coding agent` | both commands |
 | `attacker_effort` | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` | a delegated attacker |
-| `verifier` | dropdown | `main coding agent`, `opus`, `sonnet`, `haiku` | `main coding agent` | both commands |
+| `verifier` | dropdown | `main coding agent` + model names (`Opus 5.5`, `Opus 5`, …) | `main coding agent` | both commands |
 | `verifier_effort` | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` | a delegated verifier |
 | `attacker_max_turns` | number | 1–100 | 20 | the attacker, per target |
 | `probes_min` | number | 1–100 | 5 | both commands |
@@ -39,11 +39,19 @@ session model — no delegation. To follow whatever model you are using, leave i
 on `main coding agent` and set your session model with Claude Code's own
 `/model` picker.
 
-`opus`, `sonnet`, and `haiku` are **model families**. The chosen family is passed
-to Claude Code's subagent model override, which resolves it to the **latest**
-model of that family at run time. So the choice tracks the current model
-automatically — nothing is version-pinned and nothing needs manual updating when
-Claude Code ships a new model. The Fable family is intentionally not offered.
+Any other choice is a **model name** (`Opus 5.5`, `Opus 5`, `Sonnet 5.5`, …) and
+runs the role on the dedicated subagent at that model. At run time the plugin
+maps the chosen name to the exact current model id by looking it up in Claude
+Code's live model catalog (`engine/cli.py resolve-model "<name>"`), so the id is
+always correct. The Fable family is not offered.
+
+**The dropdown list is fixed, not live.** A settings dropdown is part of the
+plugin manifest and cannot be populated from Claude Code's live model list, so
+the *names shown in the dropdown* are a fixed list that is updated in a plugin
+release. When Claude Code ships a brand-new model, it appears once the list is
+updated. (You can always leave the role on `main coding agent` and pick the new
+model with `/model`, which needs no plugin change.) Run `engine/cli.py
+list-models` to see the models Claude Code currently offers.
 
 ## How reasoning effort works
 

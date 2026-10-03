@@ -105,9 +105,9 @@ is an editable row:
 
 | Setting | Control | Options | Default |
 |---|---|---|---|
-| **Attacker model** | dropdown | `main coding agent`, `opus`, `sonnet`, `haiku` | `main coding agent` |
+| **Attacker model** | dropdown | `main coding agent`, `Opus 5.5`, `Opus 5`, `Opus 4.8`, `Sonnet 5.5`, `Sonnet 5`, `Haiku 4.5`, … | `main coding agent` |
 | **Attacker reasoning effort** | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` |
-| **Verifier model** (trace judge) | dropdown | `main coding agent`, `opus`, `sonnet`, `haiku` | `main coding agent` |
+| **Verifier model** (trace judge) | dropdown | same model list as Attacker | `main coding agent` |
 | **Verifier reasoning effort** | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` |
 | **Attacker max turns** | number | 1–100 | 20 |
 | **Probes per target (min)** | number | 1–100 | 5 |
@@ -117,13 +117,19 @@ is an editable row:
 
 **Models.** `main coding agent` (the default) runs the role inline on your
 current session model — to follow whatever model you use, leave it here and set
-your session model with Claude Code's own **`/model`** picker. `opus` / `sonnet`
-/ `haiku` are **families** that always resolve to the **latest** model of that
-family, so the choice auto-updates when Claude Code ships a new model — nothing
-is version-pinned and no plugin edit is needed. Fable is not offered.
+your session model with Claude Code's own **`/model`** picker. Any other choice
+is a model name and runs the role on the dedicated subagent at that model; the
+plugin maps the name to the exact current model id from Claude Code's live
+catalog at run time. Fable is not offered.
+
+The dropdown's **names are a fixed list** (a settings dropdown can't read Claude
+Code's live model list), updated in a plugin release; a brand-new model shows up
+once the list is updated, or you can pick it via `/model` with the role left on
+`main coding agent`. Run `python3 engine/cli.py list-models` to see what Claude
+Code currently offers.
 
 `inherit` effort uses your current session effort; a chosen level applies when a
-role runs on a family (not `main coding agent`).
+role runs on a model (not `main coding agent`).
 
 **Attacker max turns** is the attacker's turn budget per target: it explores and
 crafts probes for up to this many turns, then returns its probes (compelled to
@@ -145,8 +151,8 @@ separate from **Max targets per run** (how many functions one run attacks) and
 | Argument | Meaning |
 |---|---|
 | `--probes MIN-MAX` | probe budget per target |
-| `--attacker <main coding agent\|opus\|sonnet\|haiku>` | model for the attacker |
-| `--verifier <main coding agent\|opus\|sonnet\|haiku>` | model for the verifier |
+| `--attacker <name>` | model for the attacker (a model name, `opus`/`sonnet`/`haiku`, or `main coding agent`) |
+| `--verifier <name>` | model for the verifier (same values as `--attacker`) |
 | `--attacker-effort <inherit\|low\|medium\|high\|xhigh\|max>` | attacker reasoning effort |
 | `--verifier-effort <inherit\|low\|medium\|high\|xhigh\|max>` | verifier reasoning effort |
 | `--attacker-max-turns N` | attacker turn budget per target |
