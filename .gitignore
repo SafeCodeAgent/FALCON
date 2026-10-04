@@ -1,16 +1,28 @@
-# The paper is kept locally but not published with the plugin.
+# The paper PDF is kept locally, not in the repository.
 paper/
 
-# Engine run artifacts written into a repo under test.
+# Engine files written into a repository under test.
 .attacker-verifier/
-.attacker-verifier-harness.py
 
-# Generated security reports (named <repo>_<timestamp>.md).
+# Security reports (named <repo>_<timestamp>.md).
 *_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9].md
+
+# Experiment data, outputs, and checkpoints.
+experiments/**/outputs/
+experiments/**/runs/
+experiments/**/workspaces/
+experiments/rl/data/
+*.parquet
+*.partial
+*.log
+.env
 
 # Python
 __pycache__/
 *.py[cod]
+*.egg-info/
+build/
+dist/
 .mypy_cache/
 .pytest_cache/
 .venv/

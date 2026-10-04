@@ -2,15 +2,15 @@
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "attacker-verifier",
   "owner": {
-    "name": "tue09",
-    "url": "https://github.com/tue09"
+    "name": "SafeCodeAgent",
+    "url": "https://github.com/SafeCodeAgent"
   },
-  "description": "Attacker-Verifier: secure code generation and security checking for Claude Code.",
+  "description": "attacker-verifier: security checking and secure code generation for Claude Code.",
   "plugins": [
     {
       "name": "attacker-verifier",
       "source": ".",
-      "description": "Generate secure code and check existing code for vulnerabilities with sandboxed, counterexample-grounded verification.",
+      "description": "Check code for vulnerabilities, or write code and harden it, using sandboxed proof-of-concept probes and trace verification.",
       "category": "security"
     }
   ]

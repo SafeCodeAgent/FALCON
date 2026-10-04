@@ -2,21 +2,21 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
   "name": "attacker-verifier",
   "displayName": "Attacker-Verifier",
-  "version": "0.1.0",
-  "description": "Counterexample-grounded security checking for agent-generated code: an attacker proposes proof-of-concept probes, a faithfulness check filters them, and a verifier judges their sandboxed execution traces.",
+  "version": "0.2.0",
+  "description": "Checks code for security vulnerabilities by attacking it: an attacker writes proof-of-concept probes, unfaithful probes are discarded, and a verifier judges the sandboxed execution traces.",
   "author": {
-    "name": "tue09",
-    "url": "https://github.com/tue09"
+    "name": "SafeCodeAgent",
+    "url": "https://github.com/SafeCodeAgent"
   },
-  "homepage": "https://github.com/tue09/attacker-verifier",
-  "repository": "https://github.com/tue09/attacker-verifier",
+  "homepage": "https://safecodeagent.github.io/attacker-verifier/",
+  "repository": "https://github.com/SafeCodeAgent/attacker-verifier",
   "license": "MIT",
   "keywords": [
     "security",
     "secure-code-generation",
     "vulnerability-detection",
-    "static-analysis",
     "dynamic-analysis",
+    "proof-of-concept",
     "sandbox",
     "code-review"
   ],
@@ -24,35 +24,71 @@
     "attacker": {
       "type": "string",
       "title": "Attacker model",
-      "description": "Who generates the adversarial probes. 'main coding agent' runs it inline on your current session model; a specific model runs the dedicated attacker agent on it. This list is fixed in the plugin (a settings dropdown cannot read Claude Code's live list); each choice is resolved to the current model id at run time. Fable is not offered.",
-      "options": ["main coding agent", "Opus 5.5", "Opus 5", "Opus 4.8", "Opus 4.7", "Opus 4.6", "Sonnet 5.5", "Sonnet 5", "Sonnet 4.6", "Haiku 4.5"],
+      "description": "Who writes the adversarial probes. 'main coding agent' runs the attacker in your current session; a model name runs the attacker subagent on that model. Names are resolved to current model ids when a run starts.",
+      "options": [
+        "main coding agent",
+        "Opus 5.5",
+        "Opus 5",
+        "Opus 4.8",
+        "Opus 4.7",
+        "Opus 4.6",
+        "Sonnet 5.5",
+        "Sonnet 5",
+        "Sonnet 4.6",
+        "Haiku 4.5"
+      ],
       "default": "main coding agent"
     },
     "attacker_effort": {
       "type": "string",
       "title": "Attacker reasoning effort",
       "description": "Reasoning effort for the attacker when it runs on a chosen model. 'inherit' keeps the current session's effort.",
-      "options": ["inherit", "low", "medium", "high", "xhigh", "max"],
+      "options": [
+        "inherit",
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
       "default": "inherit"
     },
     "verifier": {
       "type": "string",
       "title": "Verifier model (trace judge)",
-      "description": "Who judges execution traces the crash oracle leaves undecided. 'main coding agent' runs it inline on your current session model; a specific model runs the dedicated verifier agent on it. This list is fixed in the plugin (a settings dropdown cannot read Claude Code's live list); each choice is resolved to the current model id at run time. Fable is not offered.",
-      "options": ["main coding agent", "Opus 5.5", "Opus 5", "Opus 4.8", "Opus 4.7", "Opus 4.6", "Sonnet 5.5", "Sonnet 5", "Sonnet 4.6", "Haiku 4.5"],
+      "description": "Who judges the traces the crash oracle cannot decide. 'main coding agent' runs the judge in your current session; a model name runs the verifier subagent on that model. Names are resolved to current model ids when a run starts.",
+      "options": [
+        "main coding agent",
+        "Opus 5.5",
+        "Opus 5",
+        "Opus 4.8",
+        "Opus 4.7",
+        "Opus 4.6",
+        "Sonnet 5.5",
+        "Sonnet 5",
+        "Sonnet 4.6",
+        "Haiku 4.5"
+      ],
       "default": "main coding agent"
     },
     "verifier_effort": {
       "type": "string",
       "title": "Verifier reasoning effort",
       "description": "Reasoning effort for the verifier when it runs on a chosen model. 'inherit' keeps the current session's effort.",
-      "options": ["inherit", "low", "medium", "high", "xhigh", "max"],
+      "options": [
+        "inherit",
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
       "default": "inherit"
     },
     "attacker_max_turns": {
       "type": "number",
       "title": "Attacker max turns",
-      "description": "Turn budget for the attacker per target: it explores the code and crafts probes for up to this many turns, then returns its probes. If it has not returned by the limit it is compelled to, and if it produces no probes the target is skipped. Default 20.",
+      "description": "Turns the attacker may spend on one target before it must return its probes. A target with no probes is skipped. Default 20.",
       "default": 20,
       "min": 1,
       "max": 100
@@ -76,7 +112,7 @@
     "num_turns": {
       "type": "number",
       "title": "Repair turns (secure-code-generation)",
-      "description": "How many attack -> verify -> repair cycles /secure-code-generation runs before returning the best version. Default 2.",
+      "description": "Attack, verify, and repair rounds that /secure-code-generation runs. Default 2.",
       "default": 2,
       "min": 1,
       "max": 10

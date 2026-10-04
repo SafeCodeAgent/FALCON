@@ -1,49 +1,41 @@
-# Attacker-Verifier
+# attacker-verifier
 
-**Counterexample-grounded security for agent-generated code, as a Claude Code plugin.**
+Security checking for code written by coding agents, by attacking it and reading
+what happens.
 
-Reading code to decide whether it is secure is hard and unreliable. Attacker-Verifier
-judges code by *what it does when attacked*, not by how it looks. An **attacker**
-proposes deterministic proof-of-concept probes that drive a target function with
-adversarial inputs; a **faithfulness check** discards probes that would fake the
-result; the admitted probes run in a **sandbox**; and a **verifier** reads the
-resulting execution traces and decides, backed by concrete evidence.
+An attacker writes small proof-of-concept scripts (probes) that call the code
+with adversarial inputs. A probe never states what the output should be. Probes
+that replace the code under test or produce their own evidence are thrown out.
+The rest run in a sandbox under a tracer, and a verifier decides from each
+execution trace whether the code did something unsafe. Every reported problem
+comes with the probe and the trace that show it.
 
-It ships two slash commands:
+![Overview: the coding agent's patch is attacked with PoC probes, unfaithful probes are rejected, the admitted probes run in a sandbox, and the verifier turns their traces into a verdict and feedback.](docs/assets/overview.png)
 
-- **`/secure-code-generation`** — write or edit code, then harden it over a few
-  attack → verify → repair turns, fixing each vulnerability against a real
-  counterexample.
-- **`/check-code-security`** — audit existing code and report which parts of the
-  repository are unsafe, with a Markdown report you can share.
+This repository contains:
 
-Both run with **no configuration** out of the box, and expose a small set of
-knobs when you want them.
+- a Claude Code plugin with two commands, `/check-code-security` and
+  `/secure-code-generation`;
+- the code for the experiments in the paper *Secure Agentic Coding through
+  Counterexample-Grounded Feedback*: test-time repair on CWEval and
+  SecCodeBench-V2, repair inside coding agents on SusVibes, and RL training on
+  SecCodePLT+. See [experiments/](experiments/README.md).
 
----
+Project page: https://safecodeagent.github.io/attacker-verifier/
 
-## Install
+## Install the plugin
 
 In Claude Code:
 
 ```
-/plugin marketplace add tue09/attacker-verifier
+/plugin marketplace add SafeCodeAgent/attacker-verifier
 /plugin install attacker-verifier@attacker-verifier
 ```
 
-That is all. The commands are then available as `/secure-code-generation` and
-`/check-code-security` (and their namespaced forms `/attacker-verifier:...`).
+To update later, run `/plugin marketplace update attacker-verifier`.
 
-To update later:
-
-```
-/plugin marketplace update attacker-verifier
-```
-
-Requirements: Python 3.8+ on the machine (or in your container) that runs the
-probes. The engine is pure standard library — nothing to `pip install`.
-
----
+The probes run with Python 3.8 or newer, on your machine or in a container. The
+engine uses only the standard library.
 
 ## Usage
 
@@ -51,212 +43,133 @@ probes. The engine is pure standard library — nothing to `pip install`.
 
 ```
 /check-code-security
-```
-
-With no target, it asks whether to scan the whole repository (filtered to the
-most security-relevant functions) or to focus on something you name. You can
-also point it directly:
-
-```
 /check-code-security src/storage.py
 /check-code-security src/ --probes 8-12
-/check-code-security --scope changed        # only your uncommitted changes
+/check-code-security --scope changed
 ```
 
-It writes a report named `<repo>_<timestamp>.md` in the repository root and
-prints a short summary of the unsafe findings.
+Without a path, the command asks whether to scan the whole repository (the most
+security-relevant functions first) or a part you name. `--scope changed` checks
+only uncommitted work, including new files.
 
-### Generate secure code
+It writes a Markdown report named `<repo>_<timestamp>.md` in the repository root
+and prints the unsafe findings. [docs/sample-report.md](docs/sample-report.md)
+shows what a report looks like.
+
+### Write code and harden it
 
 ```
 /secure-code-generation add an endpoint that serves report files by name
 /secure-code-generation implement the CSV import --turns 3
 ```
 
-It implements the request, then attacks and repairs what it wrote for
-`--turns` rounds (default 2), and tells you what it found and fixed.
+Claude implements the request, then attacks what it wrote, fixes each violation
+the verifier confirms, and repeats for `--turns` rounds (default 2) or until a
+round finds nothing.
 
----
+### Sandbox
 
-## The first run in a session: sandbox
+Probes execute real code with adversarial inputs. The first time either command
+runs in a session, it asks how to run them:
 
-Probes execute real code with adversarial inputs, so they run in a sandbox. The
-**first time** either command runs in a session, it asks once how to execute
-probes:
+- in a Docker image (a fresh container per probe) or a running container, with
+  the repository mounted inside it;
+- on the host, with the permissions the Claude Code session already has.
 
-- **Use an existing sandbox / Docker** — name a Docker image (a fresh container
-  per probe) or a running container to exec into. Probes are isolated from your
-  host.
-- **Run here with current permissions** — no container; probes run under the
-  permissions and sandboxing this Claude Code session already has. This is the
-  default if you have no sandbox.
+The answer is kept for the rest of the session. See [docs/sandbox.md](docs/sandbox.md).
 
-The choice is remembered for the rest of the session.
+## Configuration
 
----
+Every setting has a default, so nothing needs to be configured. To change them,
+open `/config` (or `/plugin`, then attacker-verifier, then Configure):
 
-Everything has a working default. Set anything you want in the UI, or override
-per run with arguments.
+| Setting | Default | Meaning |
+|---|---|---|
+| Attacker model | `main coding agent` | Who writes probes. Pick a model to run the attacker as a subagent on it. |
+| Attacker reasoning effort | `inherit` | Effort for a subagent attacker. |
+| Verifier model | `main coding agent` | Who judges the traces the crash oracle cannot decide. |
+| Verifier reasoning effort | `inherit` | Effort for a subagent verifier. |
+| Attacker max turns | 20 | Turns the attacker may spend on one target before it must return its probes. |
+| Probes per target (min, max) | 5, 10 | Probe budget per target. |
+| Repair turns | 2 | Attack, verify, and repair rounds in `/secure-code-generation`. |
+| Max targets per run | 20 | How many functions, methods, or classes one run attacks. |
 
-### Settings UI (`/config`)
+`main coding agent` runs the role in your current session, on whatever model
+`/model` is set to. The model list in the dropdown is fixed in the plugin
+manifest; each name is mapped to the current model id from Claude Code's model
+catalog when the run starts (`python3 engine/cli.py list-models` prints what is
+available).
 
-Open **`/config`** (or `/plugin` → attacker-verifier → Configure). Every setting
-is an editable row:
-
-| Setting | Control | Options | Default |
-|---|---|---|---|
-| **Attacker model** | dropdown | `main coding agent`, `Opus 5.5`, `Opus 5`, `Opus 4.8`, `Sonnet 5.5`, `Sonnet 5`, `Haiku 4.5`, … | `main coding agent` |
-| **Attacker reasoning effort** | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` |
-| **Verifier model** (trace judge) | dropdown | same model list as Attacker | `main coding agent` |
-| **Verifier reasoning effort** | dropdown | `inherit`, `low`, `medium`, `high`, `xhigh`, `max` | `inherit` |
-| **Attacker max turns** | number | 1–100 | 20 |
-| **Probes per target (min)** | number | 1–100 | 5 |
-| **Probes per target (max)** | number | 1–100 | 10 |
-| **Repair turns** (`/secure-code-generation`) | number | 1–10 | 2 |
-| **Max targets per run** | number | 1–200 | 20 |
-
-**Models.** `main coding agent` (the default) runs the role inline on your
-current session model — to follow whatever model you use, leave it here and set
-your session model with Claude Code's own **`/model`** picker. Any other choice
-is a model name and runs the role on the dedicated subagent at that model; the
-plugin maps the name to the exact current model id from Claude Code's live
-catalog at run time. Fable is not offered.
-
-The dropdown's **names are a fixed list** (a settings dropdown can't read Claude
-Code's live model list), updated in a plugin release; a brand-new model shows up
-once the list is updated, or you can pick it via `/model` with the role left on
-`main coding agent`. Run `python3 engine/cli.py list-models` to see what Claude
-Code currently offers.
-
-`inherit` effort uses your current session effort; a chosen level applies when a
-role runs on a model (not `main coding agent`).
-
-**Attacker max turns** is the attacker's turn budget per target: it explores and
-crafts probes for up to this many turns, then returns its probes (compelled to
-return if it hasn't; the target is skipped if it produces none). This is
-separate from **Max targets per run** (how many functions one run attacks) and
-**Repair turns** (how many fix cycles `/secure-code-generation` runs).
-
-> Note: on a brand-new install some Claude Code builds render the number boxes
-> empty until first saved — the effective defaults are still those above
-> (5, 10, 2, 20). Click **Save configuration** once to write them in explicitly.
-
-### Per-run arguments (override the settings for one call)
+Any setting can be overridden for one run:
 
 ```
 /check-code-security src/ --probes 8-12 --attacker opus --verifier sonnet
-/secure-code-generation implement the import --turns 3
+/secure-code-generation implement the import --turns 3 --max-targets 5
 ```
 
-| Argument | Meaning |
-|---|---|
-| `--probes MIN-MAX` | probe budget per target |
-| `--attacker <name>` | model for the attacker (a model name, `opus`/`sonnet`/`haiku`, or `main coding agent`) |
-| `--verifier <name>` | model for the verifier (same values as `--attacker`) |
-| `--attacker-effort <inherit\|low\|medium\|high\|xhigh\|max>` | attacker reasoning effort |
-| `--verifier-effort <inherit\|low\|medium\|high\|xhigh\|max>` | verifier reasoning effort |
-| `--attacker-max-turns N` | attacker turn budget per target |
-| `--turns N` | attack → verify → repair cycles (`/secure-code-generation`) |
-| `--max-targets N` | cap on how many functions a run attacks |
-| `--scope whole\|changed\|path` | what to attack |
+Arguments: `--probes MIN-MAX`, `--attacker NAME`, `--verifier NAME`,
+`--attacker-effort LEVEL`, `--verifier-effort LEVEL`, `--attacker-max-turns N`,
+`--turns N`, `--max-targets N`, `--scope whole|changed|path`.
 
-**Attacker and verifier as agents.** By default both roles run inline on the
-main coding agent. Choosing a model delegates to the dedicated subagents
-(`attacker-verifier:attacker`, `attacker-verifier:verifier`) on that model, at
-the chosen reasoning effort. The attacker is a genuine agent: it may read the
-code and the repository and iterate for up to 20 turns before committing its
-probes.
-
-For the complete, explicit reference of every setting, see
-[docs/configuration.md](docs/configuration.md).
-
-### Project file (optional, committed with the repo)
-
-Set engine-level defaults (sandbox, probe limits) for the repo in
-`.attacker-verifier/config.json`:
+A repository can also pin engine settings in `.attacker-verifier/config.json`:
 
 ```json
-{
-  "probes_min": 5,
-  "probes_max": 10,
-  "max_targets": 20,
-  "execution": { "mode": "host" }
-}
+{ "probes_min": 5, "probes_max": 10, "max_targets": 20, "execution": { "mode": "host" } }
 ```
 
----
+[docs/configuration.md](docs/configuration.md) lists every setting.
 
 ## How it works
 
-For each attacked target the plugin runs this pipeline:
+For each target the plugin runs these steps:
 
-1. **Target selection** (deterministic). Functions, methods, and classes in
-   non-test files are ranked by how much security-relevant surface they touch.
-2. **Attacker** (agent). Proposes deterministic probes that exercise a target
-   with adversarial inputs — and *only* inputs: a probe never states an expected
-   output or a verdict.
-3. **Faithfulness check** (deterministic). A probe that redefines, rebinds, or
-   mocks the target, or that performs the sensitive operation itself, is
-   discarded before it can count as evidence. A probe that never reaches the
-   target is inconclusive.
-4. **Sandboxed execution** (deterministic). Each admitted probe runs in its own
-   process under a tracer that records the target's activations, arguments,
-   return values, exceptions, and the probe's observations.
-5. **Verifier**. A deterministic **crash oracle** flags abnormal termination on
-   the exercised path. Anything it cannot decide goes to a **trace judge** that
-   reads the execution trace — not the source — and decides secure or insecure
-   from the observed behaviour.
-6. **Signal.** A target is **insecure** if any admitted probe is insecure,
-   **secure** if the admitted set is non-empty and none is insecure, and
-   **no-evidence** if nothing was admitted.
+1. Target selection. Functions, methods, and classes in non-test Python files
+   are ranked by how much security-relevant code they touch (subprocess, file
+   paths, SQL, deserialization, templates, network, crypto).
+2. Attack. The attacker reads the code and writes deterministic probes that
+   call the target with adversarial inputs. A probe records the input and what
+   came back; it never says what should have happened.
+3. Faithfulness check. Before running, a probe is rejected if it redefines,
+   rebinds, or patches the target or its module, writes code into the
+   repository, runs the sensitive operation itself, or prints a canary or a
+   value it read rather than one the target produced. After running, a probe is
+   inconclusive if it never reached the target, or if everything it reported
+   was printed before the target ran.
+4. Sandboxed execution. Each remaining probe runs in its own process under CPU,
+   memory, and time limits, with a tracer that records the target's calls,
+   arguments, return values, and exceptions.
+5. Verification. A crash oracle flags a process that died from a signal or a
+   memory error while the target was running. Every other trace goes to a judge
+   that sees only the trace and the task, not the source, and decides whether
+   the observed behaviour is a violation.
+6. Result. A target is insecure if any admitted probe is insecure, secure if at
+   least one probe was admitted and none is insecure, and has no evidence if no
+   probe was admitted.
 
-Each insecure verdict carries a counterexample — the probe, its trace, and the
-reason — which is what `/secure-code-generation` repairs against.
+[docs/attack-verify-loop.md](docs/attack-verify-loop.md) is the procedure the
+two commands follow.
 
----
+## Limits
 
-## The report
-
-`/check-code-security` writes a Markdown report with a fixed structure, so runs
-are comparable and diffable:
-
-1. Title and run metadata (repository, time, scope, execution mode)
-2. Verdict summary with counts
-3. **Insecure findings** — the unsafe parts, each with location, weakness,
-   reason, evidence, and a trace excerpt
-4. Per-target results table
-5. Faithfulness summary (what was rejected and why)
-6. Not attacked (files or languages skipped)
-7. The exact configuration used
-
-A sample is in [`docs/sample-report.md`](docs/sample-report.md).
-
----
-
-## Scope and limits
-
-- **Language.** This version attacks **Python** end to end. Files in other
-  languages are listed in the report as not attacked rather than given a verdict.
-- **Coverage.** A secure verdict means no admitted probe exposed a violation
-  under the budget used. It is evidence of robustness against the attacks tried,
-  not a proof of safety. Raise `--probes` or widen the scope for a deeper check.
-- **Execution cost.** Running code is heavier than reading it; that is the price
-  of grounding the verdict in real behaviour.
-
----
+- Only Python is attacked. Files in other languages are listed in the report as
+  not attacked.
+- A secure result means the probes that ran found nothing. It is not a proof
+  that the code is safe; a larger probe budget or a wider scope checks more.
+- Running code costs more time than reading it.
 
 ## Repository layout
 
 ```
-attacker-verifier/
-├── .claude-plugin/        plugin.json + marketplace.json
-├── skills/                the two slash commands
-├── agents/                attacker and verifier subagents
-├── engine/                deterministic engine (stdlib only) + prompts
-├── docs/                  shared procedures and a sample report
-└── README.md
+.claude-plugin/   plugin and marketplace manifests
+skills/           the two commands
+agents/           attacker and verifier subagents
+engine/           target selection, faithfulness checks, sandbox, crash oracle, report
+docs/             procedures, configuration reference, sample report, project page
+tests/            engine tests (python3 -m pytest tests)
+experiments/      code for the paper's experiments
 ```
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE). The experiment code includes third-party components
+under their own licenses; see [experiments/README.md](experiments/README.md#third-party-code).
