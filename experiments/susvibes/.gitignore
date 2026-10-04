@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.venv/
+runs/
+workspaces/
+*.log
+*.env
+vendor/**/node_modules/
+vendor/**/.cache/
+vendor/**/.opencode/
+vendor/**/dist/

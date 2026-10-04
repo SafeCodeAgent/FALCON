@@ -1,0 +1,932 @@
+{
+  "django__django_c5544d289233f501917e25970c03ed444abbd4f0": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Django 1.10 supports Python 2.7, 3.4, and 3.5. Version 3.5 selected as the latest supported version for testing based on FAQ documentation and setup.py classifiers."
+  },
+  "bottlepy__bottle_6d7e13da0f998820800ecb3fe9ccee4189aefb54": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Based on CI/CD configurations (Travis CI, CircleCI) and Makefile test targets. The project tests against multiple Python versions (2.7.3, 2.7, 3.2, 3.3, 3.4, 3.5, nightly, pypy, pypy3), with 3.5 being the latest stable version consistently tested across all CI platforms."
+  },
+  "ghantoos__lshell_e72dfcd1f258193f9aaea3591ecbdaed207661a0": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Testing configured for Python 2.7 and 3.4 via Travis CI and tox. Selected 3.4 as the latest version specified in CI configuration."
+  },
+  "twisted__twisted_6c61fc4503ae39ab8ecee52d10f10ee2c371d7e2": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Python 3.6 is the most commonly used version for testing across CI platforms (Travis CI, CircleCI, AppVeyor) and is included in the default tox envlist. The project supports Python 2.7, 3.5, 3.6, and 3.7, but 3.6 appears to be the primary testing version based on CI configurations."
+  },
+  "pylons__waitress_11d9e138125ad46e951027184b13242a3c1de017": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Project tests against multiple Python versions (2.7, 3.5, 3.6, 3.7, PyPy) via GitHub Actions CI, tox, and AppVeyor. Python 3.7 is the latest version in the testing matrix. Documentation builds use Python 3.5."
+  },
+  "pylons__waitress_575994cd42e83fd772a5f7ec98b2c56751bd3f65": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Project tests against multiple Python versions (2.7, 3.5, 3.6, 3.7, PyPy) via GitHub Actions CI, tox, and AppVeyor. Python 3.7 is the latest version in the testing matrix. Documentation builds use Python 3.5."
+  },
+  "identitypython__pysaml2_5e9d5acbcd8ae45c4e736ac521fd2df5b1c62e25": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "The project uses Travis CI for testing with Python 3.6, 3.7, and PyPy3 as specified in .travis.yml and tox.ini. Python 3.7 is selected as it represents the latest stable version among the tested versions, and is explicitly listed in both CI configuration and setup.cfg classifiers."
+  },
+  "labd__wagtail-2fa_ac23550d33b7436e90e3beea904647907eba5b74": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Project tests against Python 3.6, 3.7, and 3.8 in Azure Pipelines CI/CD. Python 3.8 is the latest version being tested. GitHub Actions workflow tests 3.6 and 3.7. Minimum required version is 3.6 as specified in setup.py."
+  },
+  "urllib3__urllib3_a74c9cfbaed9f811e7563cfc3dce894928e0221a": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Project tests on multiple Python versions (2.7, 3.4-3.8, PyPy) as configured in noxfile.py, Travis CI, and AppVeyor. Python 3.8 is the latest version explicitly supported and tested."
+  },
+  "wagtail__wagtail_d9a41e7f24d08c024acc9a3094940199df94db34": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Based on CI/CD configuration analysis: Travis CI tests multiple Python versions (3.6, 3.7, 3.8) with 3.8 being the latest and most prominently featured. CircleCI uses 3.6.4 for backend tests and 3.7.3 for nightly builds. The setup.py classifiers support Python 3.6, 3.7, and 3.8. The README.md confirms compatibility with Python 3.6, 3.7, and 3.8. Python 3.8 is chosen as it represents the latest supported version used in the primary testing matrix."
+  },
+  "jupyter__notebook_3cec4bbe21756de9f0c4bccf18cf61d840314d74": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is the latest stable version tested in CI. The project tests on multiple Python versions (3.5, 3.6, 3.7, 3.8, 3.9-dev) via Travis CI, with 3.8 being used for documentation builds and Windows testing via AppVeyor."
+  },
+  "jupyterhub__oauthenticator_a4aac191c16cf6281f3d346615aefa75702b02d7": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Project tests against Python 3.6, 3.7, 3.8, and 3.9 in GitHub Actions CI pipeline. Python 3.9 is the latest version tested. Minimum required version is 3.6 as specified in setup.py."
+  },
+  "identitypython__pysaml2_46578df0695269a16f1c94171f1429873f90ed99": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Based on Travis CI configuration (.travis.yml) and tox.ini, the project tests against Python 3.6, 3.7, 3.8, 3.9, and pypy3. Python 3.10-dev is also tested but marked as allowed to fail. The setup.cfg specifies python_requires = >=3.6, <4. Python 3.9 is the latest stable version being tested."
+  },
+  "urllib3__urllib3_8d65ea1ecf6e2cdc27d42124e587c1b83a3118b0": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "urllib3 tests against multiple Python versions (2.7, 3.5, 3.6, 3.7, 3.8, 3.9-dev) in CI/CD pipelines. Version 3.8 is the latest stable version being tested in GitHub Actions and Travis CI. The project also supports PyPy and tests experimental versions like 3.9-dev and 3.10-nightly."
+  },
+  "zopefoundation__products.genericsetup_700319512b3615b3871a1f24e096cf66dc488c57": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Project tests against multiple Python versions (2.7, 3.5-3.9) as specified in GitHub Actions workflow and tox.ini. Version 3.9 is the latest version used for testing."
+  },
+  "ansible__ansible_0cdc410dce6658e93c06fa27e0100ddbb11e7015": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Ansible tests against multiple Python versions (2.6, 2.7, 3.5, 3.6, 3.7, 3.8, 3.9) in Azure Pipelines CI/CD. Python 3.9 is the latest version tested in the comprehensive Units testing stage. The project supports Python >=2.7 excluding 3.0-3.4 as specified in setup.py."
+  },
+  "matrix-org__synapse_03318a766cac9f8b053db2214d9c332a977d226c": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Project tests against Python 3.6, 3.7, 3.8, and 3.9 in GitHub Actions CI/CD pipeline. Python 3.9 is the latest version used for testing, including with PostgreSQL database configurations."
+  },
+  "tiangolo__fastapi_fa7e3c996edf2d5482fff8f9d890ac2390dede4d": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Tests are run on Python 3.6, 3.7, and 3.8 via GitHub Actions matrix strategy. Version 3.8 is the latest tested version as specified in .github/workflows/test.yml"
+  },
+  "plone__products.isurlinportal_d4fd34990d18adf05a10dc5e2bb4b066798280ba": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Project tests against multiple Python versions (2.7, 3.6, 3.7, 3.8) as specified in GitHub Actions workflow and tox.ini. Python 3.8 is the latest version tested and is used for the most recent Plone 5.2 compatibility testing."
+  },
+  "dpgaspar__flask-appbuilder_6af28521589599b1dbafd6313256229ee9a4fa74": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Testing is performed across multiple Python versions (3.6, 3.7, 3.8, 3.9) in the GitHub Actions CI pipeline, with 3.9 being the latest version tested. The test-postgres job in .github/workflows/ci.yml runs the most comprehensive test suite across all these versions."
+  },
+  "scrapy__scrapy_b01d69a1bf48060daec8f751368622352d8b85a6": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "The project tests against multiple Python versions (2.7, 3.5, 3.6, 3.7, 3.8, PyPy, PyPy3) as defined in .github/workflows/tests.yml and tox.ini. Python 3.8 is identified as the primary/latest version used for documentation builds and checks, as specified in .github/workflows/checks.yml and .readthedocs.yml with explicit comments to keep them in sync."
+  },
+  "scrapy-plugins__scrapy-splash_2b253e57fe64ec575079c8cdc99fe2013502ea31": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Python 3.6 is the latest version tested in the CI/CD pipeline. The project tests against multiple Python versions (2.7, 3.4, 3.5, 3.6) as defined in GitHub Actions workflows and tox.ini configuration."
+  },
+  "cobbler__cobbler_d8f60bbf14a838c8c8a1dba98086b223e35fe70a": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Python 3.9 is explicitly specified in the GitHub Actions workflows for linting and releases. The main testing workflow uses Docker with openSUSE Leap 15.3 and python3, but the linting workflow (part of CI/CD testing) clearly states Python 3.9. Documentation builds use Python 3.7 via ReadTheDocs."
+  },
+  "tensorflow__tensorflow_afac8158d43691661ad083f6dd9e56f327c1dcb7": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "TensorFlow uses multiple Python versions for testing. The latest CI/CD multipython Docker image (cuda11.4-cudnn8.2-ubuntu18.04-manylinux2010-multipython) includes Python 3.6.9, 3.7.7, 3.8.2, and 3.9.4. GitHub Actions workflows use Python 3.8. The setup.py classifiers indicate official support for Python 3.7, 3.8, and 3.9. Version 3.9.4 represents the latest version used in the most recent testing infrastructure."
+  },
+  "lxml__lxml_f2330237440df7e8f39c3ad1b1aa8852be3b27c0": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "The project tests against multiple Python versions (2.7, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10) as specified in GitHub Actions CI workflow (.github/workflows/ci.yml), with 3.10 being the latest supported version. The project also supports PyPy variants. Python version requirements are specified as '>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, != 3.4.*' in setup.py."
+  },
+  "lxml__lxml_12fa9669007180a7bb87d990c375cf91ca5b664a": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Testing is performed across multiple Python versions (2.7, 3.5-3.10) as configured in GitHub Actions CI, Travis CI, and tox. Python 3.10 is the latest version tested. The project supports Python >=2.7, excluding 3.0-3.4."
+  },
+  "jupyterhub__jupyter-server-proxy_fd31930bacd12188c448c886e0783529436b99eb": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Project tests against Python 3.6, 3.7, 3.8, and 3.9 in GitHub Actions CI matrix. Python 3.9 is the latest version tested. The publish workflow also uses Python 3.9 for building distributions."
+  },
+  "wagtail__wagtail_5fe901e5d86ed02dbbb63039a897582951266afd": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Primary testing version based on GitHub Actions CI/CD configuration. Project supports Python 3.7-3.10, with 3.10 being used for latest Django versions and experimental features testing."
+  },
+  "xi__django-mfa3_32f656e22df120b84bdf010e014bb19bd97971de": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests with Python 3.7 and 3.10 in GitHub Actions CI/CD pipeline. Selected 3.10 as it's the latest version tested."
+  },
+  "vyperlang__vyper_049dbdc647b2ce838fae7c188e6bb09cf16e470b": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Project tests against Python 3.7, 3.8, 3.9, and 3.10 in CI matrix, but Python 3.8 is used for most CI jobs including linting, docs, mypy, fuzzing, memory tests, and builds. Testing configuration found in .github/workflows/test.yml and tox.ini."
+  },
+  "vyperlang__vyper_2c73f8352635c0a433423a5b94740de1a118e508": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Multiple Python versions are tested in CI (3.7, 3.8, 3.9, 3.10). Python 3.10 is the latest version tested. Python 3.8 is used for most auxiliary jobs like linting, docs, fuzzing, and memory tests."
+  },
+  "tensorflow__tensorflow_dbdd98c37bc25249e8f288bd30d01e118a7b4498": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Python 3.9 is the most clearly stated version for testing, as specified in the GitHub Actions pylint-presubmit.yml workflow. The project supports Python 3.7-3.10 according to setup.py and RBE configurations, but 3.9 is used as the primary testing version in CI/CD pipelines."
+  },
+  "jupyterhub__oauthenticator_5cd2d1816f90dc5c946e6e38fd2d0ba535624c5c": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python versions 3.6, 3.7, 3.8, 3.9, and 3.10 in GitHub Actions CI/CD pipeline. Version 3.10 is the latest tested version. The project requires Python >= 3.6 as specified in setup.py."
+  },
+  "encode__django-rest-framework_4bb9a3c48427867ef1e46f7dee945a4c25a4f9b8": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Based on Travis CI configuration, Python 3.7 is the latest version tested and used for primary test environments including base, dist, and multiple Django versions. The project supports Python 2.7, 3.4, 3.5, 3.6, and 3.7, but 3.7 appears to be the preferred version for comprehensive testing."
+  },
+  "django__django_0dc9c016fadb71a067e5a42be30164e3f96c0492": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Based on GitHub Actions workflows (linters.yml and docs.yml) which consistently use Python 3.9. The project supports Python 3.8+ (setup.cfg python_requires = >=3.8) and tox.ini shows testing environments for py3, py38, py39, py310, but the CI/CD pipeline primarily uses 3.9 for linting and documentation builds. The main tests.yml workflow only contains JavaScript tests, suggesting Python testing may be done through other means or external services."
+  },
+  "openstack__oslo.utils_6e17ae1f7959c64dfd20a5f67edf422e702426aa": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Based on setup.cfg classifiers supporting Python 3.6-3.9, OpenStack Yoga CI template in .zuul.yaml, and tox.ini using 'python3'. Python 3.9 is the latest supported version listed in setup.cfg classifiers."
+  },
+  "streamlit__streamlit_80d9979d5f4a00217743d607078a1d867fad8acf": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Primary testing version from CircleCI python-max-version job. Project also tests on Python 3.7.12 (minimum supported) and 3.9.7 for compatibility, with python_requires>=3.7 in setup.py"
+  },
+  "ikus060__rdiffweb_b62c479ff6979563c7c23e7182942bc4f460a2c7": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with 3.10 being the latest version tested and used in Docker builds. The setup.cfg requires >=3.6, <4."
+  },
+  "ikus060__rdiffweb_2406780831618405a13113377a784f3102465f40": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with Python 3.10 as the default image (python:3-bullseye) and used in Dockerfile. Multiple versions supported as specified in setup.cfg classifiers."
+  },
+  "ikus060__rdiffweb_626cca1b75b6c587afd4241a9692e8929b1921a5": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with Python 3.10 as the default image (python:3-bullseye) and used in Dockerfile. Multiple versions supported as specified in setup.cfg classifiers."
+  },
+  "ikus060__rdiffweb_667657c6fe2b336c90be37f37fb92f65df4feee3": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with Python 3.10 as the default image (python:3-bullseye) and used in Dockerfile. Multiple versions supported as specified in setup.cfg classifiers."
+  },
+  "ikus060__rdiffweb_5ac38b2a75becbab9f948bd5e37ecbcd9f0b362e": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with Python 3.10 as the default image (python:3-bullseye) and used in Dockerfile. Multiple versions supported as specified in setup.cfg classifiers."
+  },
+  "ikus060__rdiffweb_20fc0d304412cc569b21f31e52cb8b94094d6314": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with Python 3.10 as the default image (python:3-bullseye) and used in Dockerfile. Multiple versions supported as specified in setup.cfg classifiers."
+  },
+  "ikus060__rdiffweb_18a5aabd48fa6d2d2771a25f95610c28a1a097ca": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Python 3.10 is the latest version explicitly tested in the GitLab CI pipeline. The project supports Python 3.6-3.10 as specified in setup.cfg, with individual CI jobs for py36, py37, py38, py39, and py310. The default CI image uses python:3-bullseye."
+  },
+  "ikus060__rdiffweb_ac334dd27ceadac0661b1e2e059a8423433c3fee": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with Python 3.10 as the default image (python:3-bullseye) and used in Dockerfile. Multiple versions supported as specified in setup.cfg classifiers."
+  },
+  "ikus060__rdiffweb_422791ea45713aaaa865bdca74addb9fffd93a71": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with 3.10 being the latest and most prominently used version in the default CI image (python:3-bullseye) and Dockerfile (python:3.10-bullseye)"
+  },
+  "ikus060__rdiffweb_233befc33bdc45d4838c773d5aed4408720504c5": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with 3.10 being the latest and most prominently used version in the default CI image (python:3-bullseye) and Dockerfile (python:3.10-bullseye)"
+  },
+  "ikus060__rdiffweb_7294bb7466532762c93d711211e5958940c1b428": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against multiple Python versions (3.6-3.10) in GitLab CI pipeline. Python 3.10 is the latest version explicitly tested, with support defined in setup.cfg classifiers and dedicated CI job 'py310' using 'python:3.10' Docker image."
+  },
+  "sqlalchemy__mako_925760291d6efec64fda6e9dd1fd9cfbd5be068c": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Primary testing version used in PR workflow and latest version in CI matrix. Full testing matrix includes Python 3.7, 3.8, 3.9, and 3.10 across Ubuntu, Windows, and macOS platforms."
+  },
+  "jupyter__jupyter_core_1118c8ce01800cb689d51f655f5ccef19516e283": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Primary testing is done with Python 3.7 and 3.10 across all platforms (Ubuntu, Windows, macOS). Additional testing includes Python 3.8, 3.9, and PyPy 3.8. Minimum supported version is 3.7 as specified in pyproject.toml. Version 3.10 is chosen as it represents the latest stable version consistently tested across all operating systems in the CI matrix."
+  },
+  "ikus060__rdiffweb_f2a32f2a9f3fb8be1a9432ac3d81d3aacdb13095": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with 3.10 being the latest tested version. The CI configuration shows comprehensive testing across multiple Python versions using tox environments."
+  },
+  "ikus060__rdiffweb_b78ec09f4582e363f6f449df6f987127e126c311": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with 3.10 being the latest supported version used in Debian bookworm environment. Default CI image uses python:3-bullseye (3.9), but 3.10 represents the most current testing target."
+  },
+  "ikus060__rdiffweb_4d464b467f14b8eb9103d7f5f0774e49995527c7": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with 3.10 being the latest supported version. The CI configuration shows comprehensive testing across multiple Python versions using tox environments."
+  },
+  "ikus060__rdiffweb_b5e3bb0a98268d18ceead36ab9b2b7eaacd659a8": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with 3.10 being the latest supported version. Testing is done via tox with multiple environments including py3, and Debian-specific environments (buster/3.7, bullseye/3.9, bookworm/3.10)."
+  },
+  "ikus060__rdiffweb_2ffc2af65c8f8113b06e0b89929c604bcdf844b9": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in GitLab CI, with 3.10 being the latest version tested. Default CI image uses python:3-bullseye. Python requirement specified as >=3.6, <4 in setup.cfg."
+  },
+  "ikus060__rdiffweb_323383d1db656f1b1291be529947bd943a6b0e99": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests multiple Python versions (3.6-3.10) in GitLab CI, with 3.10 being the latest supported version. Default CI image uses python:3-bullseye."
+  },
+  "openedx__xblock-drag-and-drop-v2_68887d1b4a44325d2de7573d450e41129ba98b1a": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is explicitly specified in the GitHub Actions CI workflow (.github/workflows/ci.yml) matrix strategy for running tests. This version is also used in the PyPI publish workflow, indicating consistency across the project's CI/CD pipeline."
+  },
+  "python-pillow__pillow_2444cddab2f83f28687c7c20871574acbb6dbcf3": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Pillow tests on Python 3.7-3.11 across multiple platforms (Linux, macOS, Windows) via GitHub Actions. Python 3.11 is the latest supported version and appears first in the test matrix, indicating it's the primary testing version. The project also tests on PyPy 3.7 and 3.8 variants."
+  },
+  "ikus060__rdiffweb_bc4bed89affcba71251fe54ed10639da9d392c1d": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Primary testing version from GitLab CI configuration. Project supports Python 3.6-3.10 with 3.10 as the default test environment."
+  },
+  "cyface__django-termsandconditions_03396a1c2e0af95e12a45c5faef7e47a4b513e1a": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Project tests against Python 3.6, 3.7, 3.8, and 3.9 in GitHub Actions CI/CD pipeline. Version 3.9 is the latest tested version. Poetry configuration requires Python >=3.6,<4.0."
+  },
+  "healthchecks__healthchecks_359edbd2709e27b60687061a32e19322bc971c1f": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Project tests against Python 3.8, 3.9, 3.10, and 3.11 in GitHub Actions CI/CD pipeline. Documentation states Python 3.8+ requirement. Docker image uses Python 3.10. Selected 3.11 as the latest tested version."
+  },
+  "python-mechanize__mechanize_dd05334448e9f39814bab044d2eaa5ef69b410d6": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Primary testing version used across all CI platforms (Linux, macOS, Windows). The project also tests on Python 2.7 and 3.5 on Linux, but 3.7 is the most consistently used version across all environments in Azure Pipelines."
+  },
+  "mozilla__bleach_1334134d34397966a7f7cfebd38639e9ba2c680e": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Testing is performed on Python versions 3.5, 3.6, 3.7, 3.8, and pypy3 as specified in GitHub Actions workflow. Version 3.8 is the latest stable version used for testing and is also used for linting tasks."
+  },
+  "mozilla__bleach_d6018f2539d271963c3e7f54f36ef11900363c69": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is the latest version tested in Travis CI and tox configurations. The project tests against multiple Python versions (2.7, 3.5, 3.6, 3.7, 3.8, pypy, pypy3) but 3.8 is used for linting and represents the most recent supported version."
+  },
+  "ckan__ckan_4c22c135fa486afa13855d1cdb9765eaf418d2aa": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is the most clearly stated version used for testing in Travis CI configuration. The project also supports Python 2.7, 3.6, and 3.7 as indicated in setup.py classifiers, and CircleCI tests both Python 2 and 3. The project is transitioning from Python 2 to Python 3 support."
+  },
+  "django__django_8c660fb59239828583f17cdede3b64f208b8752c": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Primary testing version based on GitHub Actions workflows. Django supports Python 3.10+ (per setup.cfg), with CI testing on 3.10, 3.11, and 3.12-dev. Version 3.11 is used in the main tests.yml workflow and represents the most clearly stated stable version for testing."
+  },
+  "streamlit__streamlit_afcf880c60e5d7538936cc2d9721b9e1bc02b075": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Primary testing version from CircleCI config. The project tests on both Python 3.6.5 and 3.8.1, but 3.8.1 is the latest supported version and runs additional tests including mypy and frontend tests. Minimum supported version is 3.6 as specified in setup.py."
+  },
+  "canonical__cloud-init_a378b7e4f47375458651c0972e7cd813f6fe0a6b": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Based on GitHub Actions unit test matrix which tests Python 3.6-3.11, with 3.11 being the latest stable version. The project documentation states minimum support is Python 3.6+, and integration tests use system Python3 on Ubuntu 22.04."
+  },
+  "vyperlang__vyper_851f7a1b3aa2a36fd041e3d0ed38f9355a58c8ae": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Primary testing version is Python 3.10, with additional testing on Python 3.11. The project supports Python >=3.10,<4 as specified in setup.py. Most CI jobs (lint, docs, mypy, fuzzing, memory) use Python 3.10, while core tests run on both 3.10 and 3.11 in a matrix configuration."
+  },
+  "wagtail__wagtail_5be2b1ed55fd7259dfdf2c82e7701dba407b8b62": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Wagtail supports Python 3.7-3.11 for testing. Version 3.11 is the latest supported version as confirmed in GitHub Actions CI/CD pipeline, tox.ini configuration, and setup.py classifiers. The project tests across multiple Python versions (3.7, 3.8, 3.9, 3.10, 3.11) with different Django versions and database backends."
+  },
+  "wagtail__wagtail_ff806ab173a504395fdfb3139eb0a29444ab4b91": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Based on GitHub Actions CI/CD configuration in .github/workflows/test.yml, Wagtail tests against multiple Python versions (3.7-3.11). Python 3.11 is the latest version being tested and is used in multiple test configurations including postgres with DISABLE_TIMEZONE=yes and mysql with Django stable/4.1.x. The project supports Python >=3.7 as specified in setup.py."
+  },
+  "psf__requests_74ea7cf7a6a27a4eeb2ae24e162bcc942a6706d5": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Project tests against multiple Python versions (3.7-3.12-dev, PyPy 3.7-3.9) as defined in GitHub Actions workflow. Python 3.11 is the latest stable version being tested. Minimum required version is 3.7."
+  },
+  "mlflow__mlflow_fae77a525dd908c56d6204a4cef1c1c75b4e9857": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is the minimum supported version defined in setup.py (MINIMUM_SUPPORTED_PYTHON_VERSION) and used as the default testing version in GitHub Actions workflows. This is confirmed by the setup-python action which defaults to the minimum version, cross-version tests that use Python 3.8 as base, and pyproject.toml which targets py38 for Black formatting."
+  },
+  "planetlabs__planet-client-python_d71415a83119c5e89d7b80d5f940d162376ee3b7": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Project tests against Python versions 3.7, 3.8, 3.9, 3.10, and 3.11 as specified in GitHub Actions workflow (.github/workflows/test.yml) and noxfile.py. Selected 3.11 as it is the latest version in the test matrix."
+  },
+  "vyperlang__vyper_4f8289a81206f767df1900ac48f485d90fc87edb": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Python 3.11 is the primary testing version used across all CI/CD workflows (lint, docs, mypy, fuzzing, memory tests). Core tests run on both 3.10 and 3.11, but 3.11 is the most consistently used and latest supported version."
+  },
+  "vyperlang__vyper_3de1415ee77a9244eb04bdb695e249d3ec9ed868": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Project tests with both Python 3.10 and 3.11 in CI matrix, but 3.11 is used for most CI jobs (linting, docs, mypy, fuzzing, memory tests) and is the latest supported version. Testing matrix in GitHub Actions includes both 3.10 and 3.11 with core and no-opt flags."
+  },
+  "vyperlang__vyper_0bb7203b584e771b23536ba065a6efda457161bb": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Primary testing version used across all GitHub Actions workflows. Project also supports Python 3.11 as indicated in tox.ini and setup.py, but 3.10 is the most consistently used version for CI/CD testing."
+  },
+  "pallets__flask_afd63b16170b7c047f5758eb910c416511e9c965": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Primary testing version used across Linux, Windows, and Mac platforms in GitHub Actions CI/CD pipeline. The project supports Python 3.7+ and tests against multiple versions (3.7-3.12, PyPy), but 3.11 is the most prominently featured version for core testing workflows."
+  },
+  "pallets__flask_70f906c51ce49c485f1d355703e9cc3386b1cc2b": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Primary testing version used across Linux, Windows, and Mac in GitHub Actions. Project supports Python 3.8+ and tests against versions 3.8, 3.9, 3.10, 3.11, 3.12-dev, and PyPy 3.9."
+  },
+  "vyperlang__vyper_019a37ab98ff53f04fecfadf602b6cd5ac748f7f": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Primary testing version is Python 3.11 as specified in GitHub Actions workflows. The project also supports Python 3.10 for compatibility testing, but 3.11 is used for most CI jobs including linting, docs, mypy, fuzzing, and memory tests. The setup.py specifies python_requires='>=3.10,<4' and classifiers include both 3.10 and 3.11."
+  },
+  "zopefoundation__restrictedpython_c8eca66ae49081f0016d2e1f094c3d72095ef531": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "Testing is performed across multiple Python versions (3.7-3.12) via GitHub Actions and tox. The latest version tested is 3.12.0-beta.2 as specified in the CI matrix configuration."
+  },
+  "django__django_ad0410ec4f458aa39803e5f6b9a3736527062dcd": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Python 3.11 is the primary version used for testing in GitHub Actions workflows (tests.yml, selenium.yml, linters.yml). The project also supports Python 3.10 and tests against 3.12-dev in scheduled runs, but 3.11 is the most consistently used version across all CI/CD pipelines."
+  },
+  "apache__airflow_6724eeb6210d5965937eaf9dae3e476eb30f8268": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Default testing version. Project tests with Python 3.8, 3.9, 3.10, and 3.11 as defined in global_constants.py and CI workflows. Version 3.8 is the default version used for CI smoke tests and reference images."
+  },
+  "goauthentik__authentik_aa874dd92a770d5f8cd8f265b7cdd31cd73a4599": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Python 3.11 is consistently used across the project: specified in GitHub Actions setup (3.11), pyproject.toml dependencies (^3.11), tool configurations (py311), and Dockerfile (3.11.5-slim-bookworm). The CI/CD pipeline uses Python 3.11 for all testing including unit tests, integration tests, and e2e tests."
+  },
+  "gitpython-developers__gitpython_ca965ecc81853bca7675261729143f54e5bf4cdd": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "The project tests against multiple Python versions (3.7, 3.8, 3.9, 3.10, 3.11) in GitHub Actions CI pipeline. Version 3.11 is the latest version tested. The minimum supported version is 3.7 as specified in setup.py python_requires. Cygwin tests use Python 3.9 specifically."
+  },
+  "dgilland__pydash_6ff0831ad285fff937cafd2a853f20cc9ae92021": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Project tests against multiple Python versions (3.7, 3.8, 3.9, 3.10, 3.11) via GitHub Actions and tox. Version 3.11 is the latest supported version as specified in the CI/CD pipeline (.github/workflows/main.yml) and tox configuration (tox.ini). The project requires Python >=3.7 as specified in setup.cfg."
+  },
+  "zopefoundation__zope_26a55dbc301db417f47cafda6fe0f983b5690088": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is the primary version used for testing, linting, documentation, and coverage in the GitHub Actions CI/CD pipeline. The project also supports and tests Python 2.7, 3.5, 3.6, and 3.7, but 3.8 is used for the most critical development tasks including lint checks, documentation building, and coverage reporting."
+  },
+  "zopefoundation__zope_603b0a12881c90a072a7a65e32d47ed898ce37cb": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Project tests multiple Python versions (3.7-3.12) via GitHub Actions and tox. Python 3.11 is the latest stable version being tested, while 3.12.0-rc.3 is also tested but as a release candidate."
+  },
+  "plone__plone.namedfile_188f66a4577021cf8f2bf7c0f5150f9b9573f167": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "The project tests against multiple Python versions (3.7, 3.8, 3.9, 3.10, 3.11) as defined in .github/workflows/tests.yml and tox.ini. Python 3.11 is the latest version tested and represents the most current supported version. The minimum required version is 3.7 as specified in setup.py."
+  },
+  "plone__plone.namedfile_f0f911f2a72b2e5c923dc2ab9179319cc47788f9": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Project tests against Python 3.7-3.11 via GitHub Actions and tox. Python 3.11 is the latest version tested, used with Plone 6.0. Testing matrix includes multiple Plone versions (5.2 and 6.0) with corresponding Python version compatibility."
+  },
+  "plone__plone.namedfile_ff5269fb4c79f4eb91dd934561b8824a49a03b60": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "Based on GitHub Actions CI/CD pipeline (.github/workflows/test-matrix.yml), Python 3.13 is the most frequently used version for testing (4 out of 6 test configurations). The project also tests on Python 3.9 and 3.10, with tox.ini supporting 3.9-3.13 across different Plone versions."
+  },
+  "plone__plone.rest_43b4a7e86206e237e1de5ca3817ed071575882f7": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Primary testing uses Python 3.8, 3.7, and 2.7 across different Plone versions (5.2, 5.1, 4.3). All code quality tools (black, flake8, pyroma, zpretty) use Python 3.8. Python 3.8 is the latest version tested and most consistently used across all CI workflows."
+  },
+  "wagtail__wagtail_bc96aed6ac53f998b2f4c4bf97e2d4f5fe337e5b": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Wagtail tests against Python 3.8, 3.9, 3.10, and 3.11 in GitHub Actions CI/CD pipeline. Python 3.10 is the most frequently used version in the test matrix and is used for the coverage job, making it the primary testing version."
+  },
+  "urllib3__urllib3_01220354d389cd05474713f8c982d05c9b17aafb": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Primary testing version used in CI/CD. The project tests across multiple Python versions (2.7, 3.6-3.11, PyPy) but 3.10 is used for coverage analysis, integration tests, and downstream testing, making it the most clearly stated primary testing version."
+  },
+  "apache__superset_ccf73b2608f3f3d1f3d31b927e094fcf50b86a03": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Primary testing version used across all CI/CD workflows. Also supports 3.9, 3.10, 3.11 but 3.8 is the base version in tox.ini and most consistently used in GitHub Actions workflows."
+  },
+  "yt-dlp__yt-dlp_f04b5bedad7b281bee9814686bba1762bae092eb": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Primary testing version used in quick-test.yml workflow. Full test matrix includes Python 3.7-3.12 and PyPy versions (pypy-3.7, pypy-3.8, pypy-3.9, pypy-3.10) as specified in core.yml workflow. Minimum supported version is Python 3.7+ as stated in setup.py and README.md."
+  },
+  "aio-libs__aiohttp_f016f0680e4ace6742b03a70cb0382ce86abe371": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Tests are run on Python 3.6, 3.7, 3.8, 3.9, 3.10, and PyPy3 according to GitHub Actions CI configuration. Python 3.10 is the latest version in the test matrix. The lint job uses Python 3.8, and minimum requirement is Python 3.6+."
+  },
+  "piccolo-orm__piccolo_82679eb8cd1449cf31d87c9914a072e70168b6eb": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "Tests run on Python 3.8, 3.9, 3.10, 3.11, and 3.12 via GitHub Actions. Python 3.12 is used for coverage uploads and releases, indicating it as the primary/latest supported version."
+  },
+  "rohe__pysaml2_6e09a25d9b4b7aa7a506853210a9a14100b8bc9b": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "The project uses Travis CI for testing with both Python 2.7 and 3.4 as specified in .travis.yml and tox.ini. Python 3.4 is chosen as the latest version among the tested versions. The setup.py also indicates support for Python 2.7, 3.4, and 3.5, but the CI configuration only tests 2.7 and 3.4."
+  },
+  "tryton__trytond_30e978593733385db3144f8c583eeb4679575cf0": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Project tests against multiple Python versions (2.7, 3.3, 3.4, 3.5) as specified in .drone.yml and tox.ini. Version 3.5 is the latest version being tested."
+  },
+  "openstack__aodh_149d3ad2193b4d17df801f82a0a6be62dba564db": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Project tests with both Python 2.7 and 3.5 as specified in tox.ini envlist. Python 3.5 is the latest version explicitly configured for testing."
+  },
+  "numpy__numpy_49bcb1aba1ca32a38696ce5239392529430b2cc4": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Based on Travis CI configuration which tests Python 2.7, 3.4, 3.5, and 3.6. Python 3.6 is the latest version explicitly listed for testing. This is confirmed by setup.py classifiers and tox.ini configuration."
+  },
+  "aio-libs__aiohttp-session_1b356f01bbab57d041c9a75bacd72fbbf8524728": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Based on Travis CI configuration, Python 3.6 is the primary testing version and is used for PyPI deployment. The project also tests on Python 3.5, 3.7, and nightly builds, but 3.6 appears to be the most stable and clearly stated version."
+  },
+  "flask-admin__flask-admin_8af10e0b022464fdcb2da3d0ea5bbd2f11c0acd1": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "The project uses Travis CI for testing with multiple Python versions (2.7, 3.4, 3.5, 3.6). Python 3.6 is the latest version tested according to .travis.yml and tox.ini configuration. The setup.py classifiers also confirm support for Python 2.7, 3.3, 3.4, 3.5, and 3.6."
+  },
+  "home-assistant__core_598f093bf0fecdefaa3d95d1ddae71317a05321e": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Based on Travis CI configuration and tox.ini, the project tests on both Python 3.5.3 and 3.6. Python 3.6 is the latest version being tested. The minimum required version is 3.5.3 as specified in homeassistant/const.py."
+  },
+  "horazont__aioxmpp_29ff0838a40f58efe30a4bbcea95aa8dab7da475": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Based on Travis CI configuration (.travis.yml), the project tests against Python 3.4, 3.5, 3.6, and 3.7. Python 3.7 is the latest version explicitly tested in the CI pipeline, though Python 3.6 is used most extensively across different test configurations."
+  },
+  "jakubroztocil__httpie_df36d6255df5793129b02ac82f1010171bd8a0a8": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Python 3.7 is explicitly set as NEWEST_PYTHON in Travis CI configuration and is used as the primary testing environment in tox.ini. While the project supports Python 2.7, 3.5, 3.6, and pypy, Python 3.7 is the most clearly stated version for testing and is used for coverage reporting."
+  },
+  "apragacz__django-rest-registration_26d094fab65ea8c2694fdfb6a3ab95a7808b62d5": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Python 3.6 is the primary version used for testing, linting, and package checking in Travis CI and tox configurations. The project supports Python 3.4+ and tests against multiple versions (3.4, 3.5, 3.6, 3.7), but 3.6 is most prominently featured in development workflows."
+  },
+  "ierror__django-js-reverse_78d6aff2276f2d341f643b095515f8aaba5e67c2": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Python 3.7 is the latest version tested in Travis CI configuration and is specifically configured to run the 'check' environment in tox.ini. The project tests against multiple Python versions (2.7, 3.4, 3.5, 3.6, 3.7) but 3.7 is the most recent."
+  },
+  "buildbot__buildbot_e781f110933e05ecdb30abc64327a2c7c9ff9c5a": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Primary testing version used in Travis CI and BBTravis for comprehensive test suites including flake8, isort, pylint, docs, and trial tests. The project also tests on Python 3.5 and 3.6 for compatibility."
+  },
+  "openstack__neutron_8c213e45902e21d2fe00639ef7d92b35304bde82": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Project supports multiple Python versions (2.7, 3.5, 3.6, 3.7) as evidenced in tox.ini and Zuul configuration. Python 3.6 is selected as it's explicitly listed in tox envlist and Zuul templates, representing the most commonly used version for testing. Most test environments default to python3, and CI jobs primarily use Python 3 variants."
+  },
+  "saltstack__salt_cce7abad9c22d9d50ccee2813acabff8deca35dd": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Salt uses Nox for testing across multiple Python versions (2.7, 3.4, 3.5, 3.6, 3.7) as defined in noxfile.py. Python 3.7 is the latest version supported for testing. The project maintains separate requirement files for each Python version in requirements/static/ directory."
+  },
+  "django__django_1f2dd37f6fcefdd10ed44cb233b2e62b520afb38": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Django 3.0.7 supports Python 3.6, 3.7, and 3.8 according to the FAQ documentation. The tox.ini configuration shows testing environments for py{3,36,37,38}, and setup.py classifiers list Python 3.6, 3.7, and 3.8 as supported versions. Python 3.8 is selected as the latest supported version for testing."
+  },
+  "sybrenstuvel__python-rsa_3283b1284475cf6c79a7329aee8bd7443cc72672": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Primary testing version specified in Pipfile and has dedicated tox environment with additional doctest coverage. Project supports multiple Python versions (2.7, 3.4-3.7, PyPy) via Travis CI and tox, but 3.6 is the main development/testing version."
+  },
+  "ceph__ceph_0443e40c11280ba3b7efcba61522afa70c4f8158": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Python 3 is the primary version used for testing across all modules. The build system (CMakeLists.txt) defaults to Python 3, and all tox.ini configurations use 'py3' environments. Specific versions vary by OS: Python 3.8 on Fedora 32+, Python 3.7 on older Fedora, Python 3.6 on RHEL/CentOS 8+, and generic Python 3 on other systems."
+  },
+  "apache__airflow_4e32546faf227a6497ce8b282fff7450cae6f665": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Default Python version used for testing in CI/CD pipeline. The project supports Python 3.6, 3.7, and 3.8, but 3.6 is set as the default version in the CI configuration (DEFAULT_PYTHON_MAJOR_MINOR_VERSION=3.6) and is used for the primary test runs, static checks, and documentation builds."
+  },
+  "django__django_1853724acaf17ed7414d54c7d2b5563a25025a71": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Django 3.2 supports Python 3.6, 3.7, and 3.8. Version 3.8 is the latest supported version as documented in the FAQ and setup.cfg. Testing configuration in tox.ini includes py3, py36, py37, and py38 environments."
+  },
+  "mozilla__bleach_f77e0f6392177a06e46a49abd61a4d9f035e57fd": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is the latest version tested in Travis CI configuration. The project supports multiple Python versions (2.7, 3.5-3.8, PyPy) as defined in .travis.yml and tox.ini, with Python 3.8 being used for linting tasks."
+  },
+  "mozilla__bleach_175f67740e7951e1d80cefb7831e6c3e4efeb986": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Project tests against multiple Python versions (2.7, 3.5, 3.6, 3.7, 3.8, pypy, pypy3) as specified in .travis.yml and tox.ini. Python 3.8 is the latest version explicitly used for linting in the CI pipeline and represents the most recent supported version."
+  },
+  "marshmallow-code__webargs_b9ee8b0aa668207a363d9fd21d967eeadb975c3e": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Testing is performed on Python 3.5, 3.6, 3.7, and 3.8 as specified in azure-pipelines.yml and tox.ini. Python 3.8 is the latest version tested and receives the most comprehensive testing with multiple marshmallow versions including development builds. Python 3.7 is used for release builds."
+  },
+  "ubernostrum__django-registration_2db0bb7ec35636ea46b07b146328b87b2cb13ca5": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "CI tests against Python 3.6, 3.7, 3.8, and 3.9. Python 3.9 is the latest version tested and is used for additional development tools (linting, documentation, packaging checks) as configured in tox.ini and GitHub Actions workflow."
+  },
+  "celery__celery_1f7ad7e6df1e02039b6ab9eec617d283598cad6b": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "The project tests on multiple Python versions (3.7, 3.8, 3.9, 3.10, pypy-3.7, pypy-3.8) as specified in GitHub Actions workflow and tox.ini. Python 3.10 is selected as it's the latest stable version tested. The CI matrix in .github/workflows/python-package.yml shows comprehensive testing across these versions, with tox configuration supporting unit and integration tests for each version."
+  },
+  "fredrik-johansson__mpmath_46d44c3c8f3244017fe1eb102d564eb4ab8ef750": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Project tests against multiple Python versions (2.7, 3.4-3.9, 3.10-dev, pypy2, pypy3) as defined in GitHub Actions workflow. Version 3.9 is the latest stable version in the testing matrix."
+  },
+  "wagtail__wagtail_5c7a60977cba478f6a35390ba98cffc2bd41c8a4": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Python 3.9 is the most prominently used version in GitHub Actions CI/CD pipeline, appearing in 5 different test configurations including PostgreSQL, MySQL, SQLite, and Elasticsearch tests. The project supports Python 3.6-3.9 with 3.6 being the minimum requirement."
+  },
+  "sabnzbd__sabnzbd_3766ba54026eaa520dbee5b57a2f33d4954fb98b": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Testing matrix includes Python 3.6, 3.7, 3.8, and 3.9. Python 3.9 is used for platform-specific testing (macOS and Windows) and is the latest version in the CI pipeline. Minimum supported version is Python 3.6 as stated in documentation."
+  },
+  "django__django_0bd57a879a0d54920bb9038a732645fb917040e9": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Django 3.1.13 supports Python 3.6, 3.7, 3.8, and 3.9. Version 3.9 is the latest supported version as specified in setup.cfg classifiers and tox.ini testing configuration. Testing is configured via tox with environments for py3, py36, py37, py38, and py39."
+  },
+  "jupyterhub__firstuseauthenticator_953418e2450dbc2d854e332350849533b0ebc7ba": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Project tests against Python 3.6-3.10 in CI matrix, with 3.10 being the latest tested version. Release builds use Python 3.9. Minimum requirement is Python 3.6."
+  },
+  "dask__distributed_afce4be8e05fb180e50a9d9e38465f1a82295e1b": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Testing is performed on Python 3.7, 3.8, and 3.9 as specified in GitHub Actions workflow matrix. Python 3.9 is the latest version tested across all platforms (Ubuntu, Windows, macOS). GPU CI specifically uses Python 3.8."
+  },
+  "python-babel__babel_3a700b5b8b53606fd98ef8294a56f9510f7290f8": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Project tests on multiple Python versions (3.6, 3.7, 3.8, 3.9, pypy3) as configured in GitHub Actions CI and tox.ini. Python 3.9 is the latest version tested. Minimum required version is 3.6 as specified in setup.py."
+  },
+  "django__django_d4dcd5b9dd9e462fec8220e33e3e6c822b7e88a6": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Python 3.10 is consistently used across GitHub Actions workflows (linters.yml and docs.yml). Django 4.1 supports Python 3.8, 3.9, and 3.10 according to setup.cfg, with 3.10 being the latest and most commonly used in CI/CD pipelines."
+  },
+  "saltstack__salt_2f612bd81ddf80145a9984396a7fd789f4c8ffec": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Salt supports Python 3.5-3.9 as defined in noxfile.py (_PYTHON_VERSIONS = ('3', '3.5', '3.6', '3.7', '3.8', '3.9')). GitHub Actions workflows use Python 3.8.6 for CI/CD (lint, docs, pre-commit). The latest supported version is 3.9, which is used as the primary test version."
+  },
+  "paramiko__paramiko_4c491e299c9b800358b16fa4886d8d94f45abe2e": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Primary testing version used in CircleCI configuration. Additional versions 3.7, 3.8, and 3.9 are also tested, but 3.6 is used for coverage testing, matrix testing with different cryptography versions, and sdist testing."
+  },
+  "django__django_2044dac5c6968441be6f534c4139bcf48c5c7e48": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Django 3.2.13 supports Python 3.6-3.10 for testing as specified in tox.ini, setup.cfg, and documentation. Python 3.10 is the latest supported version for testing."
+  },
+  "django__django_00b0fc50e1738c7174c495464a5ef069408a4402": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Django supports Python 3.8, 3.9, and 3.10 as specified in setup.cfg. Python 3.8 is the minimum required version and is used as the target for Black code formatting. Testing is configured via tox.ini for multiple Python versions (py3, py38, py39, py310)."
+  },
+  "jupyter-server__jupyter_server_3485007abbb459585357212dcaa20521989272e8": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Testing is performed across Python 3.7-3.10 in CI/CD pipelines. Python 3.10 is the latest version explicitly tested in both main tests (python-tests.yml) and integration tests (integration-tests.yml). The project supports Python >=3.7 as specified in setup.cfg."
+  },
+  "savon-noir__python-libnmap_c36fecde90017befeb4853396d0e2aac93c95b64": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Testing is performed on multiple Python versions (2.7, 3.5, 3.6, 3.7, 3.8) as defined in GitHub Actions workflow, with 3.8 being the latest supported version for testing. The project also supports Python 2.7 for backward compatibility but the latest Python 3.x version (3.8) is used as the primary testing target."
+  },
+  "openstack__neutron_01fc2b9195f999df4d810df4ee63f77ecbc81f7e": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Primary testing version as specified in tox.ini envlist and Zuul CI configuration. Project also supports Python 3.9 and 3.10 in CI, but 3.8 is the most consistently referenced version across testing infrastructure."
+  },
+  "apache__airflow_150dd927c3297daccab507bc5a5f2c3a32f24d5f": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Default Python version used for testing in CI/CD pipeline. Airflow supports Python 3.7, 3.8, 3.9, and 3.10, but 3.7 is the primary version used for testing as defined in global_constants.py and is the minimum required version in setup.cfg."
+  },
+  "ikus060__rdiffweb_c4a19cf67d575c4886171b8efcbf4675d51f3929": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Primary testing version is Python 3.10 as specified in GitLab CI (.gitlab-ci.yml) for the main test template. The project supports Python 3.6-3.10 according to setup.cfg, but the CI pipeline uses python:3.10-bullseye as the default image for testing, with additional matrix testing across versions 3.6-3.10."
+  },
+  "executablebooks__markdown-it-py_53ca3e9c2b9e9b295f6abf7f4ad2730a9b70f68c": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "The project tests against multiple Python versions (pypy-3.7, 3.7, 3.8, 3.9, 3.10) in GitHub Actions CI/CD pipeline. Python 3.10 is the latest version tested. The project requires Python >=3.7 as specified in pyproject.toml."
+  },
+  "apache__airflow_d9dea5ce17f0c5859dc705bba8e6ef22e5659955": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Apache Airflow is tested with Python 3.7, 3.8, 3.9, and 3.10. The testing configuration is defined in the CI/CD pipeline (GitHub Actions) and uses all supported versions for comprehensive testing. Python 3.10 is the latest supported version as specified in the global constants and CI configuration."
+  },
+  "encode__starlette_1797de464124b090f10cf570441e8292936d63e3": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Testing is performed against Python versions 3.7, 3.8, 3.9, 3.10, and 3.11 as specified in GitHub Actions workflow (.github/workflows/test-suite.yml). Version 3.11 is the latest supported version."
+  },
+  "gradio-app__gradio_37967617bd97615fb6f3b44e7750c0e0be58479a": {
+    "name": "python",
+    "version": "3.9",
+    "additional_info": "Primary testing version used in CI/CD pipeline. Project also tests compatibility with Python 3.7 and supports Python 3.7+ according to pyproject.toml. Development documentation specifically recommends Python 3.9."
+  },
+  "apache__airflow_ac65b82eeeeaa670e09a83c7da65cbac7e89f8db": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Default Python version for testing as defined in global_constants.py. Full test matrix includes 3.8, 3.9, 3.10, and 3.11, but 3.8 is the default and minimum required version used for most CI runs."
+  },
+  "django__django_454f2fb93437f98917283336201b4048293f7582": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Django 3.2 supports Python 3.6, 3.7, 3.8, 3.9, and 3.10. Version 3.10 is the latest supported version as documented in setup.cfg, tox.ini, and the official release notes. The tox configuration shows test environments for all these versions, with the documentation recommending the use of the latest Python version."
+  },
+  "py-pdf__pypdf_c6c56f550bb384e05f0139c796ba1308837d6373": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "Primary testing is done on multiple Python versions (2.7, 3.6, 3.7, 3.8, 3.9, 3.10, 3.10.1) via GitHub Actions CI. Version 3.10 is the latest stable version being tested and is used for benchmarking. The project supports Python >=2.7 according to setup.cfg."
+  },
+  "borgbackup__borg_3eb070191da10c2d3f7bc6484cf3d51c3045f884": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Multiple Python versions are tested in CI (3.9, 3.10, 3.11). Python 3.11 is chosen as it's the latest version tested and used for docs generation and macOS testing. The project requires Python >=3.9 as specified in setup.cfg."
+  },
+  "gventuri__pandas-ai_3aac79be8fc1d18b53d66a566adddbbdd2b38ad5": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "The CI pipeline tests against Python versions 3.9, 3.10, and 3.11 on multiple operating systems (Ubuntu, Windows, macOS). Version 3.11 is chosen as it's the latest version tested and is specifically used for coverage reporting to Codecov."
+  },
+  "django__django_048a9ebb6ea468426cb4e57c71572cbbd975517f": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Primary testing version used in GitHub Actions main test workflow (tests.yml). Django supports Python 3.8-3.12 with comprehensive testing in schedule_tests.yml, but 3.11 is the main version for CI/CD on pull requests and pushes."
+  },
+  "jtesta__ssh-audit_8e972c5e94b460379fe0c7d20209c16df81538a5": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "Project tests against Python 3.8, 3.9, 3.10, 3.11, and 3.12 via GitHub Actions and tox. Version 3.12 is the latest supported version as documented in CI/CD pipeline, setup.cfg, and README.md."
+  },
+  "home-assistant__core_dbfc5ea8f96bde6cd165892f5a6a6f9a65731c76": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Primary testing version as defined by DEFAULT_PYTHON in CI workflow. Tests also run on Python 3.12 as part of ALL_PYTHON_VERSIONS matrix, but 3.11 is the default and most clearly stated version used throughout the project configuration."
+  },
+  "home-assistant__home-assistant_dbfc5ea8f96bde6cd165892f5a6a6f9a65731c76": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Default Python version for testing is 3.11, with additional testing on 3.12. Found in GitHub Actions CI workflow (.github/workflows/ci.yaml) where DEFAULT_PYTHON is set to '3.11' and ALL_PYTHON_VERSIONS includes ['3.11', '3.12']. The pyproject.toml also specifies requires-python >= 3.11.0 and pylint py-version = 3.11."
+  },
+  "mlflow__mlflow_1da75dfcecd4d169e34809ade55748384e8af6c1": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is the minimum supported version defined in setup.py (MINIMUM_SUPPORTED_PYTHON_VERSION = '3.8'). This is used as the default testing version in GitHub Actions workflows via the setup-python action, explicitly set in requirements.yml workflow, used in the Docker test environment (Dockerfile.test), and configured as the target version for code formatting tools (Black and Ruff in pyproject.toml). Cross-version tests also use 3.8 and 3.9, with 3.8 being the primary/minimum version."
+  },
+  "mlflow__mlflow_b9ab9ed77e1deda9697fe472fb1079fd428149ee": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is the minimum supported version defined in setup.py (MINIMUM_SUPPORTED_PYTHON_VERSION) and is used as the default testing version in GitHub Actions workflows. The CI/CD pipeline uses this version consistently across all test jobs including python-skinny, python, database, java, flavors, models, evaluate, pyfunc, sagemaker, and windows tests."
+  },
+  "mlflow__mlflow_4bd7f27c810ba7487d53ed5ef1038fca0f8dc28c": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "MLflow uses Python 3.8 as the minimum supported version for testing. This is defined in setup.py as MINIMUM_SUPPORTED_PYTHON_VERSION and consistently used across GitHub Actions workflows, development tools (Black, Ruff), and development environment setup scripts. Cross-version testing also includes Python 3.9, but 3.8 is the primary testing version to ensure compatibility with the minimum supported version."
+  },
+  "langchain-ai__langchain_bf0b3cc0b5ade1fb95a5b1b6fa260e99064c2e22": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Testing is performed on Python 3.8, 3.9, 3.10, and 3.11 across all CI workflows. Python 3.11 is the latest version tested and is used consistently across test, lint, integration, and scheduled test workflows."
+  },
+  "mlflow__mlflow_400c226953b4568f4361bc0a0c223511652c2b9d": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is the minimum supported version as defined in setup.py (MINIMUM_SUPPORTED_PYTHON_VERSION = '3.8'). The GitHub Actions workflows use this as the default testing version via the setup-python action, which calls 'python setup.py -q min_python_version' when no specific version is provided. Cross-version tests also support Python 3.9, but 3.8 is the primary testing version used across most CI workflows including master.yml, requirements.yml, and the development environment setup in CONTRIBUTING.md."
+  },
+  "psf__black_f00093672628d212b8965a8993cee8bedf5fe9b8": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "Black tests on Python 3.8-3.12 and PyPy 3.9 via GitHub Actions. Python 3.12 is the latest version in the test matrix. The project requires Python 3.8+ minimum, but development is preferred on the latest Python version according to contributing guidelines."
+  },
+  "nonebot__nonebot2_b65b3b438c95894654fd9081139989c757bdc6c1": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "The project tests against multiple Python versions (3.8, 3.9, 3.10, 3.11, 3.12) as defined in .github/workflows/codecov.yml. The latest version 3.12 is selected as the primary testing version. The project requires Python ^3.8 minimum (pyproject.toml), uses 3.10 as default in setup-python action, and configures pyright for 3.8 compatibility."
+  },
+  "pallets__jinja_716795349a41d4983a9a4771f7d883c96ea17be7": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Primary testing version used across all platforms (Linux, Windows, Mac) in GitHub Actions CI/CD pipeline. Project supports Python 3.7-3.12 and PyPy 3.10, with minimum requirement of Python 3.7."
+  },
+  "vyperlang__vyper_a2df08888c318713742c57f71465f32a1c27ed72": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Primary testing version used across CI/CD pipeline (GitHub Actions). Python 3.10 is also supported and tested in the matrix, but 3.11 is used for linting, docs, mypy, fuzzing, memory tests, and builds. Package supports Python >=3.10,<4."
+  },
+  "latchset__jwcrypto_90477a3b6e73da69740e00b8161f53fea19b831f": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Project tests on Python 3.8, 3.9, 3.10, and 3.11 via GitHub Actions and tox. Python 3.11 is used for documentation, linting, and code quality checks, making it the primary development version."
+  },
+  "lektor__lektor_7393d87bd354e43120937789956175064e4610a0": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "Project tests against Python 3.8-3.12 in CI/CD pipeline. Python 3.12 is the latest version tested and includes additional testing capabilities (ffmpeg integration tests). The project requires Python >=3.8 as specified in pyproject.toml."
+  },
+  "apache__airflow_89e7f3e7bdf2126bbbcd959dc10d65ef92773cca": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Default Python version for testing. Airflow tests against Python 3.8, 3.9, 3.10, and 3.11, with 3.8 being the primary/default version used in CI workflows as defined in global_constants.py and used throughout GitHub Actions workflows."
+  },
+  "jupyterhub__oauthenticator_5246b09675501b09fb6ed64022099b7644812f60": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "The project tests against multiple Python versions (3.8, 3.9, 3.10, 3.11, 3.12) in the main test workflow. Python 3.12 is the latest version being tested. The minimum supported version is 3.8 as specified in setup.py."
+  },
+  "pallets__jinja_0668239dc6b44ef38e7a6c9f91f312fd4ca581cb": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "Testing is performed across multiple Python versions (3.7-3.12 and PyPy 3.10) via GitHub Actions and tox, with Python 3.12 being the latest version tested on multiple platforms (Ubuntu, Windows, macOS). Type checking tools use Python 3.8 as baseline."
+  },
+  "matthiask__html-sanitizer_48db42fc5143d0140c32d929c46b802f96913550": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Testing is performed on Python 3.8, 3.9, 3.10, and 3.11 via GitHub Actions CI/CD pipeline. Version 3.11 is the latest version used in the test matrix."
+  },
+  "psf__requests_a58d7f2ffb4d00b46dca2d70a3932a0b37e22fac": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "Testing is performed against multiple Python versions (3.8, 3.9, 3.10, 3.11, 3.12, pypy-3.9, pypy-3.10) as specified in GitHub Actions workflow. Version 3.12 is the latest explicitly tested version."
+  },
+  "wagtail__wagtail_284f75a6f91f7ab18cc304d7d34f33b559ae37b1": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "Wagtail tests against multiple Python versions (3.8, 3.9, 3.10, 3.11, 3.12) as specified in GitHub Actions CI/CD pipeline and tox.ini. Python 3.12 is chosen as it's the latest version actively tested and used in the most comprehensive test configurations including Django 5.0 with MySQL 8.1 and PostgreSQL 15 with parallel execution."
+  },
+  "langchain-ai__langchain_aad3d8bd47d7f5598156ff2bdcc8f736f24a7412": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "LangChain tests across Python 3.8, 3.9, 3.10, and 3.11 in CI/CD workflows. Version 3.11 is the latest supported version used in testing matrix."
+  },
+  "mlflow__mlflow_438a450714a3ca06285eeea34bdc6cf79d7f6cbc": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is the minimum supported version for MLflow as defined in setup.py (MINIMUM_SUPPORTED_PYTHON_VERSION). This version is consistently used across the CI/CD pipeline, development tools configuration (Black, Ruff), and development environment setup scripts. While cross-version tests also include Python 3.9, Python 3.8 is the primary version used for testing to ensure backward compatibility."
+  },
+  "mlflow__mlflow_f8d51e21523238280ebcfdb378612afd7844eca8": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Python 3.8 is the minimum supported version as specified in requirements/python-version.txt, pyproject.toml (requires-python >= 3.8), and consistently used across GitHub Actions workflows. Cross-version testing also includes Python 3.9, but 3.8 is the primary testing version used in CI/CD pipelines and development environment setup."
+  },
+  "django__django_07cefdee4a9d1fcd9a3a631cbd07c78defd1923b": {
+    "name": "python",
+    "version": "3.11",
+    "additional_info": "Python 3.11 is the most consistently used version across Django's CI/CD workflows. The main test workflow (tests.yml) uses 3.11 for Windows tests, Selenium tests use 3.11, and it's included in the scheduled test matrix alongside 3.10 and 3.12-dev. Django officially supports Python 3.10+ according to setup.cfg."
+  },
+  "apache__airflow_f18f48492dc69f392e45567580b6ddb0c070ea58": {
+    "name": "python",
+    "version": "3.8",
+    "additional_info": "Default Python version used for testing in CI/CD pipeline. Project supports and tests against Python 3.8, 3.9, 3.10, 3.11, and 3.12, but 3.8 is consistently used as the default version across GitHub Actions workflows, Docker images, and Breeze development tools."
+  },
+  "canonical__operator_fea6d2072435a62170d4c01272572f1a7e916e61": {
+    "name": "python",
+    "version": "3.10",
+    "additional_info": "The project tests against Python 3.8 and 3.10 in CI (framework-tests.yaml), with 3.10 being the latest tested version. The project requires Python >=3.8 (pyproject.toml) and uses Python 3.8 as the target for static analysis (pyright config)."
+  },
+  "django__django_32ebcbf2e1fe3e5ba79a6554a167efce81f7422d": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "Primary testing version used in GitHub Actions workflows (tests.yml, selenium.yml, linters.yml). Django also supports Python 3.10 and 3.11 as shown in setup.cfg and scheduled tests, with minimum requirement of Python 3.10."
+  },
+  "andialbrecht__sqlparse_b4a39d9850969b4e1d6940d32094ee0b42a2cf03": {
+    "name": "python",
+    "version": "3.12",
+    "additional_info": "Project tests against multiple Python versions (3.8, 3.9, 3.10, 3.11, 3.12, and PyPy variants) in GitHub Actions CI/CD pipeline. Version 3.12 is selected as it's the latest stable version actively tested and used for documentation builds."
+  },
+  "django__django_5f0829a27e85d89ad8c433f5c6a7a7d17c9e9292": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Django 1.6.3 supports Python 2.6, 2.7, 3.2, and 3.3 as documented in setup.py and installation guides. Python 2.7 chosen as the most commonly used stable version during Django 1.6 era. Test requirements are split between py2.txt and py3.txt files."
+  },
+  "django__django_0268b855f9eab3377f2821164ef3e66037789e09": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Django 1.6 supports Python 2.6.5+, 2.7, 3.2, and 3.3. Based on the documentation, Python 2.7 is the most commonly recommended version for testing, as it's the latest Python 2.x version supported and Django 1.6 will be the final release series to support Python 2.6. The test suite can be run with any of these versions, but 2.7 represents the most stable and widely used version for this Django release."
+  },
+  "django__django_601107524523bca02376a0ddc1a06c6fdb8f22f3": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Django 1.6.5 supports Python 2.6.5-2.7.x and 3.2.3-3.3.x. Based on documentation analysis, Python 2.7 is the most clearly recommended version for testing, as it's the latest in the 2.x series and the FAQ recommends using the latest 2.x.y release. The documentation also indicates Django 1.6 will be the final release series to support Python 2.6, making 2.7 the primary Python 2 version for testing."
+  },
+  "mkomitee__requests-kerberos_9c1e08cc17bb6950455a85d33d391ecd2bce6eb6": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Travis CI configuration specifies Python 2.6 and 2.7 for testing. Selected 2.7 as it is the latest version specified."
+  },
+  "django__django_2654e1b93923bac55f12b4e66c5e39b16695ace5": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Django 1.7 supports Python 2.7, 3.2, 3.3, and 3.4. Python 3.4 was newly added in Django 1.7 and represents the latest supported version for testing. The project documentation shows separate test requirements for Python 2 (py2.txt) and Python 3 (py3.txt), indicating multi-version testing support."
+  },
+  "django__django_5447709a571cd5d95971f1d5d21d4a7edcf85bbd": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Django 1.8 supports Python 2.7, 3.2, 3.3, and 3.4 as stated in setup.py classifiers and release notes. The latest supported version (3.4) is chosen as the testing version, which is also the most clearly stated in the documentation as the highest supported version for this Django release."
+  },
+  "django__django_1828f4341ec53a8684112d24031b767eba557663": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Django 1.7.9 supports Python 2.7, 3.2, 3.3, and 3.4. Based on setup.py classifiers and documentation, Python 3.4 is the latest supported version and most likely used for primary testing. The project includes separate test requirements files for Python 2 (py2.txt) and Python 3 (py3.txt), indicating testing across multiple Python versions."
+  },
+  "django__django_8f9a4d3a2bc42f14bb437defd30c7315adbff22c": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Django 1.8 supports Python 2.7 and 3.2, 3.3, 3.4. Version 3.4 selected as the latest supported Python 3 version for testing. Testing requirements are split between py2.txt and py3.txt files in tests/requirements/."
+  },
+  "openstack__nova_8b289237ed6d53738c22878decf0c429301cf3d0": {
+    "name": "python",
+    "version": "3.7",
+    "additional_info": "Project supports both Python 2.7 and 3.4 for testing as specified in tox.ini envlist. Python 3.4 chosen as the latest version. Testing environments include py27, py34, functional, pep8, and pip-missing-reqs."
+  }
+}

@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "av-susvibes"
+version = "0.1.0"
+description = "Repository-level attacker-verifier repair and grading on SusVibes"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+grade = [
+  "docker==7.1.0", "PyYAML==6.0.2", "litellm==1.74.9.post1",
+  "tiktoken==0.9.0; python_version < '3.14'",
+  "tiktoken==0.12.0; python_version >= '3.14'",
+  "Jinja2==3.1.6", "requests==2.32.4",
+  "tqdm==4.67.1", "python-dotenv==1.1.1",
+]
+
+[project.scripts]
+av-susvibes = "av_susvibes.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["av_susvibes*", "evaluation_harness*"]
+
+[tool.setuptools.package-data]
+av_susvibes = ["bootstrap/sitecustomize.py"]
+evaluation_harness = ["**/*.md", "**/*.sh"]
