@@ -133,7 +133,7 @@ or above Claude Opus 4.8 without repair.
 
 ### Coding agents on SusVibes
 
-Three coding-agent harnesses, [SWE-agent](https://github.com/SWE-agent/SWE-agent), [OpenCode](https://github.com/anomalyco/opencode), and [Claude Code](https://claude.com/product/claude-code), edit real
+Three coding-agent harnesses, [SWE-agent](https://github.com/SWE-agent/SWE-agent), [Claude Code](https://claude.com/product/claude-code), and [OpenCode](https://github.com/anomalyco/opencode), edit real
 Python repositories in [SusVibes](https://arxiv.org/abs/2512.03262) (186 tasks, 77 CWEs). Before a patch is
 accepted, the changed code is attacked and any violation goes back to the agent,
 for at most five checks; the attacker and the judge use the agent's model
@@ -219,81 +219,6 @@ Sec-TestRate are the fractions of functional and security tests passed.
 </td></tr>
 </tbody>
 <tbody>
-<tr><td colspan="5"><b><a href="https://github.com/anomalyco/opencode">OpenCode</a></b></td></tr>
-<tr><td>GPT&#8209;5.4&#8209;mini</td><td>79.03</td><td>22.04</td><td>85.65</td><td>81.86</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
-
-**81.18**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.15}}$
-
-</td><td>
-
-**30.11**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{8.07}}$
-
-</td><td>
-
-**86.18**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.53}}$
-
-</td><td>
-
-**83.13**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.27}}$
-
-</td></tr>
-<tr><td>GPT&#8209;5.4</td><td>93.01</td><td>28.49</td><td>86.96</td><td>82.91</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
-
-**93.55**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.54}}$
-
-</td><td>
-
-**32.80**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.31}}$
-
-</td><td>
-
-**87.48**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.52}}$
-
-</td><td>
-
-**83.35**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.44}}$
-
-</td></tr>
-<tr><td>GPT&#8209;5.6&#8209;luna</td><td>81.72</td><td>22.04</td><td>85.64</td><td>81.92</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
-
-<span>81.18</span>$\enspace\color{#d73a3a}{\scriptstyle\blacktriangledown\thinspace\mathsf{0.54}}$
-
-</td><td>
-
-**25.27**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{3.23}}$
-
-</td><td>
-
-**85.88**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.24}}$
-
-</td><td>
-
-**83.93**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.01}}$
-
-</td></tr>
-<tr><td>DeepSeek&#8209;V4&#8209;Pro</td><td>91.94</td><td>19.35</td><td>86.95</td><td>82.09</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
-
-**92.47**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.53}}$
-
-</td><td>
-
-**24.19**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.84}}$
-
-</td><td>
-
-**87.11**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.16}}$
-
-</td><td>
-
-**83.16**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.07}}$
-
-</td></tr>
-</tbody>
-<tbody>
 <tr><td colspan="5"><b><a href="https://claude.com/product/claude-code">Claude Code</a></b></td></tr>
 <tr><td>GPT&#8209;5.4&#8209;mini</td><td>27.96</td><td>6.45</td><td>68.36</td><td>62.74</td></tr>
 <tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
@@ -365,6 +290,81 @@ Sec-TestRate are the fractions of functional and security tests passed.
 </td><td>
 
 **77.22**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{3.08}}$
+
+</td></tr>
+</tbody>
+<tbody>
+<tr><td colspan="5"><b><a href="https://github.com/anomalyco/opencode">OpenCode</a></b></td></tr>
+<tr><td>GPT&#8209;5.4&#8209;mini</td><td>79.03</td><td>22.04</td><td>85.65</td><td>81.86</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
+
+**81.18**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.15}}$
+
+</td><td>
+
+**30.11**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{8.07}}$
+
+</td><td>
+
+**86.18**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.53}}$
+
+</td><td>
+
+**83.13**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.27}}$
+
+</td></tr>
+<tr><td>GPT&#8209;5.4</td><td>93.01</td><td>28.49</td><td>86.96</td><td>82.91</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
+
+**93.55**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.54}}$
+
+</td><td>
+
+**32.80**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.31}}$
+
+</td><td>
+
+**87.48**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.52}}$
+
+</td><td>
+
+**83.35**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.44}}$
+
+</td></tr>
+<tr><td>GPT&#8209;5.6&#8209;luna</td><td>81.72</td><td>22.04</td><td>85.64</td><td>81.92</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
+
+<span>81.18</span>$\enspace\color{#d73a3a}{\scriptstyle\blacktriangledown\thinspace\mathsf{0.54}}$
+
+</td><td>
+
+**25.27**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{3.23}}$
+
+</td><td>
+
+**85.88**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.24}}$
+
+</td><td>
+
+**83.93**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.01}}$
+
+</td></tr>
+<tr><td>DeepSeek&#8209;V4&#8209;Pro</td><td>91.94</td><td>19.35</td><td>86.95</td><td>82.09</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
+
+**92.47**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.53}}$
+
+</td><td>
+
+**24.19**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.84}}$
+
+</td><td>
+
+**87.11**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.16}}$
+
+</td><td>
+
+**83.16**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.07}}$
 
 </td></tr>
 </tbody>
