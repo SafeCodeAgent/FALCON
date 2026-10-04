@@ -136,282 +136,235 @@ or above Claude Opus 4.8 without repair.
 Three coding-agent harnesses, [SWE-agent](https://github.com/SWE-agent/SWE-agent), [OpenCode](https://github.com/anomalyco/opencode), and [Claude Code](https://claude.com/product/claude-code), edit real
 Python repositories in [SusVibes](https://arxiv.org/abs/2512.03262) (186 tasks, 77 CWEs). Before a patch is
 accepted, the changed code is attacked and any violation goes back to the agent,
-for at most five checks; the attacker and the judge use the agent's model.
+for at most five checks; the attacker and the judge use the agent's model
+(DeepSeek-V4-Pro is the 08-13 release).
 FuncPass and SecPass are the benchmark's task-level criteria; Func-TestRate and
 Sec-TestRate are the fractions of functional and security tests passed.
 
 <table>
-<thead><tr><th align="left">Harness / model</th><th align="right">FuncPass</th><th align="right">SecPass</th><th align="right">Func&#8209;TestRate</th><th align="right">Sec&#8209;TestRate</th></tr></thead>
+<thead><tr><th align="left">Harness / model</th><th align="left">FuncPass</th><th align="left">SecPass</th><th align="left">Func&#8209;TestRate</th><th align="left">Sec&#8209;TestRate</th></tr></thead>
 <tbody>
 <tr><td colspan="5"><b><a href="https://github.com/SWE-agent/SWE-agent">SWE-agent</a></b></td></tr>
-<tr><td>GPT&#8209;5.4&#8209;mini</td><td align="right">25.27</td><td align="right">8.60</td><td align="right">68.01</td><td align="right">64.68</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>GPT&#8209;5.4&#8209;mini</td><td>25.27</td><td>8.60</td><td>68.01</td><td>64.68</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-**29.57**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.30}}$
+**29.57**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.30}}$
 
-</td><td align="right">
+</td><td>
 
-**12.90**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.30}}$
+**12.90**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.30}}$
 
-</td><td align="right">
+</td><td>
 
-**72.62**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.61}}$
+**72.62**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.61}}$
 
-</td><td align="right">
+</td><td>
 
-**69.77**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{5.09}}$
+**69.77**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{5.09}}$
 
 </td></tr>
-<tr><td>GPT&#8209;5.4</td><td align="right">54.30</td><td align="right">17.74</td><td align="right">79.45</td><td align="right">75.45</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>GPT&#8209;5.4</td><td>54.30</td><td>17.74</td><td>79.45</td><td>75.45</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-**55.91**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.61}}$
+**55.91**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.61}}$
 
-</td><td align="right">
+</td><td>
 
-**22.58**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.84}}$
+**22.58**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.84}}$
 
-</td><td align="right">
+</td><td>
 
-**82.19**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.74}}$
+**82.19**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.74}}$
 
-</td><td align="right">
+</td><td>
 
-**78.30**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.85}}$
+**78.30**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.85}}$
 
 </td></tr>
-<tr><td>GPT&#8209;5.6&#8209;luna</td><td align="right">38.17</td><td align="right">16.13</td><td align="right">74.42</td><td align="right">71.72</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>GPT&#8209;5.6&#8209;luna</td><td>38.17</td><td>16.13</td><td>74.42</td><td>71.72</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-**39.78**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.61}}$
+**39.78**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.61}}$
 
-</td><td align="right">
+</td><td>
 
-**20.43**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.30}}$
+**20.43**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.30}}$
 
-</td><td align="right">
+</td><td>
 
-**74.98**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.56}}$
+**74.98**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.56}}$
 
-</td><td align="right">
+</td><td>
 
-**73.07**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.35}}$
+**73.07**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.35}}$
 
 </td></tr>
-<tr><td>DeepSeek&#8209;V4&#8209;Pro&#8209;08&#8209;13</td><td align="right">87.10</td><td align="right">25.27</td><td align="right">87.11</td><td align="right">83.54</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>DeepSeek&#8209;V4&#8209;Pro</td><td>87.10</td><td>25.27</td><td>87.11</td><td>83.54</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-**87.63**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.53}}$
+**87.63**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.53}}$
 
-</td><td align="right">
+</td><td>
 
-**29.03**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{3.76}}$
+**29.03**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{3.76}}$
 
-</td><td align="right">
+</td><td>
 
-**87.90**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.79}}$
+**87.90**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.79}}$
 
-</td><td align="right">
+</td><td>
 
-**84.39**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.85}}$
+**84.39**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.85}}$
 
 </td></tr>
 </tbody>
 <tbody>
 <tr><td colspan="5"><b><a href="https://github.com/anomalyco/opencode">OpenCode</a></b></td></tr>
-<tr><td>GPT&#8209;5.4&#8209;mini</td><td align="right">79.03</td><td align="right">22.04</td><td align="right">85.65</td><td align="right">81.86</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>GPT&#8209;5.4&#8209;mini</td><td>79.03</td><td>22.04</td><td>85.65</td><td>81.86</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-**81.18**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.15}}$
+**81.18**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.15}}$
 
-</td><td align="right">
+</td><td>
 
-**30.11**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{8.07}}$
+**30.11**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{8.07}}$
 
-</td><td align="right">
+</td><td>
 
-**86.18**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.53}}$
+**86.18**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.53}}$
 
-</td><td align="right">
+</td><td>
 
-**83.13**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.27}}$
+**83.13**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.27}}$
 
 </td></tr>
-<tr><td>GPT&#8209;5.4</td><td align="right">93.01</td><td align="right">28.49</td><td align="right">86.96</td><td align="right">82.91</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>GPT&#8209;5.4</td><td>93.01</td><td>28.49</td><td>86.96</td><td>82.91</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-**93.55**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.54}}$
+**93.55**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.54}}$
 
-</td><td align="right">
+</td><td>
 
-**32.80**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.31}}$
+**32.80**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.31}}$
 
-</td><td align="right">
+</td><td>
 
-**87.48**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.52}}$
+**87.48**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.52}}$
 
-</td><td align="right">
+</td><td>
 
-**83.35**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.44}}$
+**83.35**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.44}}$
 
 </td></tr>
-<tr><td>GPT&#8209;5.6&#8209;luna</td><td align="right">81.72</td><td align="right">22.04</td><td align="right">85.64</td><td align="right">81.92</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>GPT&#8209;5.6&#8209;luna</td><td>81.72</td><td>22.04</td><td>85.64</td><td>81.92</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-81.18\
-$\color{#d73a3a}{\scriptstyle\blacktriangledown\thinspace\mathsf{0.54}}$
+<span>81.18</span>$\enspace\color{#d73a3a}{\scriptstyle\blacktriangledown\thinspace\mathsf{0.54}}$
 
-</td><td align="right">
+</td><td>
 
-**25.27**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{3.23}}$
+**25.27**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{3.23}}$
 
-</td><td align="right">
+</td><td>
 
-**85.88**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.24}}$
+**85.88**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.24}}$
 
-</td><td align="right">
+</td><td>
 
-**83.93**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.01}}$
+**83.93**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.01}}$
 
 </td></tr>
-<tr><td>DeepSeek&#8209;V4&#8209;Pro&#8209;08&#8209;13</td><td align="right">91.94</td><td align="right">19.35</td><td align="right">86.95</td><td align="right">82.09</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>DeepSeek&#8209;V4&#8209;Pro</td><td>91.94</td><td>19.35</td><td>86.95</td><td>82.09</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-**92.47**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.53}}$
+**92.47**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.53}}$
 
-</td><td align="right">
+</td><td>
 
-**24.19**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.84}}$
+**24.19**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.84}}$
 
-</td><td align="right">
+</td><td>
 
-**87.11**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.16}}$
+**87.11**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.16}}$
 
-</td><td align="right">
+</td><td>
 
-**83.16**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.07}}$
+**83.16**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.07}}$
 
 </td></tr>
 </tbody>
 <tbody>
 <tr><td colspan="5"><b><a href="https://claude.com/product/claude-code">Claude Code</a></b></td></tr>
-<tr><td>GPT&#8209;5.4&#8209;mini</td><td align="right">27.96</td><td align="right">6.45</td><td align="right">68.36</td><td align="right">62.74</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>GPT&#8209;5.4&#8209;mini</td><td>27.96</td><td>6.45</td><td>68.36</td><td>62.74</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-**29.03**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.07}}$
+**29.03**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.07}}$
 
-</td><td align="right">
+</td><td>
 
-**8.60**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.15}}$
+**8.60**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.15}}$
 
-</td><td align="right">
+</td><td>
 
-**69.91**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.55}}$
+**69.91**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.55}}$
 
-</td><td align="right">
+</td><td>
 
-**64.76**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.02}}$
+**64.76**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.02}}$
 
 </td></tr>
-<tr><td>GPT&#8209;5.4</td><td align="right">59.14</td><td align="right">14.52</td><td align="right">78.54</td><td align="right">74.29</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>GPT&#8209;5.4</td><td>59.14</td><td>14.52</td><td>78.54</td><td>74.29</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-**63.44**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.30}}$
+**63.44**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{4.30}}$
 
-</td><td align="right">
+</td><td>
 
-**20.43**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{5.91}}$
+**20.43**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{5.91}}$
 
-</td><td align="right">
+</td><td>
 
-**79.68**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.14}}$
+**79.68**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.14}}$
 
-</td><td align="right">
+</td><td>
 
-**76.40**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.11}}$
+**76.40**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.11}}$
 
 </td></tr>
-<tr><td>GPT&#8209;5.6&#8209;luna</td><td align="right">67.74</td><td align="right">18.82</td><td align="right">82.92</td><td align="right">79.71</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>GPT&#8209;5.6&#8209;luna</td><td>67.74</td><td>18.82</td><td>82.92</td><td>79.71</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-**69.89**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.15}}$
+**69.89**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.15}}$
 
-</td><td align="right">
+</td><td>
 
-**20.97**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.15}}$
+**20.97**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{2.15}}$
 
-</td><td align="right">
+</td><td>
 
-**83.54**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.62}}$
+**83.54**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{0.62}}$
 
-</td><td align="right">
+</td><td>
 
-**81.09**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.38}}$
+**81.09**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.38}}$
 
 </td></tr>
-<tr><td>DeepSeek&#8209;V4&#8209;Pro&#8209;08&#8209;13</td><td align="right">66.67</td><td align="right">17.74</td><td align="right">77.54</td><td align="right">74.14</td></tr>
-<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td align="right">
+<tr><td>DeepSeek&#8209;V4&#8209;Pro</td><td>66.67</td><td>17.74</td><td>77.54</td><td>74.14</td></tr>
+<tr><td>&nbsp;&nbsp;+ <b>FALCON</b></td><td>
 
-**67.74**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.07}}$
+**67.74**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.07}}$
 
-</td><td align="right">
+</td><td>
 
-**21.51**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{3.77}}$
+**21.51**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{3.77}}$
 
-</td><td align="right">
+</td><td>
 
-**79.02**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.48}}$
+**79.02**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{1.48}}$
 
-</td><td align="right">
+</td><td>
 
-**77.22**\
-$\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{3.08}}$
+**77.22**$\enspace\color{#1f9e46}{\scriptstyle\blacktriangle\thinspace\mathsf{3.08}}$
 
 </td></tr>
 </tbody>
