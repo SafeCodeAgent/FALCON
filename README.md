@@ -19,7 +19,8 @@
   <a href="#how-it-works"><b>How it works</b></a> ·
   <a href="#benchmark-results"><b>Benchmark results</b></a> ·
   <a href="experiments/README.md"><b>Experiments</b></a> ·
-  <a href="docs/configuration.md"><b>Configuration</b></a>
+  <a href="docs/configuration.md"><b>Configuration</b></a> ·
+  <a href="paper/Attacker_Verifier.pdf"><b>Paper</b></a>
 </p>
 
 <p align="center">

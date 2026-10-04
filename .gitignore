@@ -1,6 +1,3 @@
-# The paper PDF is kept locally, not in the repository.
-paper/
-
 # Engine files written into a repository under test.
 .attacker-verifier/
 
