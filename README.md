@@ -131,47 +131,287 @@ or above Claude Opus 4.8 without repair.
 
 ### Coding agents on SusVibes
 
-[SWE-agent](https://github.com/SWE-agent/SWE-agent), [OpenCode](https://github.com/anomalyco/opencode), and [Claude Code](https://claude.com/product/claude-code) edit real Python
-repositories in [SusVibes](https://arxiv.org/abs/2512.03262) (186 tasks, 77 CWEs). Before a patch is
+Three coding-agent harnesses, [SWE-agent](https://github.com/SWE-agent/SWE-agent), [OpenCode](https://github.com/anomalyco/opencode), and [Claude Code](https://claude.com/product/claude-code), edit real
+Python repositories in [SusVibes](https://arxiv.org/abs/2512.03262) (186 tasks, 77 CWEs). Before a patch is
 accepted, the changed code is attacked and any violation goes back to the agent,
 for at most five checks; the attacker and the judge use the agent's model.
 FuncPass and SecPass are the benchmark's task-level criteria; Func-TestRate and
 Sec-TestRate are the fractions of functional and security tests passed.
 
 <table>
-<thead><tr><th align="left">Agent / model</th><th align="right">FuncPass</th><th align="right">SecPass</th><th align="right">Func&#8209;TestRate</th><th align="right">Sec&#8209;TestRate</th></tr></thead>
+<thead><tr><th align="left">Harness / model</th><th align="right">FuncPass</th><th align="right">SecPass</th><th align="right">Func&#8209;TestRate</th><th align="right">Sec&#8209;TestRate</th></tr></thead>
 <tbody>
 <tr><td colspan="5"><b><a href="https://github.com/SWE-agent/SWE-agent">SWE-agent</a></b></td></tr>
 <tr><td>GPT&#8209;5.4&#8209;mini</td><td align="right">25.27</td><td align="right">8.60</td><td align="right">68.01</td><td align="right">64.68</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right"><b>29.57</b>&nbsp;<sub>▲4.30</sub></td><td align="right"><b>12.90</b>&nbsp;<sub>▲4.30</sub></td><td align="right"><b>72.62</b>&nbsp;<sub>▲4.61</sub></td><td align="right"><b>69.77</b>&nbsp;<sub>▲5.09</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+**29.57**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{4.30}}$
+
+</td><td align="right">
+
+**12.90**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{4.30}}$
+
+</td><td align="right">
+
+**72.62**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{4.61}}$
+
+</td><td align="right">
+
+**69.77**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{5.09}}$
+
+</td></tr>
 <tr><td>GPT&#8209;5.4</td><td align="right">54.30</td><td align="right">17.74</td><td align="right">79.45</td><td align="right">75.45</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right"><b>55.91</b>&nbsp;<sub>▲1.61</sub></td><td align="right"><b>22.58</b>&nbsp;<sub>▲4.84</sub></td><td align="right"><b>82.19</b>&nbsp;<sub>▲2.74</sub></td><td align="right"><b>78.30</b>&nbsp;<sub>▲2.85</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+**55.91**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{1.61}}$
+
+</td><td align="right">
+
+**22.58**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{4.84}}$
+
+</td><td align="right">
+
+**82.19**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{2.74}}$
+
+</td><td align="right">
+
+**78.30**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{2.85}}$
+
+</td></tr>
 <tr><td>GPT&#8209;5.6&#8209;luna</td><td align="right">38.17</td><td align="right">16.13</td><td align="right">74.42</td><td align="right">71.72</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right"><b>39.78</b>&nbsp;<sub>▲1.61</sub></td><td align="right"><b>20.43</b>&nbsp;<sub>▲4.30</sub></td><td align="right"><b>74.98</b>&nbsp;<sub>▲0.56</sub></td><td align="right"><b>73.07</b>&nbsp;<sub>▲1.35</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+**39.78**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{1.61}}$
+
+</td><td align="right">
+
+**20.43**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{4.30}}$
+
+</td><td align="right">
+
+**74.98**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.56}}$
+
+</td><td align="right">
+
+**73.07**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{1.35}}$
+
+</td></tr>
 <tr><td>DeepSeek&#8209;V4&#8209;Pro&#8209;08&#8209;13</td><td align="right">87.10</td><td align="right">25.27</td><td align="right">87.11</td><td align="right">83.54</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right"><b>87.63</b>&nbsp;<sub>▲0.53</sub></td><td align="right"><b>29.03</b>&nbsp;<sub>▲3.76</sub></td><td align="right"><b>87.90</b>&nbsp;<sub>▲0.79</sub></td><td align="right"><b>84.39</b>&nbsp;<sub>▲0.85</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+**87.63**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.53}}$
+
+</td><td align="right">
+
+**29.03**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{3.76}}$
+
+</td><td align="right">
+
+**87.90**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.79}}$
+
+</td><td align="right">
+
+**84.39**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.85}}$
+
+</td></tr>
 </tbody>
 <tbody>
 <tr><td colspan="5"><b><a href="https://github.com/anomalyco/opencode">OpenCode</a></b></td></tr>
 <tr><td>GPT&#8209;5.4&#8209;mini</td><td align="right">79.03</td><td align="right">22.04</td><td align="right">85.65</td><td align="right">81.86</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right"><b>81.18</b>&nbsp;<sub>▲2.15</sub></td><td align="right"><b>30.11</b>&nbsp;<sub>▲8.07</sub></td><td align="right"><b>86.18</b>&nbsp;<sub>▲0.53</sub></td><td align="right"><b>83.13</b>&nbsp;<sub>▲1.27</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+**81.18**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{2.15}}$
+
+</td><td align="right">
+
+**30.11**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{8.07}}$
+
+</td><td align="right">
+
+**86.18**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.53}}$
+
+</td><td align="right">
+
+**83.13**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{1.27}}$
+
+</td></tr>
 <tr><td>GPT&#8209;5.4</td><td align="right">93.01</td><td align="right">28.49</td><td align="right">86.96</td><td align="right">82.91</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right"><b>93.55</b>&nbsp;<sub>▲0.54</sub></td><td align="right"><b>32.80</b>&nbsp;<sub>▲4.31</sub></td><td align="right"><b>87.48</b>&nbsp;<sub>▲0.52</sub></td><td align="right"><b>83.35</b>&nbsp;<sub>▲0.44</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+**93.55**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.54}}$
+
+</td><td align="right">
+
+**32.80**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{4.31}}$
+
+</td><td align="right">
+
+**87.48**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.52}}$
+
+</td><td align="right">
+
+**83.35**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.44}}$
+
+</td></tr>
 <tr><td>GPT&#8209;5.6&#8209;luna</td><td align="right">81.72</td><td align="right">22.04</td><td align="right">85.64</td><td align="right">81.92</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">81.18&nbsp;<sub>▼0.54</sub></td><td align="right"><b>25.27</b>&nbsp;<sub>▲3.23</sub></td><td align="right"><b>85.88</b>&nbsp;<sub>▲0.24</sub></td><td align="right"><b>83.93</b>&nbsp;<sub>▲2.01</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+81.18\
+$\color{#d73a3a}{\footnotesize \blacktriangledown\,\textsf{0.54}}$
+
+</td><td align="right">
+
+**25.27**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{3.23}}$
+
+</td><td align="right">
+
+**85.88**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.24}}$
+
+</td><td align="right">
+
+**83.93**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{2.01}}$
+
+</td></tr>
 <tr><td>DeepSeek&#8209;V4&#8209;Pro&#8209;08&#8209;13</td><td align="right">91.94</td><td align="right">19.35</td><td align="right">86.95</td><td align="right">82.09</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right"><b>92.47</b>&nbsp;<sub>▲0.53</sub></td><td align="right"><b>24.19</b>&nbsp;<sub>▲4.84</sub></td><td align="right"><b>87.11</b>&nbsp;<sub>▲0.16</sub></td><td align="right"><b>83.16</b>&nbsp;<sub>▲1.07</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+**92.47**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.53}}$
+
+</td><td align="right">
+
+**24.19**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{4.84}}$
+
+</td><td align="right">
+
+**87.11**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.16}}$
+
+</td><td align="right">
+
+**83.16**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{1.07}}$
+
+</td></tr>
 </tbody>
 <tbody>
 <tr><td colspan="5"><b><a href="https://claude.com/product/claude-code">Claude Code</a></b></td></tr>
 <tr><td>GPT&#8209;5.4&#8209;mini</td><td align="right">27.96</td><td align="right">6.45</td><td align="right">68.36</td><td align="right">62.74</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right"><b>29.03</b>&nbsp;<sub>▲1.07</sub></td><td align="right"><b>8.60</b>&nbsp;<sub>▲2.15</sub></td><td align="right"><b>69.91</b>&nbsp;<sub>▲1.55</sub></td><td align="right"><b>64.76</b>&nbsp;<sub>▲2.02</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+**29.03**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{1.07}}$
+
+</td><td align="right">
+
+**8.60**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{2.15}}$
+
+</td><td align="right">
+
+**69.91**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{1.55}}$
+
+</td><td align="right">
+
+**64.76**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{2.02}}$
+
+</td></tr>
 <tr><td>GPT&#8209;5.4</td><td align="right">59.14</td><td align="right">14.52</td><td align="right">78.54</td><td align="right">74.29</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right"><b>63.44</b>&nbsp;<sub>▲4.30</sub></td><td align="right"><b>20.43</b>&nbsp;<sub>▲5.91</sub></td><td align="right"><b>79.68</b>&nbsp;<sub>▲1.14</sub></td><td align="right"><b>76.40</b>&nbsp;<sub>▲2.11</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+**63.44**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{4.30}}$
+
+</td><td align="right">
+
+**20.43**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{5.91}}$
+
+</td><td align="right">
+
+**79.68**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{1.14}}$
+
+</td><td align="right">
+
+**76.40**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{2.11}}$
+
+</td></tr>
 <tr><td>GPT&#8209;5.6&#8209;luna</td><td align="right">67.74</td><td align="right">18.82</td><td align="right">82.92</td><td align="right">79.71</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right"><b>69.89</b>&nbsp;<sub>▲2.15</sub></td><td align="right"><b>20.97</b>&nbsp;<sub>▲2.15</sub></td><td align="right"><b>83.54</b>&nbsp;<sub>▲0.62</sub></td><td align="right"><b>81.09</b>&nbsp;<sub>▲1.38</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+**69.89**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{2.15}}$
+
+</td><td align="right">
+
+**20.97**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{2.15}}$
+
+</td><td align="right">
+
+**83.54**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{0.62}}$
+
+</td><td align="right">
+
+**81.09**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{1.38}}$
+
+</td></tr>
 <tr><td>DeepSeek&#8209;V4&#8209;Pro&#8209;08&#8209;13</td><td align="right">66.67</td><td align="right">17.74</td><td align="right">77.54</td><td align="right">74.14</td></tr>
-<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right"><b>67.74</b>&nbsp;<sub>▲1.07</sub></td><td align="right"><b>21.51</b>&nbsp;<sub>▲3.77</sub></td><td align="right"><b>79.02</b>&nbsp;<sub>▲1.48</sub></td><td align="right"><b>77.22</b>&nbsp;<sub>▲3.08</sub></td></tr>
+<tr><td>&nbsp;&nbsp;+ Attacker&#8209;Verifier</td><td align="right">
+
+**67.74**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{1.07}}$
+
+</td><td align="right">
+
+**21.51**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{3.77}}$
+
+</td><td align="right">
+
+**79.02**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{1.48}}$
+
+</td><td align="right">
+
+**77.22**\
+$\color{#1f9e46}{\footnotesize \blacktriangle\,\textsf{3.08}}$
+
+</td></tr>
 </tbody>
 </table>
 
