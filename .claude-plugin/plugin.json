@@ -8,8 +8,8 @@
     "name": "SafeCodeAgent",
     "url": "https://github.com/SafeCodeAgent"
   },
-  "homepage": "https://github.com/SafeCodeAgent/attacker-verifier",
-  "repository": "https://github.com/SafeCodeAgent/attacker-verifier",
+  "homepage": "https://github.com/SafeCodeAgent/FALCON",
+  "repository": "https://github.com/SafeCodeAgent/FALCON",
   "license": "MIT",
   "keywords": [
     "security",
