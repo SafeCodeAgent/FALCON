@@ -56,7 +56,9 @@ def render_markdown(final: Dict[str, Any]) -> str:
     out("| Probes generated | %d |" % stats["probes_total"])
     out("| Probes admitted | %d |" % stats["admitted"])
     out("| Rejected before running (unfaithful) | %d |" % stats["rejected_static"])
-    out("| Inconclusive (did not reach target) | %d |" % stats["inconclusive"])
+    out("| Inconclusive (no evidence attributable to the target) | %d |" % stats["inconclusive"])
+    if stats.get("undecided"):
+        out("| Admitted but not judged | %d |" % stats["undecided"])
     out("| Insecure findings | %d |" % stats["findings"])
     out("| Targets flagged insecure | %d |" % stats["targets_insecure"])
     out("")

@@ -1,7 +1,7 @@
 # Configuration reference
 
 Every setting, where to set it, what it accepts, and how it is applied. All
-settings have working defaults, so the plugin runs with no configuration at all.
+settings have defaults, so the plugin runs with no configuration.
 
 ## Where to set it
 
@@ -39,25 +39,22 @@ session model — no delegation. To follow whatever model you are using, leave i
 on `main coding agent` and set your session model with Claude Code's own
 `/model` picker.
 
-Any other choice is a **model name** (`Opus 5.5`, `Opus 5`, `Sonnet 5.5`, …) and
+Any other choice is a model name (`Opus 5.5`, `Opus 5`, `Sonnet 5.5`, …) and
 runs the role on the dedicated subagent at that model. At run time the plugin
-maps the chosen name to the exact current model id by looking it up in Claude
-Code's live model catalog (`engine/cli.py resolve-model "<name>"`), so the id is
-always correct. The Fable family is not offered.
+maps the name to the current model id from Claude Code's model catalog
+(`engine/cli.py resolve-model "<name>"`).
 
-**The dropdown list is fixed, not live.** A settings dropdown is part of the
-plugin manifest and cannot be populated from Claude Code's live model list, so
-the *names shown in the dropdown* are a fixed list that is updated in a plugin
-release. When Claude Code ships a brand-new model, it appears once the list is
-updated. (You can always leave the role on `main coding agent` and pick the new
-model with `/model`, which needs no plugin change.) Run `engine/cli.py
-list-models` to see the models Claude Code currently offers.
+The names in the dropdown are a fixed list in the plugin manifest, because a
+settings dropdown cannot read Claude Code's model list. A newly released model
+appears there after the list is updated in a plugin release. Until then, leave
+the role on `main coding agent` and select the model with `/model`. Run
+`engine/cli.py list-models` to see the models Claude Code currently offers.
 
 ## How reasoning effort works
 
 - `inherit` uses your current session effort.
-- Any other level (`low` … `max`) sets the effort for that role **when it runs on
-  a chosen family** (not `main coding agent`).
+- Any other level (`low` … `max`) sets the effort for that role when it runs on
+  a chosen model (not `main coding agent`).
 - When a role is `main coding agent`, it always uses the session effort.
 
 ## Attacker turn budget
@@ -87,3 +84,6 @@ or, for a container:
 
 `mode` is `host` (run under the current session's permissions) or `docker`
 (fresh container per probe from `image`, or exec into a running `container`).
+
+The engine also reads `probe_timeout_s` (CPU seconds per probe, default 30) and
+`probe_mem_mb` (memory limit per probe, default 1024) from this file.

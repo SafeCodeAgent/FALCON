@@ -8,8 +8,9 @@ budget where a vulnerability is most likely to live.
 Scopes:
 * ``whole``   -- every non-test Python file under the repo root.
 * ``path``    -- a single file or directory given by the caller.
-* ``changed`` -- only files changed against ``HEAD`` (uncommitted work), with
-  targets further narrowed to functions whose body overlaps the changed lines.
+* ``changed`` -- only uncommitted work: files changed against ``HEAD``, with
+  targets narrowed to functions whose body overlaps the changed lines, plus new
+  untracked files in full.
 """
 
 from __future__ import annotations
@@ -20,6 +21,7 @@ import re
 import subprocess
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+STATE_DIR = ".attacker-verifier"
 _TEST_PATH_RE = re.compile(r"(^|/)(tests?|testing)(/|$)", re.IGNORECASE)
 _TEST_FILE_RE = re.compile(r"(^test_|_test\.py$|^conftest\.py$)", re.IGNORECASE)
 _SKIP_DIRS = {
@@ -84,36 +86,68 @@ def _files_under(repo_root: str, start: str) -> List[str]:
     return collected
 
 
-def _changed_files(repo_root: str) -> Tuple[List[str], Dict[str, Set[int]]]:
-    """Return changed .py files and, per file, the set of changed line numbers."""
+def _git(repo_root: str, *args: str) -> Optional[str]:
     try:
-        diff = subprocess.run(
-            ["git", "diff", "--unified=0", "HEAD", "--", "*.py"],
-            cwd=repo_root, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
-            timeout=30, check=False,
-        ).stdout.decode("utf-8", "replace")
+        done = subprocess.run(
+            ["git", *args], cwd=repo_root, stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL, timeout=30, check=False,
+        )
     except (OSError, subprocess.SubprocessError):
-        return [], {}
+        return None
+    return done.stdout.decode("utf-8", "replace") if done.returncode == 0 else None
 
+
+def _changed_files(repo_root: str) -> Tuple[List[str], Dict[str, Set[int]]]:
+    """Return changed .py files and, per file, the set of changed line numbers.
+
+    Tracked files contribute the lines changed against ``HEAD``. New, untracked
+    files (and every file in a repository with no commits yet) count as changed
+    in full.
+    """
     files: List[str] = []
     changed: Dict[str, Set[int]] = {}
-    current: Optional[str] = None
-    for line in diff.splitlines():
-        if line.startswith("+++ b/"):
-            rel = line[6:].strip()
-            current = rel
-            abspath = os.path.join(repo_root, rel)
-            if rel.endswith(".py"):
-                files.append(abspath)
-                changed.setdefault(abspath, set())
-        elif line.startswith("@@") and current:
-            match = re.search(r"\+(\d+)(?:,(\d+))?", line)
-            if match:
-                start = int(match.group(1))
-                count = int(match.group(2) or "1")
-                abspath = os.path.join(repo_root, current)
-                changed.setdefault(abspath, set()).update(range(start, start + max(count, 1)))
+
+    def whole(rel: str) -> None:
+        abspath = os.path.join(repo_root, rel)
+        if rel.endswith(".py") and os.path.isfile(abspath) and abspath not in changed:
+            files.append(abspath)
+            changed[abspath] = set(range(1, _line_count(abspath) + 1))
+
+    has_head = _git(repo_root, "rev-parse", "--verify", "--quiet", "HEAD") is not None
+    if has_head:
+        diff = _git(repo_root, "diff", "--unified=0", "HEAD", "--", "*.py") or ""
+        current: Optional[str] = None
+        for line in diff.splitlines():
+            if line.startswith("+++ "):
+                # "+++ /dev/null" marks a deleted file; its hunks belong to nothing.
+                current = line[6:].strip() if line.startswith("+++ b/") else None
+                if current and current.endswith(".py"):
+                    abspath = os.path.join(repo_root, current)
+                    if abspath not in changed:
+                        files.append(abspath)
+                        changed[abspath] = set()
+            elif line.startswith("@@") and current:
+                match = re.search(r"\+(\d+)(?:,(\d+))?", line)
+                if match:
+                    start = int(match.group(1))
+                    count = int(match.group(2) or "1")
+                    abspath = os.path.join(repo_root, current)
+                    changed.setdefault(abspath, set()).update(range(start, start + max(count, 1)))
+        listed = _git(repo_root, "ls-files", "--others", "--exclude-standard") or ""
+    else:
+        listed = _git(repo_root, "ls-files", "--cached", "--others", "--exclude-standard") or ""
+    for rel in listed.splitlines():
+        if not rel.startswith(STATE_DIR + "/"):
+            whole(rel.strip())
     return files, changed
+
+
+def _line_count(path: str) -> int:
+    try:
+        with open(path, "r", encoding="utf-8", errors="replace") as handle:
+            return sum(1 for _ in handle)
+    except OSError:
+        return 0
 
 
 def _targets_in_file(

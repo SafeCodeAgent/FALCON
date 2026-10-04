@@ -28,8 +28,8 @@ probes will execute and record the choice for the rest of the session.
      already has. This is the default if the user has no sandbox.
 
    If the user picks Docker, ask for the image (e.g. `python:3.12-slim`) or the
-   container name, and confirm the repository is mounted/visible at a working
-   directory inside it (default `/work`).
+   container name. For a running container, confirm the repository is mounted
+   at a working directory inside it (default `/work`).
 
 3. **Record the decision** so later runs in this session don't ask again:
 
@@ -55,6 +55,21 @@ probes will execute and record the choice for the rest of the session.
    ```
    --config-json '{"execution":{"mode":"docker","image":"python:3.12-slim","workdir":"/work"},"probes_min":5,"probes_max":10}'
    ```
+
+How each mode runs a probe:
+
+- Host: the probe runs as a child process with CPU, memory, and wall-clock
+  limits and its own scratch directory. It can reach whatever the Claude Code
+  session can reach, so use this mode for code you are willing to run locally.
+- Docker image: each probe gets `docker run --rm --network none` with the
+  repository mounted at `workdir`.
+- Running container: each probe runs through `docker exec`. The repository must
+  already be mounted at `workdir` inside that container.
+
+In both Docker modes the probe, its trace file, and a copy of the harness are
+staged under `.attacker-verifier/run/` in the repository, so the same paths
+resolve on the host and in the container. The engine writes a `.gitignore` in
+`.attacker-verifier/` that ignores everything except `config.json`.
 
 Only the execution mode is remembered per session. Probe budgets, attacker and
 verifier choices, scope, and turns are read fresh from each invocation's

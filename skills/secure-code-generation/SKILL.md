@@ -31,8 +31,10 @@ attacker-verifier → Configure). The in-effect values are:
 - Repair turns: `${user_config.num_turns}`
 - Max targets: `${user_config.max_targets}`
 
-A per-run argument overrides a setting for this run (`--turns N`,
-`--probes MIN-MAX`, `--attacker <model>`, `--verifier <model>`).
+A per-run argument overrides a setting for this run: `--turns N`,
+`--probes MIN-MAX`, `--attacker <model>`, `--verifier <model>`,
+`--attacker-effort <level>`, `--verifier-effort <level>`,
+`--attacker-max-turns N`, `--max-targets N`.
 
 Resolve each model choice to what the Agent tool takes:
 
@@ -74,8 +76,9 @@ Progress: `turn 0/<N> · main coding agent · implemented <summary>`.
 
 Let `N = num_turns` from the Configuration section (`--turns` overrides). Follow
 `${CLAUDE_PLUGIN_ROOT}/docs/attack-verify-loop.md` for each turn, with
-`--scope changed` so the attacker targets what you just wrote (fall back to
-`--scope path` on the touched files if there is no git history), using the
+`--scope changed` so the attacker targets what you just wrote, including new
+files (use `--scope path` on the touched files if the project is not a git
+repository), using the
 attacker, verifier, probe, and target settings from the Configuration section.
 
 For each turn `t` from 1 to `N`:

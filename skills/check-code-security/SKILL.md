@@ -29,8 +29,9 @@ attacker-verifier → Configure). The in-effect values are:
 - Probes per target: `${user_config.probes_min}`–`${user_config.probes_max}`
 - Max targets: `${user_config.max_targets}`
 
-A per-run argument overrides a setting for this run (`--probes MIN-MAX`,
-`--attacker <model>`, `--verifier <model>`, `--max-targets N`).
+A per-run argument overrides a setting for this run: `--probes MIN-MAX`,
+`--attacker <model>`, `--verifier <model>`, `--attacker-effort <level>`,
+`--verifier-effort <level>`, `--attacker-max-turns N`, `--max-targets N`.
 
 Resolve each model choice to what the Agent tool takes:
 

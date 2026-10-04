@@ -5,16 +5,19 @@ probe, the target descriptor, and a scratch directory wired in through the
 environment. It supports two execution modes:
 
 * ``host`` -- run in the current environment, under the permissions the coding
-  session already has. Per-probe CPU and memory limits are applied where the
-  platform supports them, and the probe is confined to a fresh scratch
-  directory that is deleted afterwards.
+  session already has. Per-probe CPU, memory, and wall-clock limits are applied
+  where the platform supports them, and the probe gets a fresh scratch directory
+  that is deleted afterwards.
 * ``docker`` -- run inside a container, either freshly started from an image or
   exec'd into an already-running container, so execution is isolated from the
-  host filesystem.
+  host filesystem. The repository must be visible at ``execution.workdir``
+  inside the container; run files are staged under the repository so the same
+  paths work on both sides.
 
-When the process dies abnormally (a signal such as a segfault, or the memory
-limit), no trace file is written; the runner synthesises a crash trace so the
-crash oracle can still act on it.
+When the process is killed (a signal such as a segfault, a resource limit, or the
+time limit), the harness may not get to write its full trace. The runner then
+uses the provisional record the harness keeps up to date on every target call,
+which says whether the target was running when the process died.
 """
 
 from __future__ import annotations
@@ -22,87 +25,64 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
-from typing import Any, Dict
+import uuid
+from typing import Any, Dict, List, Optional, Tuple
+
+from ._harness import _parse_observations
 
 HARNESS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_harness.py")
 _FALLBACK_MARKER = "AV_TRACE_FALLBACK:"
+STATE_DIR = ".attacker-verifier"
+# Wall-clock allowance on top of the CPU limit before the harness ends itself.
+_WALL_SLACK_S = 5
+# Extra time the runner waits for the harness before killing it from outside.
+_KILL_SLACK_S = 10
 
 
-def _preexec_limits(cpu_seconds: int, mem_bytes: int):
-    """Return a preexec_fn that applies resource limits, or None if unavailable."""
-    try:
-        import resource
-    except ImportError:
-        return None
-
-    def apply():  # pragma: no cover - runs in the child process
-        try:
-            resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds + 1))
-        except (ValueError, OSError):
-            pass
-        if mem_bytes:
-            for limit_name in ("RLIMIT_AS", "RLIMIT_DATA"):
-                limit = getattr(resource, limit_name, None)
-                if limit is not None:
-                    try:
-                        resource.setrlimit(limit, (mem_bytes, mem_bytes))
-                    except (ValueError, OSError):
-                        pass
-        try:
-            os.setsid()
-        except OSError:
-            pass
-
-    return apply
+def ensure_state_dir(repo_root: str) -> str:
+    """Create ``.attacker-verifier/`` with a .gitignore for generated files."""
+    state = os.path.join(repo_root, STATE_DIR)
+    os.makedirs(state, exist_ok=True)
+    ignore = os.path.join(state, ".gitignore")
+    if not os.path.exists(ignore):
+        with open(ignore, "w", encoding="utf-8") as handle:
+            # Ignore generated files, but let a project's config.json be committed.
+            handle.write("*\n!config.json\n")
+    return state
 
 
-def _child_env(target_file: str, probe_path: str, trace_out: str, scratch: str) -> Dict[str, str]:
-    env = dict(os.environ)
-    env.update(
-        {
-            "AV_TARGET_FILE": target_file,
-            "AV_PROBE": probe_path,
-            "AV_TRACE_OUT": trace_out,
-            "AV_SCRATCH": scratch,
-            "PYTHONHASHSEED": "0",
-            "PYTHONDONTWRITEBYTECODE": "1",
-        }
+def _limits_env(config: Dict[str, Any]) -> Dict[str, str]:
+    cpu = max(1, int(config["probe_timeout_s"]))
+    return {
+        "AV_CPU_SECONDS": str(cpu),
+        "AV_MEM_BYTES": str(int(config["probe_mem_mb"]) * 1024 * 1024),
+        "AV_WALL_SECONDS": str(cpu + _WALL_SLACK_S),
+    }
+
+
+def _run(command: List[str], cwd: str, env: Optional[Dict[str, str]], timeout: int,
+         on_timeout=None) -> Tuple[Optional[int], bytes, bytes, bool]:
+    """Run a command in its own process group; kill the whole group on timeout."""
+    process = subprocess.Popen(
+        command, cwd=cwd, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        start_new_session=True,
     )
-    return env
-
-
-def _host_command(python: str) -> list:
-    return [python, HARNESS]
-
-
-def _docker_command(execution: Dict[str, Any], trace_out_in_container: str, env: Dict[str, str]) -> list:
-    """Build a docker command that runs the harness inside a container."""
-    python = execution.get("python", "python3")
-    workdir = execution.get("workdir", "/work")
-    env_flags = []
-    for key in ("AV_TARGET_FILE", "AV_PROBE", "AV_TRACE_OUT", "AV_SCRATCH", "PYTHONHASHSEED"):
-        env_flags += ["-e", "%s=%s" % (key, env[key])]
-
-    harness_in_container = workdir + "/.attacker-verifier-harness.py"
-    inner = [python, harness_in_container]
-
-    if execution.get("container"):
-        return ["docker", "exec"] + env_flags + [execution["container"]] + inner
-    # Fresh container from an image, with the repo mounted read/write at workdir.
-    return [
-        "docker",
-        "run",
-        "--rm",
-        "--network",
-        "none",
-        "-v",
-        "%s:%s" % (env["AV_REPO_ROOT"], workdir),
-        "-w",
-        workdir,
-    ] + env_flags + [execution["image"]] + inner
+    try:
+        stdout, stderr = process.communicate(timeout=timeout)
+        return process.returncode, stdout, stderr, False
+    except subprocess.TimeoutExpired:
+        if on_timeout is not None:
+            on_timeout()
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except (OSError, AttributeError):
+            process.kill()
+        stdout, stderr = process.communicate()
+        return None, stdout, stderr, True
 
 
 def run_probe(
@@ -111,65 +91,97 @@ def run_probe(
     target_file: str,
     target_qualname: str,
     config: Dict[str, Any],
+    target_kind: str = "function",
 ) -> Dict[str, Any]:
     """Execute one probe and return its trace dict (always, even on crash)."""
     execution = config["execution"]
-    cpu_seconds = max(1, int(config["probe_timeout_s"]))
-    wall_timeout = cpu_seconds + 5
-    mem_bytes = int(config["probe_mem_mb"]) * 1024 * 1024
+    repo_root = os.path.abspath(repo_root)
+    limits = _limits_env(config)
+    wall = int(limits["AV_WALL_SECONDS"]) + _KILL_SLACK_S
+    docker = execution["mode"] == "docker"
 
-    scratch = tempfile.mkdtemp(prefix="av-scratch-")
-    trace_fd, trace_out = tempfile.mkstemp(prefix="av-trace-", suffix=".json")
-    os.close(trace_fd)
-
-    env = _child_env(
-        os.path.abspath(target_file), os.path.abspath(probe_path), trace_out, scratch
-    )
-    env["AV_TARGET_QUALNAME"] = target_qualname
-
-    if execution["mode"] == "docker":
-        env["AV_REPO_ROOT"] = os.path.abspath(repo_root)
-        # Stage the harness where the container can reach it.
-        staged = os.path.join(repo_root, ".attacker-verifier-harness.py")
-        shutil.copyfile(HARNESS, staged)
-        command = _docker_command(execution, trace_out, env)
-        preexec = None
+    if docker:
+        run_dir = os.path.join(ensure_state_dir(repo_root), "run", uuid.uuid4().hex[:12])
     else:
-        command = _host_command(execution.get("python", sys.executable or "python3"))
-        preexec = _preexec_limits(cpu_seconds, mem_bytes)
-        staged = None
+        run_dir = tempfile.mkdtemp(prefix="av-run-")
+    scratch = os.path.join(run_dir, "scratch")
+    os.makedirs(scratch, exist_ok=True)
+    trace_out = os.path.join(run_dir, "trace.json")
 
-    result: Dict[str, Any]
+    if docker:
+        workdir = execution.get("workdir", "/work").rstrip("/") or "/"
+        harness = os.path.join(run_dir, "harness.py")
+        shutil.copyfile(HARNESS, harness)
+
+        def inside(path: str) -> str:
+            rel = os.path.relpath(os.path.abspath(path), repo_root).replace(os.sep, "/")
+            return workdir + "/" + rel
+
+        paths = {"AV_TARGET_FILE": inside(target_file), "AV_PROBE": inside(probe_path),
+                 "AV_TRACE_OUT": inside(trace_out), "AV_SCRATCH": inside(scratch)}
+        harness_path = inside(harness)
+    else:
+        paths = {"AV_TARGET_FILE": os.path.abspath(target_file), "AV_PROBE": os.path.abspath(probe_path),
+                 "AV_TRACE_OUT": trace_out, "AV_SCRATCH": scratch}
+        harness_path = HARNESS
+
+    harness_env = dict(paths, AV_TARGET_QUALNAME=target_qualname, AV_TARGET_KIND=target_kind or "",
+                       PYTHONHASHSEED="0", PYTHONDONTWRITEBYTECODE="1", **limits)
+
+    cidfile = None
     try:
-        completed = subprocess.run(
-            command,
-            cwd=repo_root,
-            env=env,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=wall_timeout,
-            preexec_fn=preexec,  # type: ignore[arg-type]
-        )
-        result = _collect(trace_out, completed.returncode, completed.stderr)
-    except subprocess.TimeoutExpired as exc:
-        result = _timeout_trace(target_file, target_qualname, exc)
+        if docker:
+            python = execution.get("python", "python3")
+            env_flags: List[str] = []
+            for key, value in harness_env.items():
+                env_flags += ["-e", "%s=%s" % (key, value)]
+            if execution.get("container"):
+                command = (["docker", "exec", "-w", workdir] + env_flags
+                           + [execution["container"], python, harness_path])
+            else:
+                cidfile = os.path.join(tempfile.mkdtemp(prefix="av-cid-"), "container.cid")
+                command = (["docker", "run", "--rm", "--cidfile", cidfile, "--network", "none",
+                            "-v", "%s:%s" % (repo_root, workdir), "-w", workdir]
+                           + env_flags + [execution["image"], python, harness_path])
+
+            def remove_container() -> None:
+                if cidfile and os.path.exists(cidfile):
+                    with open(cidfile, "r", encoding="utf-8") as handle:
+                        subprocess.run(["docker", "rm", "-f", handle.read().strip()],
+                                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+            returncode, stdout, stderr, timed_out = _run(
+                command, repo_root, None, wall, on_timeout=remove_container)
+        else:
+            env = dict(os.environ)
+            env.update(harness_env)
+            python = execution.get("python") or sys.executable or "python3"
+            returncode, stdout, stderr, timed_out = _run([python, harness_path], repo_root, env, wall)
+        trace = _collect(trace_out, returncode, stdout, stderr, timed_out, docker)
     finally:
-        shutil.rmtree(scratch, ignore_errors=True)
-        try:
-            os.remove(trace_out)
-        except OSError:
-            pass
-        if staged:
-            try:
-                os.remove(staged)
-            except OSError:
-                pass
+        shutil.rmtree(run_dir, ignore_errors=True)
+        if cidfile:
+            shutil.rmtree(os.path.dirname(cidfile), ignore_errors=True)
 
-    result.setdefault("target", {"file": target_file, "qualname": target_qualname})
-    return result
+    trace.setdefault("target", {"file": target_file, "qualname": target_qualname})
+    return trace
 
 
-def _collect(trace_out: str, returncode: int, stderr_bytes: bytes) -> Dict[str, Any]:
+def _signal_of(returncode: Optional[int], docker: bool) -> Optional[int]:
+    if returncode is None:
+        return None
+    if returncode < 0:
+        return -returncode
+    # Docker reports a process killed by signal N as exit status 128 + N.
+    if docker and 128 < returncode < 160:
+        return returncode - 128
+    return None
+
+
+def _collect(trace_out: str, returncode: Optional[int], stdout_bytes: bytes, stderr_bytes: bytes,
+             timed_out: bool, docker: bool) -> Dict[str, Any]:
+    stdout = stdout_bytes.decode("utf-8", "replace") if stdout_bytes else ""
+    stderr = stderr_bytes.decode("utf-8", "replace") if stderr_bytes else ""
     trace = None
     try:
         if os.path.getsize(trace_out) > 0:
@@ -179,48 +191,32 @@ def _collect(trace_out: str, returncode: int, stderr_bytes: bytes) -> Dict[str, 
         trace = None
 
     if trace is None:
-        stderr_text = stderr_bytes.decode("utf-8", "replace") if stderr_bytes else ""
-        marker = stderr_text.find(_FALLBACK_MARKER)
+        marker = stderr.find(_FALLBACK_MARKER)
         if marker != -1:
             try:
-                trace = json.loads(stderr_text[marker + len(_FALLBACK_MARKER):])
+                trace = json.loads(stderr[marker + len(_FALLBACK_MARKER):])
             except ValueError:
                 trace = None
 
     if trace is None:
-        # No trace at all: the process died before it could write one.
-        trace = {
-            "target_seen": False,
-            "frames": [],
-            "observations": [],
-            "stdout": "",
-            "stderr": stderr_bytes.decode("utf-8", "replace") if stderr_bytes else "",
-            "top_level_exception": None,
-            "completed": False,
-        }
+        # No record at all: the process died before reaching the target.
+        trace = {"target_seen": False, "target_active": False, "frames": [], "completed": False}
 
+    if not trace.get("completed"):
+        # Only the provisional record survived; take the output from the pipes.
+        trace.setdefault("stdout", stdout[-20000:])
+        trace.setdefault("stderr", stderr[-20000:])
+        trace.setdefault("observations", _parse_observations(trace["stdout"], []))
+        trace.setdefault("top_level_exception", None)
+
+    sig = _signal_of(returncode, docker)
+    if sig == getattr(signal, "SIGALRM", 14):
+        # The harness's own wall-clock limit fired.
+        timed_out, sig = True, None
     trace["returncode"] = returncode
-    # A negative return code is a kill-by-signal (e.g. SIGSEGV, SIGABRT, or the
-    # CPU/memory limit). That is an abnormal termination of the running code.
-    trace["killed_by_signal"] = returncode < 0
-    trace["signal"] = -returncode if returncode < 0 else None
+    trace["timed_out"] = timed_out
+    # A kill by signal (e.g. SIGSEGV, SIGABRT, or the CPU/memory limit) is an
+    # abnormal termination of whatever code was running at the time.
+    trace["killed_by_signal"] = sig is not None
+    trace["signal"] = sig
     return trace
-
-
-def _timeout_trace(target_file: str, target_qualname: str, exc: subprocess.TimeoutExpired) -> Dict[str, Any]:
-    stdout = exc.stdout.decode("utf-8", "replace") if exc.stdout else ""
-    stderr = exc.stderr.decode("utf-8", "replace") if exc.stderr else ""
-    return {
-        "target": {"file": target_file, "qualname": target_qualname},
-        "target_seen": False,
-        "frames": [],
-        "observations": [],
-        "stdout": stdout,
-        "stderr": stderr,
-        "top_level_exception": None,
-        "completed": False,
-        "returncode": None,
-        "killed_by_signal": False,
-        "signal": None,
-        "timed_out": True,
-    }

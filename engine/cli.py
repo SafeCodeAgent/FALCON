@@ -68,12 +68,14 @@ def _trace_excerpt(trace: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "target": trace.get("target", {}),
         "target_seen": trace.get("target_seen", False),
+        "target_active_at_exit": trace.get("target_active", False),
         "frames": trace.get("frames", []),
         "observations": [o.get("parsed", o.get("raw")) for o in trace.get("observations", [])],
         "stdout": stdout[:STDOUT_EXCERPT],
         "stderr": (trace.get("stderr", "") or "")[:600],
         "top_level_exception": trace.get("top_level_exception"),
         "returncode": trace.get("returncode"),
+        "killed_by_signal": trace.get("killed_by_signal", False),
         "signal": trace.get("signal"),
         "timed_out": trace.get("timed_out", False),
         "duration_s": trace.get("duration_s"),
@@ -131,8 +133,12 @@ def _resolve_target(repo_root: str, target_str: str, lookup: Dict[str, Dict[str,
     return None
 
 
-def _module_name(rel_file: str) -> str:
-    return os.path.splitext(os.path.basename(rel_file))[0]
+def _module_path(rel_file: str) -> str:
+    """Dotted import path of a repository file, e.g. ``app/files.py`` -> ``app.files``."""
+    parts = os.path.splitext(rel_file.replace(os.sep, "/"))[0].split("/")
+    if parts and parts[-1] == "__init__":
+        parts = parts[:-1]
+    return ".".join(p for p in parts if p)
 
 
 def cmd_check(args: argparse.Namespace) -> int:
@@ -175,13 +181,13 @@ def cmd_check(args: argparse.Namespace) -> int:
 
         script = probe.get("script", "")
         # Stage the probe inside the repo so its imports resolve from the root.
-        probe_path = os.path.join(repo_root, ".attacker-verifier", "probes", "%s.py" % _safe_name(probe_id))
+        probe_path = os.path.join(runner.ensure_state_dir(repo_root), "probes", "%s.py" % _safe_name(probe_id))
         os.makedirs(os.path.dirname(probe_path), exist_ok=True)
         with open(probe_path, "w", encoding="utf-8") as handle:
             handle.write(script)
         record["probe_path"] = os.path.relpath(probe_path, repo_root)
 
-        fstat = faithfulness.static_check(script, target["qualname"], _module_name(target["file"]))
+        fstat = faithfulness.static_check(script, target["qualname"], _module_path(target["file"]))
         if not fstat["admitted"]:
             record.update(status="rejected_static",
                           faithfulness={"stage": "static", "rule": fstat["rule"], "detail": fstat["detail"]})
@@ -190,7 +196,8 @@ def cmd_check(args: argparse.Namespace) -> int:
             continue
 
         target_file_abs = os.path.join(repo_root, target["file"])
-        trace = runner.run_probe(repo_root, probe_path, target_file_abs, target["qualname"], cfg)
+        trace = runner.run_probe(repo_root, probe_path, target_file_abs, target["qualname"], cfg,
+                                 target_kind=target.get("kind", "function"))
 
         fatt = faithfulness.runtime_check(trace, target["qualname"])
         if not fatt["admitted"]:
@@ -272,7 +279,7 @@ def cmd_finalize(args: argparse.Namespace) -> int:
     per_target: List[Dict[str, Any]] = []
     findings: List[Dict[str, Any]] = []
     rule_counts: Dict[str, int] = {}
-    total_admitted = total_rejected = total_inconclusive = 0
+    total_admitted = total_rejected = total_inconclusive = total_undecided = 0
 
     overall = verifier.NO_EVIDENCE
     for key, records in by_target.items():
@@ -283,6 +290,7 @@ def cmd_finalize(args: argparse.Namespace) -> int:
         total_admitted += admitted
         total_rejected += rejected
         total_inconclusive += inconclusive
+        total_undecided += sum(1 for r in agg["resolved"] if r["verdict"] == verifier.UNCERTAIN)
         for record in records:
             rule = record.get("faithfulness", {}).get("rule")
             if rule:
@@ -321,6 +329,7 @@ def cmd_finalize(args: argparse.Namespace) -> int:
         "admitted": total_admitted,
         "rejected_static": total_rejected,
         "inconclusive": total_inconclusive,
+        "undecided": total_undecided,
         "findings": len(findings),
         "targets_insecure": sum(1 for r in per_target if r["signal"] == "insecure"),
         "rule_counts": rule_counts,

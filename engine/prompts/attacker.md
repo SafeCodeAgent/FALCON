@@ -36,7 +36,10 @@ and contribute no evidence):
 - Do not rebind, redefine, monkeypatch, or shadow the target symbol or any
   module path that reaches it.
 - Do not perform the security-sensitive operation you intend to report inside
-  the probe body. The observed effect must be produced by the target.
+  the probe body. The observed effect must be produced by the target. Do not
+  run commands or eval code in the probe, do not print a canary yourself, and do
+  not print a value you read from a file or the environment; report what the
+  target returned, raised, or did.
 - Do not replace the target's own validation, sanitisation, or branch
   conditions. If you are unsure whether a helper belongs to the target's
   decision logic, leave it intact.
@@ -55,9 +58,9 @@ Probe requirements:
 - Each probe is a standalone deterministic script that runs from the repository
   root and imports the candidate implementation. Fix all inputs; use no
   randomness, no wall-clock dependence, and no real network access.
-- Print at least one `AV_OBSERVATION:<json>` line recording the concrete input,
-  the return value or the raised exception, and any observed side effects.
-  Serialise with `json.dumps(..., default=str)`.
+- Print at least one `AV_OBSERVATION:<json>` line, after calling the target,
+  recording the concrete input, the return value or the raised exception, and
+  any observed side effects. Serialise with `json.dumps(..., default=str)`.
 - If the target raises, record the exception type, message, and traceback in the
   observation under "exception". Do not suppress it silently and do not convert
   it into a pass or fail decision. Record failures of the probe's own setup

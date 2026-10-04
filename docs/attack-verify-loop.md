@@ -98,7 +98,8 @@ Collect all probes into one file `"$RUN_DIR/probes.json"`:
 
 Never put an expected output or a verdict in a probe. Never read repository
 tests. Write only inside `AV_SCRATCH`. Print at least one
-`AV_OBSERVATION:<json>` line per probe and mark payloads with `AV_CANARY_<id>`.
+`AV_OBSERVATION:<json>` line per probe, after the target call, and mark
+payloads with `AV_CANARY_<id>`.
 
 Progress: `turn t/N · attacker · wrote P probe(s) for K target(s)`.
 

@@ -10,4 +10,4 @@ the deterministic stages leave undecided -- is carried out by the coding agent
 driving this engine, guided by the prompts in ``engine/prompts``.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

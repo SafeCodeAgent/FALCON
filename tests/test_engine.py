@@ -10,6 +10,7 @@ separately in ``test_runner.py``.
 """
 
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -53,6 +54,52 @@ class StaticFaithfulnessTests(unittest.TestCase):
         self.assertFalse(result["admitted"])
         self.assertEqual(result["rule"], "no_probe_files")
 
+    def _rule(self, src, qualname="load_report", module="app.files"):
+        return faithfulness.static_check(src, qualname, module)["rule"]
+
+    def test_rejects_printed_canary_the_probe_made(self):
+        src = "from app.files import load_report\nload_report('x')\nprint('AV_CANARY_p1')\n"
+        self.assertEqual(self._rule(src), "probe_prints_fabricated_canary")
+        src = ("import json\nfrom app.files import load_report\nload_report('x')\n"
+               "print('AV_OBSERVATION:' + json.dumps({'leak': 'AV_CANARY_p1'}))\n")
+        self.assertEqual(self._rule(src), "probe_prints_fabricated_canary")
+
+    def test_rejects_reporting_a_value_the_probe_read(self):
+        src = ("from app.files import load_report\nload_report('x')\n"
+               "with open('/tmp/secret') as fh:\n    data = fh.read()\nprint(data)\n")
+        self.assertEqual(self._rule(src), "probe_reports_own_sensitive_read")
+        src = "import os\nfrom app.files import load_report\nload_report('x')\nprint(os.environ['KEY'])\n"
+        self.assertEqual(self._rule(src), "probe_reports_own_sensitive_read")
+
+    def test_reading_the_targets_return_value_is_allowed(self):
+        src = "from app.files import open_report\nfh = open_report('x')\nprint(fh.read())\n"
+        self.assertIsNone(self._rule(src, "open_report"))
+
+    def test_rejects_running_the_sink_itself(self):
+        src = "import subprocess\nfrom app.files import load_report\nsubprocess.run(['cat', 'x'])\n"
+        self.assertEqual(self._rule(src), "probe_reports_own_sensitive_read")
+
+    def test_rejects_writing_code_into_the_repository(self):
+        src = "from app.files import load_report\nopen('app/evil.py', 'w').write('x')\n"
+        self.assertEqual(self._rule(src), "non_test_code_path")
+
+    def test_rejects_replacing_the_module_or_owner(self):
+        src = "import sys\nsys.modules['app.files'] = object()\n"
+        self.assertEqual(self._rule(src), "target_path_replaced")
+        src = "from unittest.mock import patch\npatch('app.files.Report').start()\n"
+        self.assertEqual(self._rule(src, "Report.load"), "target_path_replaced")
+
+    def test_mocking_a_sink_with_the_same_name_is_allowed(self):
+        src = ("from unittest.mock import patch\nfrom app.runner import Job\n"
+               "with patch('subprocess.run') as run:\n    Job().run('x')\n")
+        self.assertIsNone(self._rule(src, "Job.run", "app.runner"))
+
+    def test_variable_named_like_the_module_is_allowed(self):
+        src = "from app.config import load_config\nconfig = {'path': 'x'}\nload_config(config)\n"
+        self.assertIsNone(self._rule(src, "load_config", "app.config"))
+        src = "import app.config as config\nconfig = None\n"
+        self.assertEqual(self._rule(src, "load_config", "app.config"), "module_path_rebound")
+
 
 class RuntimeFaithfulnessTests(unittest.TestCase):
     def test_rejects_when_target_never_ran(self):
@@ -66,11 +113,23 @@ class RuntimeFaithfulnessTests(unittest.TestCase):
         result = faithfulness.runtime_check(trace, "load_report")
         self.assertTrue(result["admitted"])
 
+    def test_rejects_observations_printed_before_the_target_ran(self):
+        trace = {"target_seen": True, "frames": [{"func": "load_report"}], "completed": True,
+                 "observations": [{"raw": "{}", "after_target": False}]}
+        result = faithfulness.runtime_check(trace, "load_report")
+        self.assertEqual(result["rule"], "unattributed_evidence_event")
+        trace["observations"].append({"raw": "{}", "after_target": True})
+        self.assertTrue(faithfulness.runtime_check(trace, "load_report")["admitted"])
+
 
 class CrashOracleTests(unittest.TestCase):
     def test_abort_signal_is_a_crash(self):
-        trace = {"killed_by_signal": True, "signal": 11, "target_seen": True}
+        trace = {"killed_by_signal": True, "signal": 11, "target_seen": True, "target_active": True}
         self.assertIsNotNone(verifier.crash_oracle(trace))
+
+    def test_kill_after_target_returned_is_not_a_crash(self):
+        trace = {"killed_by_signal": True, "signal": 11, "target_seen": True, "target_active": False}
+        self.assertIsNone(verifier.crash_oracle(trace))
 
     def test_uncaught_memory_error_through_target_is_a_crash(self):
         trace = {
@@ -129,6 +188,28 @@ class TargetSelectionTests(unittest.TestCase):
             self.assertNotIn("test_x", names)
             # The subprocess-touching function ranks above the pure one.
             self.assertLess(names.index("run_cmd"), names.index("pure"))
+
+    def test_changed_scope_covers_new_files_and_skips_deleted_ones(self):
+        def git(*args):
+            subprocess.run(["git", *args], cwd=root, check=True, capture_output=True)
+
+        with tempfile.TemporaryDirectory() as root:
+            git("init", "-q")
+            git("config", "user.email", "test@example.invalid")
+            git("config", "user.name", "Test")
+            for name, body in (("a.py", "def keep(x):\n    return x\n"),
+                               ("gone.py", "def old(x):\n    return x\n")):
+                with open(os.path.join(root, name), "w") as handle:
+                    handle.write(body)
+            git("add", ".")
+            git("commit", "-qm", "base")
+            os.remove(os.path.join(root, "gone.py"))
+            with open(os.path.join(root, "a.py"), "a") as handle:
+                handle.write("def added(y):\n    return y\n")
+            with open(os.path.join(root, "new.py"), "w") as handle:
+                handle.write("def fresh(z):\n    return z\n")
+            found = {(t["file"], t["qualname"]) for t in targets.select_targets(root, scope="changed")}
+            self.assertEqual(found, {("a.py", "added"), ("new.py", "fresh")})
 
 
 if __name__ == "__main__":

@@ -28,19 +28,18 @@ _ABORT_SIGNALS = {4, 6, 8, 11}  # SIGILL, SIGABRT, SIGFPE, SIGSEGV
 
 def crash_oracle(trace: Dict[str, Any]) -> Optional[str]:
     """Return a one-line reason if the trace shows a crash, else None."""
-    if trace.get("killed_by_signal") and trace.get("signal") in _ABORT_SIGNALS:
-        return (
-            "target process aborted on signal %s during the exercised call"
-            % trace.get("signal")
-        )
-    if trace.get("killed_by_signal"):
-        # A non-abort signal kill (e.g. the CPU/memory rlimit) that happened
-        # while the target was running is still an abnormal termination.
-        if trace.get("target_seen"):
+    if trace.get("killed_by_signal") and trace.get("target_active"):
+        if trace.get("signal") in _ABORT_SIGNALS:
             return (
-                "target process was killed (signal %s) while the exercised call "
-                "was running" % trace.get("signal")
+                "target process aborted on signal %s during the exercised call"
+                % trace.get("signal")
             )
+        # Any other kill while the target was running (e.g. the CPU or memory
+        # limit) is still an abnormal termination on the exercised path.
+        return (
+            "target process was killed (signal %s) while the exercised call "
+            "was running" % trace.get("signal")
+        )
     top = trace.get("top_level_exception")
     if top and top.get("is_memory_error") and top.get("through_target"):
         return "uncaught %s propagated out of the target" % top.get("type")
