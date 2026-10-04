@@ -5,9 +5,9 @@ Feedback*. Each directory is a separate Python project with its own README.
 
 | Directory | Paper | What it runs |
 | --- | --- | --- |
-| [test-time-repair/](test-time-repair/README.md) | Sections 4.2.1–4.2.2; Appendix C.2–C.4 | the security signal, and the five-round repair loop on CWEval and SecCodeBench-V2 |
-| [susvibes/](susvibes/README.md) | Section 4.2.3; Appendix C.1, C.5 | repair inside SWE-agent, Claude Code, and OpenCode on SusVibes |
-| [rl/](rl/README.md) | Section 4.2.4; Appendix B.2 | GRPO on SecCodePLT+ with six security reward settings |
+| [test-time-repair/](test-time-repair/README.md) | Sections 4.2.1–4.2.2; Appendix C.2–C.4 | the security signal, and the five-round repair loop on [CWEval](https://arxiv.org/abs/2501.08200) and [SecCodeBench-V2](https://arxiv.org/abs/2602.15485) |
+| [susvibes/](susvibes/README.md) | Section 4.2.3; Appendix C.1, C.5 | repair inside [SWE-agent](https://github.com/SWE-agent/SWE-agent), [Claude Code](https://claude.com/product/claude-code), and [OpenCode](https://github.com/anomalyco/opencode) on [SusVibes](https://arxiv.org/abs/2512.03262) |
+| [rl/](rl/README.md) | Section 4.2.4; Appendix B.2 | [GRPO](https://arxiv.org/abs/2402.03300) on [SecCodePLT+](https://arxiv.org/abs/2505.22704) with six security reward settings |
 
 `rl/` imports the signal package from `test-time-repair/`. `susvibes/` has its
 own implementation of the same method for repository patches, including Python
@@ -64,7 +64,7 @@ datasets, model endpoints, and for RL, eight GPUs.
 
 - `susvibes/vendor/swe-agent/`: SWE-agent 1.1.0, MIT.
 - `susvibes/vendor/susvibes/`: the SusVibes package and evaluator, MIT.
-- `rl/verl/`: VeRL as used in the REAL codebase, Apache-2.0 (`rl/LICENSE`).
+- `rl/verl/`: [VeRL](https://github.com/volcengine/verl) as used in the [REAL](https://arxiv.org/abs/2505.22704) codebase, Apache-2.0 (`rl/LICENSE`).
 - `rl/real_detector.py`: the REAL static detectors, Apache-2.0
   (`rl/REAL_DETECTOR_LICENSE`).
 

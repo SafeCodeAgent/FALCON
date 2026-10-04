@@ -4,7 +4,7 @@ The `av_signal` package computes the security signal for a candidate program
 and runs the repair loop of Sections 4.2.1 and 4.2.2 of the paper: a coding
 model writes a solution, the solution is attacked and the traces verified, and
 any observed violation is returned to the model for another attempt, up to five
-checks. The RL experiments in `../rl/` use the same package.
+checks, on [CWEval](https://arxiv.org/abs/2501.08200) and [SecCodeBench-V2](https://arxiv.org/abs/2602.15485). The RL experiments in `../rl/` use the same package.
 
 Benchmark scripts are in [CWEval/](CWEval/README.md) and
 [sec-code-bench/](sec-code-bench/README.md). Each prepares public task

@@ -12,13 +12,12 @@
   <img src="https://img.shields.io/badge/version-0.2.0-1f6feb?style=flat" alt="version 0.2.0">
   <img src="https://img.shields.io/badge/python-3.8%2B-3776ab?style=flat" alt="python 3.8+">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2ea44f?style=flat" alt="license MIT"></a>
-  <a href="experiments/README.md"><img src="https://img.shields.io/badge/benchmarks-CWEval%20%7C%20SecCodeBench--V2%20%7C%20SusVibes%20%7C%20SecCodePLT%2B-6e40c9?style=flat" alt="benchmarks"></a>
 </p>
 
 <p align="center">
   <a href="#quick-start"><b>Quick start</b></a> ·
   <a href="#how-it-works"><b>How it works</b></a> ·
-  <a href="#results"><b>Results</b></a> ·
+  <a href="#benchmark-results"><b>Benchmark results</b></a> ·
   <a href="experiments/README.md"><b>Experiments</b></a> ·
   <a href="docs/configuration.md"><b>Configuration</b></a>
 </p>
@@ -37,7 +36,7 @@ the code did something unsafe. A reported violation always comes with the probe
 and the trace that show it, so a coding agent can fix the cause instead of
 guessing.
 
-This repository has the Claude Code plugin and the code for the experiments in
+This repository has the [Claude Code](https://claude.com/product/claude-code) plugin and the code for the experiments in
 *Secure Agentic Coding through Counterexample-Grounded Feedback*, where the
 method is called FALCON. The figures below come from the paper.
 
@@ -96,7 +95,7 @@ splits the job in two and connects the halves through execution:
    otherwise. Each violation goes back to the coding agent with its probe and
    trace.
 
-## Results
+## Benchmark results
 
 All numbers are from the paper. Func-Sec@1 counts a task only when both the
 benchmark's functional tests and its security tests pass; those tests are never
@@ -106,10 +105,10 @@ shown to the attacker, the verifier, or the coding model.
 
 <p align="center"><img src="img/signal-comparison.png" alt="Repair on CWEval with four security signals: held-out Func-Sec@1 per round, the improvement each signal reports, and reported versus held-out improvement." width="100%"></p>
 
-GPT-5.4-mini repaired its CWEval solutions for five rounds against four
+GPT-5.4-mini repaired its [CWEval](https://arxiv.org/abs/2501.08200) solutions for five rounds against four
 different signals. Every signal reported progress on its own verdicts, but only
 part of it reached the held-out tests: Attacker-Verifier raised Func-Sec@1 by
-25.2 points (61.3 to 86.6), CodeQL by 6.7, the LLM judge by 0.0, and
+25.2 points (61.3 to 86.6), [CodeQL](https://codeql.github.com/) by 6.7, the LLM judge by 0.0, and
 attacker-written tests lowered it by 1.7.
 
 ### Test-time repair
@@ -119,11 +118,11 @@ attacker-written tests lowered it by 1.7.
   <img src="img/repair-cweval.png" alt="Func-Sec@1 on CWEval before and after repair, with frontier models as single-pass references." width="49%">
 </p>
 
-Up to five rounds of repair, with the attacker and the judge on the same model
-as the coder (starred). Func-Sec@1 rises by 22.5 to 24.0 points on
-SecCodeBench-V2 and 24.4 to 25.2 points on CWEval. GPT-5.4-nano goes from 40.6%
-to 64.3% and from 52.9% to 77.3%, close to or above Claude Opus 4.8 without
-repair.
+Up to five rounds of repair on [SecCodeBench-V2](https://arxiv.org/abs/2602.15485) and [CWEval](https://arxiv.org/abs/2501.08200), with
+the attacker and the judge on the same model as the coder (starred). Func-Sec@1
+rises by 22.5 to 24.0 points on SecCodeBench-V2 and 24.4 to 25.2 points on
+CWEval. GPT-5.4-nano goes from 40.6% to 64.3% and from 52.9% to 77.3%, close to
+or above Claude Opus 4.8 without repair.
 
 <details>
 <summary>Functionality, security, and Func-Sec per repair round</summary>
@@ -132,45 +131,59 @@ repair.
 
 ### Coding agents on SusVibes
 
-SWE-agent, Claude Code, and OpenCode edit real Python repositories (186 tasks,
-77 CWEs). Before a patch is accepted, the changed code is attacked and any
-violation goes back to the agent, for at most five checks. Averages over the
-three agents:
+[SWE-agent](https://github.com/SWE-agent/SWE-agent), [OpenCode](https://github.com/anomalyco/opencode), and [Claude Code](https://claude.com/product/claude-code) edit real Python
+repositories in [SusVibes](https://arxiv.org/abs/2512.03262) (186 tasks, 77 CWEs). Before a patch is
+accepted, the changed code is attacked and any violation goes back to the agent,
+for at most five checks; the attacker and the judge use the agent's model.
+FuncPass and SecPass are the benchmark's task-level criteria; Func-TestRate and
+Sec-TestRate are the fractions of functional and security tests passed.
 
-| Model | FuncPass | SecPass | Func-TestRate | Sec-TestRate |
-|---|---:|---:|---:|---:|
-| GPT-5.4-mini | 44.09 | 12.36 | 74.01 | 69.76 |
-| + Attacker-Verifier | **46.59** (+2.50) | **17.20** (+4.84) | **76.24** (+2.23) | **72.55** (+2.79) |
-| GPT-5.4 | 68.82 | 20.25 | 81.65 | 77.55 |
-| + Attacker-Verifier | **70.97** (+2.15) | **25.27** (+5.02) | **83.12** (+1.47) | **79.35** (+1.80) |
-| GPT-5.6-luna | 62.54 | 19.00 | 80.99 | 77.78 |
-| + Attacker-Verifier | **63.62** (+1.08) | **22.22** (+3.22) | **81.47** (+0.48) | **79.36** (+1.58) |
-| DeepSeek-V4-Pro-08-13 | 81.90 | 20.79 | 83.87 | 79.92 |
-| + Attacker-Verifier | **82.61** (+0.71) | **24.91** (+4.12) | **84.68** (+0.81) | **81.59** (+1.67) |
+<table>
+<thead><tr><th>Agent</th><th>Model</th><th align="right">FuncPass</th><th align="right">SecPass</th><th align="right">Func-TestRate</th><th align="right">Sec-TestRate</th></tr></thead>
+<tbody>
+<tr><td rowspan="8"><a href="https://github.com/SWE-agent/SWE-agent">SWE-agent</a></td><td>GPT-5.4-mini</td><td align="right">25.27</td><td align="right">8.60</td><td align="right">68.01</td><td align="right">64.68</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">29.57 (+4.30)</td><td align="right">12.90 (+4.30)</td><td align="right">72.62 (+4.61)</td><td align="right">69.77 (+5.09)</td></tr>
+<tr><td>GPT-5.4</td><td align="right">54.30</td><td align="right">17.74</td><td align="right">79.45</td><td align="right">75.45</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">55.91 (+1.61)</td><td align="right">22.58 (+4.84)</td><td align="right">82.19 (+2.74)</td><td align="right">78.30 (+2.85)</td></tr>
+<tr><td>GPT-5.6-luna</td><td align="right">38.17</td><td align="right">16.13</td><td align="right">74.42</td><td align="right">71.72</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">39.78 (+1.61)</td><td align="right">20.43 (+4.30)</td><td align="right">74.98 (+0.56)</td><td align="right">73.07 (+1.35)</td></tr>
+<tr><td>DeepSeek-V4-Pro-08-13</td><td align="right">87.10</td><td align="right">25.27</td><td align="right">87.11</td><td align="right">83.54</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">87.63 (+0.53)</td><td align="right">29.03 (+3.76)</td><td align="right">87.90 (+0.79)</td><td align="right">84.39 (+0.85)</td></tr>
+<tr><td rowspan="8"><a href="https://github.com/anomalyco/opencode">OpenCode</a></td><td>GPT-5.4-mini</td><td align="right">79.03</td><td align="right">22.04</td><td align="right">85.65</td><td align="right">81.86</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">81.18 (+2.15)</td><td align="right">30.11 (+8.07)</td><td align="right">86.18 (+0.53)</td><td align="right">83.13 (+1.27)</td></tr>
+<tr><td>GPT-5.4</td><td align="right">93.01</td><td align="right">28.49</td><td align="right">86.96</td><td align="right">82.91</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">93.55 (+0.54)</td><td align="right">32.80 (+4.31)</td><td align="right">87.48 (+0.52)</td><td align="right">83.35 (+0.44)</td></tr>
+<tr><td>GPT-5.6-luna</td><td align="right">81.72</td><td align="right">22.04</td><td align="right">85.64</td><td align="right">81.92</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">81.18 (−0.54)</td><td align="right">25.27 (+3.23)</td><td align="right">85.88 (+0.24)</td><td align="right">83.93 (+2.01)</td></tr>
+<tr><td>DeepSeek-V4-Pro-08-13</td><td align="right">91.94</td><td align="right">19.35</td><td align="right">86.95</td><td align="right">82.09</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">92.47 (+0.53)</td><td align="right">24.19 (+4.84)</td><td align="right">87.11 (+0.16)</td><td align="right">83.16 (+1.07)</td></tr>
+<tr><td rowspan="8"><a href="https://claude.com/product/claude-code">Claude Code</a></td><td>GPT-5.4-mini</td><td align="right">27.96</td><td align="right">6.45</td><td align="right">68.36</td><td align="right">62.74</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">29.03 (+1.07)</td><td align="right">8.60 (+2.15)</td><td align="right">69.91 (+1.55)</td><td align="right">64.76 (+2.02)</td></tr>
+<tr><td>GPT-5.4</td><td align="right">59.14</td><td align="right">14.52</td><td align="right">78.54</td><td align="right">74.29</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">63.44 (+4.30)</td><td align="right">20.43 (+5.91)</td><td align="right">79.68 (+1.14)</td><td align="right">76.40 (+2.11)</td></tr>
+<tr><td>GPT-5.6-luna</td><td align="right">67.74</td><td align="right">18.82</td><td align="right">82.92</td><td align="right">79.71</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">69.89 (+2.15)</td><td align="right">20.97 (+2.15)</td><td align="right">83.54 (+0.62)</td><td align="right">81.09 (+1.38)</td></tr>
+<tr><td>DeepSeek-V4-Pro-08-13</td><td align="right">66.67</td><td align="right">17.74</td><td align="right">77.54</td><td align="right">74.14</td></tr>
+<tr><td>+ Attacker-Verifier</td><td align="right">67.74 (+1.07)</td><td align="right">21.51 (+3.77)</td><td align="right">79.02 (+1.48)</td><td align="right">77.22 (+3.08)</td></tr>
+</tbody>
+</table>
 
 ### Reinforcement learning
 
 <p align="center"><img src="img/rl-training-curves.png" alt="GRPO training reward, held-out Func-Sec@1, and KL for six security rewards on Qwen2.5-Coder-3B and 7B." width="100%"></p>
 
-GRPO on SecCodePLT+ with six security rewards and the same functionality
-reward. Every policy raises its own training reward, but the static-analysis
-(REAL) and learned (SecCodePRM) rewards transfer much less to held-out
-Func-Sec@1, and at 3B it falls while their reward keeps rising. Adding the
-Attacker-Verifier reward to either one gives the best held-out results:
-
-| Security reward | 3B Func-Sec@1 | 7B Func-Sec@1 |
-|---|---:|---:|
-| REAL | 38.75 | 57.13 |
-| SecCodePRM | 29.46 | 54.50 |
-| REAL + SecCodePRM | 38.01 | 56.89 |
-| Attacker-Verifier | 49.27 | 68.70 |
-| Attacker-Verifier + REAL | **57.25** | 70.87 |
-| Attacker-Verifier + SecCodePRM | 51.95 | **77.26** |
+[GRPO](https://arxiv.org/abs/2402.03300) on [SecCodePLT+](https://arxiv.org/abs/2505.22704) with [Qwen2.5-Coder](https://arxiv.org/abs/2409.12186) 3B and 7B, six
+security rewards, and the same functionality reward. Every policy raises its own
+training reward, but the static-analysis ([REAL](https://arxiv.org/abs/2505.22704)) and learned
+([SecCodePRM](https://arxiv.org/abs/2602.10418)) rewards transfer much less to held-out Func-Sec@1, and at
+3B it falls while their reward keeps rising. Adding the Attacker-Verifier reward
+to either one gives the best held-out results (57.25 at 3B with REAL, 77.26 at
+7B with SecCodePRM); combining REAL with SecCodePRM does not help.
 
 ### Verifier accuracy and cost
 
-Agreement with CWEval's labeled security tests, averaged over code from three
-models. Judging one observed execution is easier than judging all the
+Agreement with [CWEval](https://arxiv.org/abs/2501.08200)'s labeled security tests, averaged over code from
+three models. Judging one observed execution is easier than judging all the
 executions a piece of code allows, and it is cheaper.
 
 | Verifier (judge: GPT-5.2) | Accuracy | False positives | False negatives | Cost per example |
@@ -179,7 +192,7 @@ executions a piece of code allows, and it is cheaper.
 | Deterministic checks + trace judge | **98.58%** | 2.73% | 0.20% | $0.085 |
 | Trace judge on every trace | 87.99% | 23.92% | 0.18% | $0.634 |
 | Judge reading the source code | 61.16% | 50.43% | 28.05% | $1.227 |
-| CodeQL | 56.68% | 17.95% | 66.42% | $0 |
+| [CodeQL](https://codeql.github.com/) | 56.68% | 17.95% | 66.42% | $0 |
 
 ## Using the plugin
 
@@ -236,9 +249,9 @@ lists everything.
 
 | Experiment | Paper | Code |
 |---|---|---|
-| Test-time repair on CWEval and SecCodeBench-V2 | §4.2.1–4.2.2 | [experiments/test-time-repair](experiments/test-time-repair/README.md) |
-| Coding agents on SusVibes | §4.2.3 | [experiments/susvibes](experiments/susvibes/README.md) |
-| GRPO on SecCodePLT+ | §4.2.4 | [experiments/rl](experiments/rl/README.md) |
+| Test-time repair on [CWEval](https://arxiv.org/abs/2501.08200) and [SecCodeBench-V2](https://arxiv.org/abs/2602.15485) | §4.2.1–4.2.2 | [experiments/test-time-repair](experiments/test-time-repair/README.md) |
+| Coding agents on [SusVibes](https://arxiv.org/abs/2512.03262) | §4.2.3 | [experiments/susvibes](experiments/susvibes/README.md) |
+| [GRPO](https://arxiv.org/abs/2402.03300) on [SecCodePLT+](https://arxiv.org/abs/2505.22704) | §4.2.4 | [experiments/rl](experiments/rl/README.md) |
 
 Benchmarks, task images, and model weights are not included, and the held-out
 tests run only in the separate grading commands. See

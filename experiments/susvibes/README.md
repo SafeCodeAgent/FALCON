@@ -1,10 +1,10 @@
 # SusVibes: repair inside coding agents
 
 This package runs the repository-level experiment (Section 4.2.3 and Appendix
-C.5 of the paper). A coding agent edits a real repository to solve a SusVibes
-task. Before its patch is accepted, the changed code is attacked and the traces
+C.5 of the paper). A coding agent edits a real repository to solve a
+[SusVibes](https://arxiv.org/abs/2512.03262) task. Before its patch is accepted, the changed code is attacked and the traces
 are verified; an observed violation goes back to the agent as feedback for
-another round, up to five checks per task. SWE-agent, Claude Code, and OpenCode
+another round, up to five checks per task. [SWE-agent](https://github.com/SWE-agent/SWE-agent), [Claude Code](https://claude.com/product/claude-code), and [OpenCode](https://github.com/anomalyco/opencode)
 are supported.
 
 ## What one check does

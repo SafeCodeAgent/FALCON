@@ -1,7 +1,7 @@
 # RL training on SecCodePLT+
 
-GRPO training with the security reward from the paper (Section 4.2.4 and
-Appendix B.2). The code extends the REAL training setup, which uses VeRL. Only
+[GRPO](https://arxiv.org/abs/2402.03300) training on [SecCodePLT+](https://arxiv.org/abs/2505.22704) with the security reward from the paper (Section 4.2.4 and
+Appendix B.2). The code extends the [REAL](https://arxiv.org/abs/2505.22704) training setup, which uses [VeRL](https://github.com/volcengine/verl). Only
 the security term of the reward changes between settings; the functionality
 term (the pass rate of the task's capability tests) is the same for all.
 
@@ -9,7 +9,7 @@ term (the pass rate of the task's capability tests) is the same for all.
 | --- | --- |
 | `av` | the attacker-verifier signal with the deterministic verifier |
 | `real` | the REAL static analyzer |
-| `seccodeprm` | SecCodePRM, a learned process reward model |
+| `seccodeprm` | [SecCodePRM](https://arxiv.org/abs/2602.10418), a learned process reward model |
 | `av+real`, `av+seccodeprm`, `real+seccodeprm` | the average of the two terms |
 
 The reward for a program is `(1 - w) * functionality + w * security` with
